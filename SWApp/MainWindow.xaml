@@ -466,7 +466,7 @@
                     </Button>
                 </Grid>
             </TabItem>
-            <TabItem Header="?Moduł wycen?" MouseUp="TabItem_MouseUp">
+            <TabItem Header="Moduł wycen" MouseUp="TabItem_MouseUp">
             </TabItem>
         </TabControl>
     </Grid>

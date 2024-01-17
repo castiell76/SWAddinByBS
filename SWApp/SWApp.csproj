@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <GenerateProgramFile>false</GenerateProgramFile>
-    <TargetFramework>net6.0-windows7.0</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+	  
     <OutputType>Library</OutputType>
     <WarningLevel>4</WarningLevel>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -197,9 +198,6 @@
     <Compile Remove="Program.cs" />
     <None Remove="App.config" />
     <Page Remove="App.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\machinelearningwithFullPhotos\machinelearningwithFullPhotos\machinelearningwithFullPhotos.csproj" />
   </ItemGroup>
   <PropertyGroup>
     <NeutralLanguage>aa</NeutralLanguage>

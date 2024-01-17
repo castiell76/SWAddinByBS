@@ -14,7 +14,7 @@ using Microsoft.Win32;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using static SWApp.NaturalSorting;
-using MachinelearningwithFullPhotos;
+//using MachinelearningwithFullPhotos;
 using Aspose.Pdf.Operators;
 using System.Windows.Shapes;
 using System.Windows.Media;
@@ -737,22 +737,22 @@ namespace SWApp
             sWObject.ExportSplittedPDFs();
         }
 
-        private void BtnTrackParts_Click(object sender, RoutedEventArgs e)
-        {
-            //Load sample data
-            var imageBytes = File.ReadAllBytes("C:\\Users\\BIP\\Desktop\\guwnit.PNG");
+        //private void BtnTrackParts_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //Load sample data
+        //    var imageBytes = File.ReadAllBytes("C:\\Users\\BIP\\Desktop\\guwnit.PNG");
 
-            MLModel1FromBitMaps.ModelInput sampleData = new MLModel1FromBitMaps.ModelInput()
-            {
-                ImageSource = imageBytes,
-            };
+        //    MLModel1FromBitMaps.ModelInput sampleData = new MLModel1FromBitMaps.ModelInput()
+        //    {
+        //        ImageSource = imageBytes,
+        //    };
 
-            //Load model and predict output
-            var result = MLModel1FromBitMaps.Predict(sampleData);
+        //    //Load model and predict output
+        //    var result = MLModel1FromBitMaps.Predict(sampleData);
 
-            MessageBox.Show(result.PredictedLabel.ToString());
+        //    MessageBox.Show(result.PredictedLabel.ToString());
 
-        }
+        //}
 
         private void testLine_MouseUp(object sender, MouseButtonEventArgs e)
         {
