@@ -17,6 +17,8 @@ namespace SWApp
         public int ID {  get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public List<Material> Materials {  get; set; }
+        public List<Operation> Operations { get; set; }
         public List<SWTreeNode> Childs {  get; set; }
         public SWTreeNode Parent { get; set; }
         public int Quantity { get; set; }
