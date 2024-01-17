@@ -32,13 +32,18 @@ namespace SWApp
             FeatureManager swFeatMgr = swModel.FeatureManager;
             TreeControlItem node = swFeatMgr.GetFeatureTreeRootItem2((int)swFeatMgrPane_e.swFeatMgrPaneBottom);
             string assemblyName = System.IO.Path.GetFileNameWithoutExtension(swModel.GetPathName());
-            //SWTreeNode mainAssembly = new SWTreeNode() { Name = assemblyName };
+
+            //add main node assembly
+            SWTreeNode mainAssembly = new SWTreeNode() { Name = assemblyName };
+            //add other nodes
             SWTreeNode treeNode = new SWTreeNode() { Name = assemblyName };
 
             node = node.GetFirstChild();
-            treeNode=  CreateTreeFromSW(node, "", new SWTreeNode() {Name="JAnek" });
-            //mainAssembly.Items.Add(treeNode);
-            swTreeView.ItemsSource = (treeNode) +treeNode.Items ;
+            treeNode=  CreateTreeFromSW(node, "", treeNode);
+            mainAssembly.Items.Add(treeNode);
+
+            //assign nodes to the treeView
+            swTreeView.ItemsSource = mainAssembly.Items ;
 
         }
             public SWTreeNode CreateTreeFromSW(TreeControlItem node, string parentNum, SWTreeNode swTreeNodes)
