@@ -1,6 +1,9 @@
 ﻿using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Documents;
+using static PdfSharp.Snippets.Font.NewFontResolver;
 
 namespace SWApp
 {
@@ -28,17 +31,17 @@ namespace SWApp
             ModelDoc2 swModel = swApp.ActiveDoc;
             FeatureManager swFeatMgr = swModel.FeatureManager;
             TreeControlItem node = swFeatMgr.GetFeatureTreeRootItem2((int)swFeatMgrPane_e.swFeatMgrPaneBottom);
+            string assemblyName = System.IO.Path.GetFileNameWithoutExtension(swModel.GetPathName());
+            //SWTreeNode mainAssembly = new SWTreeNode() { Name = assemblyName };
+            SWTreeNode treeNode = new SWTreeNode() { Name = assemblyName };
 
             node = node.GetFirstChild();
-
-            CreateTreeFromSW(node, "");
-
-           // var treeInstance = sWobject.InfoAboutPart();
-
-
+            treeNode=  CreateTreeFromSW(node, "", new SWTreeNode() {Name="JAnek" });
+            //mainAssembly.Items.Add(treeNode);
+            swTreeView.ItemsSource = (treeNode) +treeNode.Items ;
 
         }
-            public void CreateTreeFromSW(TreeControlItem node, string parentNum)
+            public SWTreeNode CreateTreeFromSW(TreeControlItem node, string parentNum, SWTreeNode swTreeNodes)
             {
                 int nodeType;
                 ModelDoc2 swModel;
@@ -48,36 +51,43 @@ namespace SWApp
                 string evaluatedParentNum;
                 string parentNumOld;
                 string finalDrawingNum = drawingNum.ToString();
+                string name;
+                
 
-                while (node != null)
+            while (node != null)
                 {
                     nodeType = node.ObjectType;
                     if (nodeType == (int)swTreeControlItemType_e.swFeatureManagerItem_Component)
                     {
                         swComp = (Component2)node.Object;
                         swModel = swComp.GetModelDoc2();
-                        if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
+                        name = System.IO.Path.GetFileNameWithoutExtension(swModel.GetPathName());
+                    if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
                         {
                             childNode = node.GetFirstChild();
+                            
                             parentNumOld = parentNum;
                             parentNum = $"{parentNum}.{drawingNum}";
-                            //add position in a tree view 
-                            swTreeView.Items.Add(parentNumOld);
-                            CreateTreeFromSW(childNode, parentNum);
-                            parentNum = parentNumOld;
+                        //add position in a tree level 
+                            SWTreeNode newTreeLevel = new SWTreeNode() { Name = name };
+                            
+                            CreateTreeFromSW(childNode, parentNum, newTreeLevel);
+                        swTreeNodes.Items.Add(newTreeLevel);
+                        parentNum = parentNumOld;
                         }
                         else
                         {
-
                             evaluatedParentNum = $"{parentNum}.{drawingNum}";
                         //add position in a tree view
-                            swTreeView.Items.Add(evaluatedParentNum);
-                    }
+                        swTreeNodes.Items.Add(new SWTreeNode() { Name = name });
+                        }
                         drawingNum++;
                         
                     }
                     node = node.GetNext();
                 }
+
+            return swTreeNodes;
             }
         
     }

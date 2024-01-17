@@ -10,13 +10,18 @@
 
     <Grid>
         <Menu HorizontalAlignment="Left" VerticalAlignment="Top">
-            <MenuItem Header="Plik">
+            <MenuItem Header="Plik" Height="24" Width="42">
                 <MenuItem Header="Wczytaj dane z drzewa" Click="MenuItem_Click">
 
                 </MenuItem>
             </MenuItem>
         </Menu>
-        <TreeView x:Name="swTreeView" HorizontalAlignment="Left" VerticalAlignment="Top" > 
+        <TreeView x:Name="swTreeView" HorizontalAlignment="Left" VerticalAlignment="Top" Height="213" Width="308" Margin="0,24,0,0" AllowDrop="True" IsManipulationEnabled="True"  >
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type local:SWTreeNode}" ItemsSource="{Binding Items}">
+                    <TextBlock Text="{Binding Name}" />
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
         </TreeView>
     </Grid>
 </Window>
