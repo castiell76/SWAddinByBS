@@ -3,8 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:SWApp"
-      mc:Ignorable="d" 
+      xmlns:local="clr-namespace:SWApp" d:DataContext="{d:DesignInstance Type=local:SWTreeNode}"
+        mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CalculationModule">
 
@@ -16,12 +16,29 @@
                 </MenuItem>
             </MenuItem>
         </Menu>
-        <TreeView x:Name="swTreeView" HorizontalAlignment="Left" VerticalAlignment="Top" Height="213" Width="308" Margin="0,24,0,0" AllowDrop="True" IsManipulationEnabled="True"  >
+        <TreeView x:Name="swTreeView" HorizontalAlignment="Left" VerticalAlignment="Top" Height="370" Width="168" Margin="0,24,0,0" AllowDrop="True" IsManipulationEnabled="True" SelectedItemChanged="swTreeView_SelectedItemChanged" >
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type local:SWTreeNode}" ItemsSource="{Binding Items}">
                     <TextBlock Text="{Binding Name}" />
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
+        <DataGrid Margin="168,24,377,10" x:Name="dgCalculationModuleMaterials">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Nazwa" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Cena" Binding="{Binding Price, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="cmAddMaterial" Header="Dodaj (Ctrl+N)" Click="cmAddMaterial_Click" ></MenuItem>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+
+        <DataGrid Margin="423,24,60,10" x:Name="dgCalculationModuleOperations">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Operacje" Binding="{Binding Operations, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>
