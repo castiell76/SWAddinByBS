@@ -7,10 +7,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using SWApp.Models;
 
-namespace SWApp
+namespace SWApp.VM
 {
-     class ViewModel : INotifyPropertyChanged
+    class ProfilesVM : INotifyPropertyChanged
     {
         private ProfileSW profileSW;
         private ObservableCollection<ProfileSW> _profilesSW { get; set; }
@@ -20,7 +21,7 @@ namespace SWApp
             set { _profilesSW = value; }
         }
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName]string name="")
+        protected void OnPropertyChanged([CallerMemberName] string name = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
@@ -62,7 +63,7 @@ namespace SWApp
             set
             {
                 profileSW.Length = value;
-            } 
+            }
         }
         public string Type
         {
@@ -75,17 +76,17 @@ namespace SWApp
             set
             {
                 profileSW.DraftCount = value;
-              
+
             }
         }
-        public ViewModel()
+        public ProfilesVM()
         {
             ProfilesSWVM = new ObservableCollection<ProfileSW>();
-            
+
         }
         public void Add()
         {
-            ProfilesSWVM.Add(new ProfileSW() { Name = "", X = 0, Y = 0, Thickness = 0, DraftCount = 0, Type="", });
+            ProfilesSWVM.Add(new ProfileSW() { Name = "", X = 0, Y = 0, Thickness = 0, DraftCount = 0, Type = "", });
         }
         public void Delete(DataGrid dgprofiles)
         {
@@ -93,15 +94,15 @@ namespace SWApp
             {
                 for (int i = 0; i < dgprofiles.SelectedItems.Count; i++)
                 {
-                    this.ProfilesSWVM.Remove((ProfileSW)dgprofiles.SelectedItems[i]);
+                    ProfilesSWVM.Remove((ProfileSW)dgprofiles.SelectedItems[i]);
                 }
 
             }
-            catch (System.InvalidCastException)
+            catch (InvalidCastException)
             {
                 var toDelete = dgprofiles.SelectedItem;
-                toDelete = new ProfileSW() { Name = "", X = 0, Y = 0, Thickness = 0, DraftCount = 0, Type="" };
-                this.ProfilesSWVM.Remove((ProfileSW)toDelete);
+                toDelete = new ProfileSW() { Name = "", X = 0, Y = 0, Thickness = 0, DraftCount = 0, Type = "" };
+                ProfilesSWVM.Remove((ProfileSW)toDelete);
             }
         }
         public List<ProfileSW> Copy(DataGrid dgprofiles)
@@ -120,7 +121,7 @@ namespace SWApp
                     Length = toDuplicate.Length,
                     Type = toDuplicate.Type,
                     DraftCount = toDuplicate.DraftCount
-                 
+
                 };
 
                 toCopy.Add(toInsert);
@@ -135,6 +136,6 @@ namespace SWApp
                 ProfilesSWVM.Add(profile);
             }
         }
-        
+
     }
 }

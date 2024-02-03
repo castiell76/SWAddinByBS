@@ -30,10 +30,15 @@ using System.ComponentModel;
 using PdfSharp.Pdf;
 using Path = System.IO.Path;
 using PdfSharp.Pdf.IO;
+using NPOI.SS.Formula.PTG;
+using System.Collections.ObjectModel;
+using Newtonsoft.Json;
+using SWApp.Models;
+using SWApp.VM;
 
 namespace SWApp
 {
-    
+
     //[RunInstaller(true)]
     public class SWObject /*: System.Configuration.Install.Installer*/
     {
@@ -70,6 +75,7 @@ namespace SWApp
             {"SKALA","SCALE" },
             {"MONTAŻ","INSTALLATION" }
         };
+        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
 
 
 
@@ -80,11 +86,11 @@ namespace SWApp
                 SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
                 ModelDoc2 swModel;
                 ConfigurationManager swConfMgr;
-                swAss = swApp.ActiveDoc;
+                swAss = (AssemblyDoc)swApp.ActiveDoc;
 
 
                 //get data for the assembly filepath and configuration
-                swModel = swApp.ActiveDoc;
+                swModel = (ModelDoc2)swApp.ActiveDoc;
                 swModelExt = swModel.Extension;
                 string path = swModel.GetPathName();
                 string assemblyConfig;
@@ -125,7 +131,7 @@ namespace SWApp
 
                 MessageBoxResult suppressedChoice = default(MessageBoxResult);
 
-                swComps = swAss.GetComponents(false); //true for all comps in the assembly
+                swComps = (object[])swAss.GetComponents(false); //true for all comps in the assembly
                 List<string> doneswComps = new List<string>();
                 bool hasSuppresed = swAss.HasUnloadedComponents();
                 int lightWeightCompsCount = swAss.GetLightWeightComponentCount();
@@ -145,7 +151,7 @@ namespace SWApp
                         {
                             swComp.SetSuppression2((int)swComponentSuppressionState_e.swComponentFullyResolved);
                         }
-                        swModel = swComp.GetModelDoc2();
+                        swModel = (ModelDoc2)swComp.GetModelDoc2();
                         string compFilepath = swModel.GetPathName();
                         swModelExt = swModel.Extension;
                         swConfMgr = swModel.ConfigurationManager;
@@ -232,7 +238,7 @@ namespace SWApp
             filePathName.Add(filename);
             filePathName.Add(dirFolder);
 
-            swAssembly = swApp.NewDocument("C:\\EBA\\SZABLONY\\Solidworks\\EBA_Złożenie.asmdot", 0, 0, 0);
+            swAssembly = (ModelDoc2)swApp.NewDocument("C:\\EBA\\SZABLONY\\Solidworks\\EBA_Złożenie.asmdot", 0, 0, 0);
             swAssembly.SaveAs3($"{dirFolder}\\{filename}.SLDASM", 0, 8);
 
             return filePathName;
@@ -258,11 +264,11 @@ namespace SWApp
                 if (nodeType == (int)swTreeControlItemType_e.swFeatureManagerItem_Component)
                 {
                     swComp = (Component2)node.Object;
-                    swModel = swComp.GetModelDoc2();
+                    swModel = (ModelDoc2)swComp.GetModelDoc2();
                     swModelExt = swModel.Extension;
                     string path = swModel.GetPathName();
                     swCustomPropMgr = swModelExt.get_CustomPropertyManager("");
-                    swMassProp = swModelExt.CreateMassProperty2();
+                    swMassProp = (MassProperty2)swModelExt.CreateMassProperty2();
                     paintQty = Math.Round((swMassProp.SurfaceArea * 100 * 0.0015),3).ToString();
 
                     if (doneParts.Contains(swModel.GetPathName()) == false)
@@ -288,10 +294,10 @@ namespace SWApp
                             }
                             if (setThickness)
                             {
-                                swFeature = swModelExt.GetTemplateSheetMetal();
+                                swFeature = (Feature)swModelExt.GetTemplateSheetMetal();
                                 if(swFeature != null)
                                 {
-                                    SheetMetalFeatureData swMetalData = swFeature.GetDefinition();
+                                    SheetMetalFeatureData swMetalData = (SheetMetalFeatureData)swFeature.GetDefinition();
                                     double thickness;
                                     
                                     thickness = swMetalData.Thickness;
@@ -343,10 +349,10 @@ namespace SWApp
                             }
                             if (setThickness)
                             {
-                                swFeature = swModelExt.GetTemplateSheetMetal();
+                                swFeature = (Feature)swModelExt.GetTemplateSheetMetal();
                                 if (swFeature != null)
                                 {
-                                    SheetMetalFeatureData swMetalData = swFeature.GetDefinition();
+                                    SheetMetalFeatureData swMetalData = (SheetMetalFeatureData)swFeature.GetDefinition();
                                     double thickness;
 
                                     thickness = swMetalData.Thickness;
@@ -399,7 +405,7 @@ namespace SWApp
         public void SetPropForAllConfigs(ModelDoc2 swModel)
         {
             swModelExt = swModel.Extension;
-            string[] configNames = swModel.GetConfigurationNames();
+            string[] configNames = (string[])swModel.GetConfigurationNames();
             object vpropNames = null;
             string[] propNames;
             object vpropTypes = null;
@@ -481,7 +487,7 @@ namespace SWApp
                 if (nodeType == (int)swTreeControlItemType_e.swFeatureManagerItem_Component)
                 {
                     swComp = (Component2)node.Object;
-                    swModel = swComp.GetModelDoc2();
+                    swModel = (ModelDoc2)swComp.GetModelDoc2();
                     if(doneParts.Contains(swModel.GetPathName()) == false)
                     {
                         doneParts.Add(swModel.GetPathName());
@@ -517,12 +523,12 @@ namespace SWApp
                 //Debug.Print(swFeature.GetTypeName2().ToString() + " "+swFeature.Name);
                 if(swFeature.GetTypeName2() == "Reference")
                 {
-                    swComp = swFeature.GetSpecificFeature2();
-                    swModel = swComp.GetModelDoc2();
+                    swComp = (Component2)swFeature.GetSpecificFeature2();
+                    swModel = (ModelDoc2)swComp.GetModelDoc2();
                     if(swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
                     {
                        
-                        swFeatureChild = swFeature.GetFirstSubFeature();
+                        swFeatureChild = (Feature)swFeature.GetFirstSubFeature();
                         TraverseComponent_Test(swFeatureChild);
                     }
                     else
@@ -530,7 +536,7 @@ namespace SWApp
                     
                     }
                 }
-                swFeature = swFeature.GetNextFeature();
+                swFeature = (Feature)swFeature.GetNextFeature();
             }
         }
         public void SortTree_All(bool allLevels, ModelDoc2 swModel)
@@ -543,13 +549,13 @@ namespace SWApp
                 string modelChildName;
                 AssemblyDoc swAssMore;
                 swAss = (AssemblyDoc)swModel;
-                object[] childComps = swAss.GetComponents(true);
+                object[] childComps = (object[])swAss.GetComponents(true);
                 if (allLevels)
                 {
                     SortTree(swModel);
                     foreach (Component2 childComp in childComps)
                     {
-                        modelChild = childComp.GetModelDoc2();
+                        modelChild = (ModelDoc2)childComp.GetModelDoc2();
                         modelChildType = modelChild.GetType();
                         string filepath = modelChild.GetPathName();
                         if (modelChildType == 2)
@@ -578,15 +584,15 @@ namespace SWApp
             try
             {
                 SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-                swModel = swApp.ActiveDoc;
+                swModel = (ModelDoc2)swApp.ActiveDoc;
                 swAss = (AssemblyDoc)swModel;
                 swModelExt = swModel.Extension;
                 swFeatMgr = swModel.FeatureManager;
                 swFeatMgr.GroupComponentInstances = false;
                 Feature folderNormalia;
                 string targetToMove = "Normalia";
-                folderNormalia = swAss.FeatureByName("Normalia");
-                object[] swComps = swAss.GetComponents(true); //true for top level componenets only
+                folderNormalia = (Feature)swAss.FeatureByName("Normalia");
+                object[] swComps = (object[])swAss.GetComponents(true); //true for top level componenets only
                 List<Component2> CompsToSort = new List<Component2>();
 
                 //Creating new folder Normalia if it does not exist 
@@ -637,7 +643,7 @@ namespace SWApp
             ModelDoc2 swModel;
             AssemblyDoc swAssemblyDoc;
 
-            swModel = swApp.ActivateDoc3(assemblyName,false,2,0);
+            swModel = (ModelDoc2)swApp.ActivateDoc3(assemblyName,false,2,0);
             swAssemblyDoc = (AssemblyDoc)swModel;
 
             swAssemblyDoc.AddComponent5(filepath, 0, "", false, "", 0, 0, 0);
@@ -665,7 +671,7 @@ namespace SWApp
         {
             SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
             ModelDoc2 swModel;
-            swModel = swApp.ActiveDoc;
+            swModel = (ModelDoc2)swApp.ActiveDoc;
             swModelExt = swModel.Extension;
             string assemblyTitle = swModel.GetTitle();
             string assemblyFilepath = swModel.GetPathName();
@@ -682,9 +688,9 @@ namespace SWApp
             drawingDoc = (DrawingDoc)swModel;
             if(drawingDoc != null)
             {
-                swModel = swApp.ActiveDoc;
+                swModel = (ModelDoc2)swApp.ActiveDoc;
                 swModelExt = swModel.Extension;
-                string[] sheetNames = drawingDoc.GetSheetNames();
+                string[] sheetNames = (string[])drawingDoc.GetSheetNames();
 
 
                 drawingDoc.ActivateSheet(sheetNames[0]);
@@ -718,14 +724,14 @@ namespace SWApp
             {
                 swModel = swApp.OpenDoc6(modelFilepath, 1, 2, "", 0, 0);
                 swApp.ActivateDoc3(filename, true, 2, 0);
-                swModel = swApp.ActiveDoc;
+                swModel = (ModelDoc2)swApp.ActiveDoc;
                 
                 swPart = (PartDoc)swModel;
                 swModelExt = swModel.Extension;
-                swFeature = swModelExt.GetTemplateSheetMetal();
+                swFeature = (Feature)swModelExt.GetTemplateSheetMetal();
                 if(swFeature != null)
                 {
-                    swSheetMetalData = swFeature.GetDefinition();
+                    swSheetMetalData = (SheetMetalFeatureData)swFeature.GetDefinition();
                      thickness = Convert.ToDecimal((1000 * swSheetMetalData.Thickness), new CultureInfo("pl-PL")); //getting thickness in m, not mm
                 }
                 else
@@ -777,7 +783,7 @@ namespace SWApp
             ModelDoc2 swModel;
             swModel = swApp.OpenDoc6(modelFilepath, 1, 2, "", 0, 0);
             swApp.ActivateDoc3(filename, true, 2, 0);
-            swModel = swApp.ActiveDoc;
+            swModel = (ModelDoc2)swApp.ActiveDoc;
 
             swModelExt = swModel.Extension;
             var quantity = totalParts.Where(x => x == modelFilepath).Count(); 
@@ -795,7 +801,7 @@ namespace SWApp
             string assemblyTitle;
             string note;
 
-            swModel = swApp.ActiveDoc;
+            swModel = (ModelDoc2)swApp.ActiveDoc;
             assemblyTitle = swModel.GetTitle(); //title is name display in a upper sldwrks bar
 
             if (filedir == "" || isDefaultDir == true)
@@ -805,7 +811,7 @@ namespace SWApp
                 filedir = filedir.Remove(filedir.Length - signs , signs);
             }
 
-            swModel = swComp.GetModelDoc2();
+            swModel = (ModelDoc2)swComp.GetModelDoc2();
             if(swModel != null)
             {
                 modelFilepath = swModel.GetPathName(); //pathname inc. filename with extension
@@ -840,7 +846,7 @@ namespace SWApp
         public List<string> CountParts(AssemblyDoc swAss)
         {
             
-            var obj = swAss.GetComponents(false); //false for take all parts from main assembly and subassemblies
+            var obj = (object[])swAss.GetComponents(false); //false for take all parts from main assembly and subassemblies
             List<string> totalParts = new List<string>();
 
             foreach (Component2 comp in obj)
@@ -850,7 +856,7 @@ namespace SWApp
                     comp.SetSuppression2(3);
                 }
 
-                ModelDoc2 swModel = comp.GetModelDoc2();
+                ModelDoc2 swModel = (ModelDoc2)comp.GetModelDoc2();
                 if(swModel != null)
                 {
                     totalParts.Add(swModel.GetPathName());
@@ -872,7 +878,7 @@ namespace SWApp
             double length = Convert.ToDouble(profileSW.Length);
             int draftCount = Convert.ToInt32(profileSW.DraftCount);
 
-            swModel = swApp.NewDocument("C:\\EBA\\SZABLONY\\Solidworks\\EBA_Część.prtdot", 0, 0, 0);
+            swModel = (ModelDoc2)swApp.NewDocument("C:\\EBA\\SZABLONY\\Solidworks\\EBA_Część.prtdot", 0, 0, 0);
             swModel.SaveAs3($"{filepath}{partName}.SLDPRT", 0, 8);
 
             swExt = swModel.Extension;
@@ -981,7 +987,7 @@ namespace SWApp
             double length = Convert.ToDouble(profileSW.Length);
             int draftCount = Convert.ToInt32(profileSW.DraftCount);
 
-            swModel = swApp.NewDocument("C:\\EBA\\SZABLONY\\Solidworks\\EBA_Część.prtdot", 0, 0, 0);
+            swModel = (ModelDoc2)swApp.NewDocument("C:\\EBA\\SZABLONY\\Solidworks\\EBA_Część.prtdot", 0, 0, 0);
             swModel.SaveAs3($"{filepath}{partName}.SLDPRT", 0, 8);
 
             swExt = swModel.Extension;
@@ -1081,7 +1087,7 @@ namespace SWApp
             double length = Convert.ToDouble(profileSW.Length);
             int draftCount = Convert.ToInt32(profileSW.DraftCount);
 
-            swModel = swApp.NewDocument("C:\\EBA\\SZABLONY\\Solidworks\\EBA_Część.prtdot", 0, 0, 0);
+            swModel =   (ModelDoc2)swApp.NewDocument("C:\\EBA\\SZABLONY\\Solidworks\\EBA_Część.prtdot", 0, 0, 0);
             swModel.SaveAs3($"{filepath}{partName}.SLDPRT", 0, 8);
 
             swExt = swModel.Extension;
@@ -1179,7 +1185,7 @@ namespace SWApp
             double length = Convert.ToDouble(profileSW.Length);
             int draftCount = Convert.ToInt32(profileSW.DraftCount);
 
-            swModel = swApp.NewDocument("C:\\EBA\\SZABLONY\\Solidworks\\EBA_Część.prtdot", 0, 0, 0);
+            swModel = (ModelDoc2)swApp.NewDocument("C:\\EBA\\SZABLONY\\Solidworks\\EBA_Część.prtdot", 0, 0, 0);
             swModel.SaveAs3($"{filepath}{partName}.SLDPRT", 0, 8);
 
             swExt = swModel.Extension;
@@ -1285,9 +1291,9 @@ namespace SWApp
                 swPart = (PartDoc)swModel;
                 object[] bodies;
                 swModel.Save3(4, 0, 0);
-                bodies = swPart.GetBodies2((int)swBodyType_e.swAllBodies, false);
+                bodies = (object[])swPart.GetBodies2((int)swBodyType_e.swAllBodies, false);
                 swBiggestBody = (Body2)bodies[0];
-                double[] massProps = swBiggestBody.GetMassProperties(7800);
+                double[] massProps = (double[])swBiggestBody.GetMassProperties(7800);
                 double bodyVolume = Convert.ToDouble(massProps[3]);
                 double maxVolume = bodyVolume;
                 double bodyVolumeBeforeConvert;
@@ -1300,12 +1306,12 @@ namespace SWApp
                 convertStatus.filepath = swModel.GetPathName();
 
                 swModelExt = swModel.Extension;
-                swMassProp = swModelExt.CreateMassProperty2();
+                swMassProp = (MassProperty2)swModelExt.CreateMassProperty2();
                 bodyVolumeBeforeConvert = swMassProp.Volume;
 
                 foreach (Body2 body in bodies)
                 {
-                    massProps = body.GetMassProperties(7800);
+                    massProps = (double[])body.GetMassProperties(7800);
                     bodyVolume = Convert.ToDouble(massProps[3]);
                     if (bodyVolume > maxVolume)
                     {
@@ -1313,8 +1319,8 @@ namespace SWApp
                         swBiggestBody = body;
                     }
                 }
-                swFaces = swBiggestBody.GetFaces();
-                swBiggestFace = swBiggestBody.GetFirstFace();
+                swFaces = (object[])swBiggestBody.GetFaces();
+                swBiggestFace = (Face2)swBiggestBody.GetFirstFace();
                 swSmallestFace = swBiggestFace;
                 biggestArea = swBiggestFace.GetArea();
                 smallestArea = biggestArea;
@@ -1333,7 +1339,7 @@ namespace SWApp
                         swSmallestFace = face;
                     }
                 }
-                object[] edges = swSmallestFace.GetEdges();
+                object[] edges = (object[])swSmallestFace.GetEdges();
 
 
                 Curve curve = default(Curve);
@@ -1341,7 +1347,7 @@ namespace SWApp
                 double thickness = 200;
                 foreach (Edge edge in edges)
                 {
-                    curve = edge.GetCurve();
+                    curve = (Curve)edge.GetCurve();
                     smallestCurve = curve.GetLength3(0, 0);
                     if (thickness > smallestCurve)
                     {
@@ -1363,7 +1369,7 @@ namespace SWApp
 
 
 
-                swMassProp = swModelExt.CreateMassProperty2();
+                swMassProp = (MassProperty2)swModelExt.CreateMassProperty2();
                 bodyVolumeAfterConvert = swMassProp.Volume;
 
                 volumeRatio = (bodyVolumeAfterConvert / bodyVolumeBeforeConvert) * 1000;
@@ -1381,9 +1387,9 @@ namespace SWApp
                 }
                 else if (volumeRatio > 1005 || volumeRatio < 995)
                 {
-                    swFeature = swModel.FeatureByPositionReverse(1);
+                    swFeature = (Feature)swModel.FeatureByPositionReverse(1);
                     swFeature.Select2(false, 0);
-                    swFeature = swModel.FeatureByPositionReverse(2);
+                    swFeature = (Feature)swModel.FeatureByPositionReverse(2);
                     swFeature.Select2(true, 0);
                     swModelExt.DeleteSelection2((int)swDeleteSelectionOptions_e.swDelete_Absorbed);
                     convertStatus.isDone = false;
@@ -1433,9 +1439,9 @@ namespace SWApp
                 swPart = (PartDoc)swModel;
                 object[] bodies;
                 swModel.Save3(4, 0, 0);
-                bodies = swPart.GetBodies2((int)swBodyType_e.swAllBodies, false);
+                bodies = (object[])swPart.GetBodies2((int)swBodyType_e.swAllBodies, false);
                 swBiggestBody = (Body2)bodies[0];
-                double[] massProps = swBiggestBody.GetMassProperties(7800);
+                double[] massProps = (double[])swBiggestBody.GetMassProperties(7800);
                 double bodyVolume = Convert.ToDouble(massProps[3]);
                 double maxVolume = bodyVolume;
                 double bodyVolumeBeforeConvert;
@@ -1451,12 +1457,12 @@ namespace SWApp
                 convertStatus.filepath = swModel.GetPathName();
 
                 swModelExt = swModel.Extension;
-                swMassProp = swModelExt.CreateMassProperty2();
+                swMassProp = (MassProperty2)swModelExt.CreateMassProperty2();
                 bodyVolumeBeforeConvert = swMassProp.Volume;
 
                 foreach (Body2 body in bodies)
                 {
-                    massProps = body.GetMassProperties(7800);
+                    massProps = (double[])body.GetMassProperties(7800);
                     bodyVolume = Convert.ToDouble(massProps[3]);
                     if (bodyVolume > maxVolume)
                     {
@@ -1466,8 +1472,8 @@ namespace SWApp
                 }
 
 
-                swFaces = swBiggestBody.GetFaces();
-                swBiggestFace = swBiggestBody.GetFirstFace();
+                swFaces = (object[])swBiggestBody.GetFaces();
+                swBiggestFace = (Face2)swBiggestBody.GetFirstFace();
                 swSmallestFace = swBiggestFace;
                 biggestArea = swBiggestFace.GetArea();
                 smallestArea = biggestArea;
@@ -1511,7 +1517,7 @@ namespace SWApp
                     
                 }
 
-                object[] edges = swSmallestFace.GetEdges();
+                object[] edges = (object[])swSmallestFace.GetEdges();
 
 
                 Curve curve = default(Curve);
@@ -1519,7 +1525,7 @@ namespace SWApp
                 double thickness = 200;
                 foreach (Edge edge in edges)
                 {
-                    curve = edge.GetCurve();
+                    curve = (Curve)edge.GetCurve();
                     smallestCurve = curve.GetLength3(0, 0);
                     if (thickness > smallestCurve)
                     {
@@ -1541,7 +1547,7 @@ namespace SWApp
 
 
 
-                swMassProp = swModelExt.CreateMassProperty2();
+                swMassProp = (MassProperty2)swModelExt.CreateMassProperty2();
                 bodyVolumeAfterConvert = swMassProp.Volume;
 
                 volumeRatio = (bodyVolumeAfterConvert / bodyVolumeBeforeConvert) * 1000;
@@ -1559,9 +1565,9 @@ namespace SWApp
                 }
                 else if (volumeRatio > 1005 || volumeRatio < 995)
                 {
-                    swFeature = swModel.FeatureByPositionReverse(1);
+                    swFeature = (Feature)swModel.FeatureByPositionReverse(1);
                     swFeature.Select2(false, 0);
-                    swFeature = swModel.FeatureByPositionReverse(2);
+                    swFeature = (Feature)swModel.FeatureByPositionReverse(2);
                     swFeature.Select2(true, 0);
                     swModelExt.DeleteSelection2((int)swDeleteSelectionOptions_e.swDelete_Absorbed);
                     convertStatus.isDone = false;
@@ -1601,7 +1607,7 @@ namespace SWApp
             List<ConvertStatus> convertStatuses = new List<ConvertStatus>();
             foreach (Component2 swComp in compsToConvert)
             {
-                swModel = swComp.GetModelDoc2();
+                swModel = (ModelDoc2)swComp.GetModelDoc2();
                 if (swModel.GetType() == (int)swDocumentTypes_e.swDocPART || swModel.GetType() == (int)swDocumentTypes_e.swDocIMPORTED_PART)
                 {
                     swApp.ActivateDoc3(swModel.GetPathName(), false, 0, 0);
@@ -1625,7 +1631,7 @@ namespace SWApp
                 if (nodeType == (int)swTreeControlItemType_e.swFeatureManagerItem_Component)
                 {
                     swComp = (Component2)node.Object;
-                    swModel = swComp.GetModelDoc2();
+                    swModel = (ModelDoc2)swComp.GetModelDoc2();
 
                     if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
                     {
@@ -1650,7 +1656,7 @@ namespace SWApp
         public void SplitPart(string assemblyFilepath, string assemblyFilename, string partToSplitFilepath)
         {
             SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-            ModelDoc2 swModel = swApp.ActivateDoc3(partToSplitFilepath,false,0,0);
+            ModelDoc2 swModel = (ModelDoc2)swApp.ActivateDoc3(partToSplitFilepath,false,0,0);
             Body2 bodyToSave;
             string filedir = System.IO.Path.GetDirectoryName(swModel.GetPathName());
             string bodyName;
@@ -1660,7 +1666,7 @@ namespace SWApp
             int warnings = 0;
             swPart = (PartDoc)swModel;
             swModelExt = swModel.Extension;
-            swBodies = swPart.GetBodies2((int)swBodyType_e.swAllBodies, false);
+            swBodies = (object[])swPart.GetBodies2((int)swBodyType_e.swAllBodies, false);
             List<string> filepaths = new List<string>();
 
             for (int i = 0; i < swBodies.Length; i++)
@@ -1684,7 +1690,7 @@ namespace SWApp
                 string cos = $"{filedir}\\{bodyName}.SLDPRT";
                 swModelExt.SaveAs3($"{filedir}\\{bodyName}.SLDPRT", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Copy, null, null, errors, warnings);
                 filepaths.Add($"{filedir}\\{bodyName}.SLDPRT");
-                swFeature = swModel.FeatureByPositionReverse(0);
+                swFeature = (Feature)swModel.FeatureByPositionReverse(0);
                 swFeature.Select2(false, 0);
                 swModelExt.DeleteSelection2((int)swDeleteSelectionOptions_e.swDelete_Absorbed);
             }
@@ -1716,7 +1722,7 @@ namespace SWApp
 
             string configName;
             SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-            swAss = swApp.ActiveDoc;
+            swAss = (AssemblyDoc)swApp.ActiveDoc;
             ModelDoc2 swModel = (ModelDoc2)swAss;
             ConfigurationManager swConfMgr;
             Configuration swConfig;
@@ -1746,9 +1752,9 @@ namespace SWApp
             for (int i = 0; i < swParts.Count; i++)
             {
                 //naming the sheet with the part num
-                swDrawing = swApp.ActiveDoc;
+                swDrawing = (DrawingDoc)swApp.ActiveDoc;
                 Sheet swSheet;
-                swSheet = swDrawing.GetCurrentSheet();
+                swSheet = (Sheet)swDrawing.GetCurrentSheet();
                 ModelDoc2 part = (ModelDoc2)swParts[i];
                 filepath = part.GetPathName();
                 swModelExt = part.Extension;
@@ -1763,7 +1769,7 @@ namespace SWApp
                 View frontView = swDrawing.CreateDrawViewFromModelView3(filepath, "*Przód", 0, 0, 0);
                 move = MoveDrawingView(frontView, "frontView");
                 frontView.SetName2($"FrontView{i}");
-                swModel = swApp.ActiveDoc;
+                swModel = (ModelDoc2)swApp.ActiveDoc;
                 string cos = part.GetPathName();
                 swModelExt = swModel.Extension;
                 swModelExt.SelectByID2($"FrontView{i}", "DRAWINGVIEW", 0, 0, 0, false, 0, null, 0);
@@ -1785,7 +1791,7 @@ namespace SWApp
                     isometricView.InsertBomTable4(true, 0.417, 0.047, (int)swBOMConfigurationAnchorType_e.swBOMConfigurationAnchor_BottomRight, (int)swBomType_e.swBomType_TopLevelOnly,
                        configName, "C:\\EBA\\SZABLONY\\SolidWorks\\tabela_material.sldbomtbt", false, 0, false);
 
-                    swDrawing = swApp.ActiveDoc;
+                    swDrawing = (DrawingDoc)swApp.ActiveDoc;
                     swModelExt.SelectByID2($"IsometricView{i}", "DRAWINGVIEW", 0, 0, 0, false, 0, null, 0);
                     AutoBalloonOptions balloon =  (AutoBalloonOptions)swDrawing.CreateAutoBalloonOptions();
                     balloon.IgnoreMultiple = true;
@@ -1839,8 +1845,8 @@ namespace SWApp
                 swPartsFilepaths.Add(filepath);
                 swApp.ActivateDoc3(swModel.GetPathName(), false, 0, 0);
                 swApp.INewDocument2(templatepath, (int)swDwgPaperSizes_e.swDwgPaperA3size, 0.297, 0.42);
-                swDrawing = swApp.ActiveDoc;
-                swSheet = swDrawing.GetCurrentSheet();
+                swDrawing = (DrawingDoc)swApp.ActiveDoc;
+                swSheet = (Sheet)swDrawing.GetCurrentSheet();
                 swModelExt = swModel.Extension;
                 swConfMgr = swModel.ConfigurationManager;
                 swConfig = swConfMgr.ActiveConfiguration;
@@ -1852,7 +1858,7 @@ namespace SWApp
                 View frontView = swDrawing.CreateDrawViewFromModelView3(filepath, "*Przód", 0, 0, 0);
                 move = MoveDrawingView(frontView, "frontView");
                 frontView.SetName2($"FrontView");
-                swModel = swApp.ActiveDoc;
+                swModel = (ModelDoc2)swApp.ActiveDoc;
                 swModelExt = swModel.Extension;
                 swModelExt.SelectByID2($"FrontView", "DRAWINGVIEW", 0, 0, 0, false, 0, null, 0);
                 View righView = swDrawing.CreateUnfoldedViewAt3(move[0] + 0.1, move[1], 0, false);
@@ -1872,7 +1878,7 @@ namespace SWApp
                     isometricView.InsertBomTable4(true, 0.417, 0.047, (int)swBOMConfigurationAnchorType_e.swBOMConfigurationAnchor_BottomRight, (int)swBomType_e.swBomType_TopLevelOnly,
                         configName, "C:\\EBA\\SZABLONY\\SolidWorks\\tabela_material.sldbomtbt", false, 0, false);
 
-                    swDrawing = swApp.ActiveDoc;
+                    swDrawing = (DrawingDoc)swApp.ActiveDoc;
                     swModelExt.SelectByID2($"IsometricView", "DRAWINGVIEW", 0, 0, 0, false, 0, null, 0);
                     AutoBalloonOptions balloon = (AutoBalloonOptions)swDrawing.CreateAutoBalloonOptions();
                     balloon.IgnoreMultiple = true;
@@ -1880,7 +1886,7 @@ namespace SWApp
                     swDrawing.AutoBalloon5(balloon);
 
                 }
-                swModel = swApp.ActiveDoc;
+                swModel = (ModelDoc2)swApp.ActiveDoc;
                 swModelExt = swModel.Extension;
                 swModelExt.SaveAs3(System.IO.Path.ChangeExtension(filepath, "SLDDRW"), (int)swSaveAsVersion_e.swSaveAsStandardDrawing, (int)swSaveAsOptions_e.swSaveAsOptions_SaveReferenced, null, null, 0, 0);
                 swApp.CloseDoc(filepath);
@@ -1893,7 +1899,7 @@ namespace SWApp
 
             double[] coords = new double[4];
             double[] move = new double[2];
-            coords = swView.GetOutline();
+            coords = (double[])swView.GetOutline();
 
             double xmin = 0;
             double xmax = 0;
@@ -1950,7 +1956,7 @@ namespace SWApp
                 if (nodeType == (int)swTreeControlItemType_e.swFeatureManagerItem_Component)
                 {
                     swComp = (Component2)node.Object;
-                    swModel = swComp.GetModelDoc2();
+                    swModel = (ModelDoc2)swComp.GetModelDoc2();
 
                     if (swPartsFilepaths.Contains(swModel.GetPathName()) == false)
                     {
@@ -2017,7 +2023,7 @@ namespace SWApp
             try
             {
                 SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-                ModelDoc2 swModel = swApp.ActiveDoc;
+                ModelDoc2 swModel = (ModelDoc2)swApp.ActiveDoc;
                 swModelExt = swModel.Extension;
                 CustomPropertyManager swCustomPropMgr =  swModelExt.get_CustomPropertyManager("");
                
@@ -2049,9 +2055,9 @@ namespace SWApp
             SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
             //try
             //{
-                ModelDoc2 swModel = swApp.ActiveDoc;
-                DrawingDoc swDrawing = swApp.ActiveDoc;
-                Sheet swSheet = swDrawing.GetCurrentSheet();
+                ModelDoc2 swModel = (ModelDoc2)swApp.ActiveDoc;
+                DrawingDoc swDrawing = (DrawingDoc)swApp.ActiveDoc;
+                Sheet swSheet = (Sheet)swDrawing.GetCurrentSheet();
                 View swDetailView;
                 object[] swViews;
                 object[] swAnnotations;
@@ -2066,13 +2072,13 @@ namespace SWApp
 
                 for(int i = 0; i < sheetCount; i++)
                 {
-                    swDrawing = swApp.ActiveDoc;
-                    swSheet = swDrawing.GetCurrentSheet();
-                    swViews = swSheet.GetViews();
+                    swDrawing = (DrawingDoc)swApp.ActiveDoc;
+                    swSheet = (Sheet)swDrawing.GetCurrentSheet();
+                    swViews = (object[])swSheet.GetViews();
                     foreach (View view in swViews)
                     {
-                        swAnnotations = view.GetAnnotations();
-                        swDetailedViews = view.GetDetailCircles();
+                        swAnnotations = (object[])view.GetAnnotations();
+                        swDetailedViews = (object[])view.GetDetailCircles();
                         
 
                         if (swAnnotations != null)
@@ -2102,7 +2108,7 @@ namespace SWApp
                             foreach (DetailCircle detail in swDetailedViews)
                             {
                                 swDetailView = detail.GetView();
-                                swDetailAnnotations = swDetailView.GetAnnotations();
+                                swDetailAnnotations = (object[])swDetailView.GetAnnotations();
                                 if(swDetailAnnotations != null)
                                 {
                                     foreach (Annotation detailAnnotation in swDetailAnnotations)
@@ -2110,7 +2116,7 @@ namespace SWApp
                                         annotationType = detailAnnotation.GetType();
                                         if (annotationType == (int)swAnnotationType_e.swNote)
                                         {
-                                            scale = view.ScaleRatio;
+                                            scale = (string)view.ScaleRatio;
                                             ChangeNoteText(detailAnnotation, dicPolEng, direction,scale);
                                         }
                                     }
@@ -2134,7 +2140,7 @@ namespace SWApp
 
         public void ChangeNoteText(Annotation swAnnotation, Dictionary<string,string>dicPolEng, string direction,string scale)
         {
-            Note swNote = swAnnotation.GetSpecificAnnotation();
+            Note swNote = (Note)swAnnotation.GetSpecificAnnotation();
             string[] currentText = swNote.GetText().Split(' ');
             string[] processText = currentText;
             string finalText;
@@ -2179,11 +2185,11 @@ namespace SWApp
             const string templatepath = "C:\\EBA\\SZABLONY\\SolidWorks\\EBA_A3_RYSUNEK.drwdot";
             swApp.INewDocument2(templatepath, (int)swDwgPaperSizes_e.swDwgPaperA3size, 0.297, 0.42);
 
-            swModel = swApp.ActiveDoc;
+            swModel = (ModelDoc2)swApp.ActiveDoc;
             swFeatMgr = swModel.FeatureManager;
             swModelExt = swModel.Extension;
-            swDrawing = swApp.ActiveDoc;
-            swSheet = swDrawing.GetCurrentSheet();
+            swDrawing = (DrawingDoc)swApp.ActiveDoc;
+            swSheet = (Sheet)swDrawing.GetCurrentSheet();
             swSheet.SetName($"Sheet0");
 
             swSheet.SheetFormatVisible = false;
@@ -2200,10 +2206,10 @@ namespace SWApp
              if(filepaths[i] != null)
                 {
                     //filepaths[i] = System.IO.Path.ChangeExtension(filepaths[i], "DXF");
-                    swSheet = swDrawing.GetCurrentSheet();
+                    swSheet = (Sheet)swDrawing.GetCurrentSheet();
                     swSheet.SheetFormatVisible = false;
                     swModelExt.SelectByID2($"Sheet{i}", "SHEET", 0, 0, 0, false, 0, null, 0);
-                    swImportData = swApp.GetImportFileData(filepaths[i]);
+                    swImportData = (ImportDxfDwgData)swApp.GetImportFileData(filepaths[i]);
                     swImportData.set_LengthUnit("", (int)swLengthUnit_e.swMM);
                     swImportData.SetPaperSize("", (int)swDwgPaperSizes_e.swDwgPaperA3size, 0, 0);
                     swImportData.set_ImportMethod("", (int)swImportDxfDwg_ImportMethod_e.swImportDxfDwg_ImportToExistingDrawing);
@@ -2229,9 +2235,9 @@ namespace SWApp
             try
             {
                 SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-                ModelDoc2 swModel = swApp.ActiveDoc;
+                ModelDoc2 swModel = (ModelDoc2)swApp.ActiveDoc;
                 ModelDocExtension swModelExt;
-                ExportPdfData exportPdfData = swApp.GetExportFileData((int)swExportDataFileType_e.swExportPdfData);
+                ExportPdfData exportPdfData = (ExportPdfData)swApp.GetExportFileData((int)swExportDataFileType_e.swExportPdfData);
                 exportPdfData.ViewPdfAfterSaving = false;
 
                 string assemblyFilepath = swModel.GetPathName();
@@ -2247,17 +2253,17 @@ namespace SWApp
                     swApp.ActivateDoc3(System.IO.Path.ChangeExtension(assemblyFilepath, ".SLDDRW"), false, 0, 0);
 
                 }
-                swModel = swApp.ActiveDoc;
+                swModel = (ModelDoc2)swApp.ActiveDoc;
 
-                DrawingDoc swDrawing = swApp.ActiveDoc;
-                Sheet swSheet = swDrawing.GetCurrentSheet();
-                sheetNames = swDrawing.GetSheetNames();
+                DrawingDoc swDrawing = (DrawingDoc)swApp.ActiveDoc;
+                Sheet swSheet = (Sheet)swDrawing.GetCurrentSheet();
+                sheetNames = (string[])swDrawing.GetSheetNames();
                 int sheetCount = swDrawing.GetSheetCount();
 
-                swDrawing = swApp.ActiveDoc;
+                swDrawing = (DrawingDoc)swApp.ActiveDoc;
                 swModel = (ModelDoc2)swDrawing;
                 swModelExt = swModel.Extension;
-                swSheet = swDrawing.GetCurrentSheet();
+                swSheet = (Sheet)swDrawing.GetCurrentSheet();
                 pdfFilepath = System.IO.Path.ChangeExtension(assemblyFilepath, ".PDF");
                 exportPdfData.SetSheets((int)swExportDataSheetsToExport_e.swExportData_ExportAllSheets, sheetName);
                 swModelExt.SaveAs3(pdfFilepath, (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_Silent, exportPdfData, null, 0, 0);
@@ -2296,7 +2302,7 @@ namespace SWApp
          public List<TrackingPart> TrackParts()
          {
             SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-            AssemblyDoc swAss = swApp.ActiveDoc;
+            AssemblyDoc swAss = (AssemblyDoc)swApp.ActiveDoc;
             List<TrackingPart> trackingParts = new List<TrackingPart>();
             string part;
             var partsList = CountParts(swAss);
@@ -2318,7 +2324,7 @@ namespace SWApp
         public CalculationObject InfoAboutPart()
         {
             SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-            ModelDoc2 swModel = swApp.ActiveDoc;
+            ModelDoc2 swModel = (ModelDoc2)swApp.ActiveDoc;
             CalculationObject calculationObject = new CalculationObject();
             string name = System.IO.Path.GetFileNameWithoutExtension(swModel.GetPathName());
             var type = swModel.GetType();
@@ -2356,7 +2362,7 @@ namespace SWApp
         public IEnumerable<SWTreeNode> SWTreeInit()
         {
             SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-            ModelDoc2 swModel = swApp.ActiveDoc;
+            ModelDoc2 swModel = (ModelDoc2)swApp.ActiveDoc;
             FeatureManager swFeatMgr = swModel.FeatureManager;
             TreeControlItem node = swFeatMgr.GetFeatureTreeRootItem2((int)swFeatMgrPane_e.swFeatMgrPaneBottom);
             string assemblyName = System.IO.Path.GetFileNameWithoutExtension(swModel.GetPathName());
@@ -2384,6 +2390,7 @@ namespace SWApp
             string parentNumOld;
             string finalDrawingNum = drawingNum.ToString();
             string name;
+            string path;
 
 
             while (node != null)
@@ -2392,8 +2399,9 @@ namespace SWApp
                 if (nodeType == (int)swTreeControlItemType_e.swFeatureManagerItem_Component)
                 {
                     swComp = (Component2)node.Object;
-                    swModel = swComp.GetModelDoc2();
+                    swModel = (ModelDoc2)swComp.GetModelDoc2();
                     name = System.IO.Path.GetFileNameWithoutExtension(swModel.GetPathName());
+                    path = System.IO.Path.GetFullPath(swModel.GetPathName());
                     if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
                     {
                         childNode = node.GetFirstChild();
@@ -2401,7 +2409,7 @@ namespace SWApp
                         parentNumOld = parentNum;
                         parentNum = $"{parentNum}.{drawingNum}";
                         //add position in a tree level 
-                        SWTreeNode newTreeLevel = new SWTreeNode() { Name = name };
+                        SWTreeNode newTreeLevel = new SWTreeNode() { Name = name, Path = path };
 
                         CreateTreeFromSW(childNode, parentNum, newTreeLevel);
                         swTreeNodes.Items.Add(newTreeLevel);
@@ -2411,7 +2419,7 @@ namespace SWApp
                     {
                         evaluatedParentNum = $"{parentNum}.{drawingNum}";
                         //add position in a tree level
-                        swTreeNodes.Items.Add(new SWTreeNode() { Name = name });
+                        swTreeNodes.Items.Add(new SWTreeNode() { Name = name, Path = path });
                     }
                     drawingNum++;
 
@@ -2422,8 +2430,366 @@ namespace SWApp
             return swTreeNodes;
         }
 
+        public void OpenSelectedPart(string path)
+        {
+            SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
+            swApp.ActivateDoc3(path, false, 0, 0);
+        }
+        public void CalculateAssembly(ModelDoc2 swModel)
+        {
+
+        }
+
+        public void CalculateNodes()
+        {
+            SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
+            ModelDoc2 swModel = (ModelDoc2)swApp.ActiveDoc;
+            var type = swModel.GetType();
+
+            if (type == (int)swDocumentTypes_e.swDocASSEMBLY)
+            {
+                CalculateAssembly(swModel);
+            }
+            else if(type == (int)swDocumentTypes_e.swDocPART)
+            {
+
+            }
+            else if(type == (int)swDocumentTypes_e.swDocIMPORTED_ASSEMBLY)
+            {
+
+            }
+            else if(type == (int)swDocumentTypes_e.swDocIMPORTED_PART)
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+
+        private double GetSheetThickness(Feature swFeat)
+        {
+            SheetMetalFeatureData swSheetMetal = default(SheetMetalFeatureData);
+            double thickness;
+
+            swSheetMetal = (SheetMetalFeatureData)swFeat.GetDefinition();
+            thickness = swSheetMetal.Thickness;
+
+            return (thickness * 1000);
+
+        }
+
+
+        private void SearchThroughOtherBodies(Feature swFeat)
+        {
+            Body2 swBody;
+            Feature swSubFeat = (Feature)swFeat.GetFirstSubFeature();
+            string name = swSubFeat.GetTypeName2();
+
+
+            while (swSubFeat != null)
+            {
+                //swBody = swSubFeat.GetSpecificFeature2();
+                swSubFeat = (Feature)swSubFeat.GetNextSubFeature();
+                name = swSubFeat.GetTypeName2();
+                Debug.Print(name);
+            }
+
+        }
+
+        public CalculationPartVM CalculateConvertedPart(bool isPainted)
+        {
+            SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
+            ModelDoc2 swModel = (ModelDoc2)swApp.ActiveDoc;
+            Feature swFeat;
+            SheetMetalFeatureData swSheetMetal;
+            ModelDocExtension swModelExt;
+            MassProperty2 swMassProp;
+            PartDoc swPart = (PartDoc)swModel;
+
+            Dictionary<string, int> bends = new Dictionary<string, int>();
+            double thickness;
+            double mass;
+            double massGross;
+            double cutTime; //todo how to calculate it through which framework?
+            double area;
+            int bends_0_5;
+            int bends_0_5_1;
+            int bends_1_1_5;
+            int bends_1_5;
+            int threads;
+            //int nutserts; //todo how to track it
+            //int pems; //todo how to track it
+            CalculationPartVM calculationPartVM = new CalculationPartVM();
+            ObservableCollection<Operation> allOperations = JsonConvert.DeserializeObject<CalculationPartVM>(allOperationsstr).Operations;
+            ObservableCollection<Operation> partOperations = new ObservableCollection<Operation>();
+
+            object[] swBodies = (object[])swPart.GetBodies2(-1, false);
+            string name;
+
+            //getting base info about part
+            swModelExt = swModel.Extension;
+            swFeat = (Feature)swModelExt.GetTemplateSheetMetal();
+            swSheetMetal = (SheetMetalFeatureData)swFeat.GetDefinition();
+            thickness = swSheetMetal.Thickness * 1000;
+            swMassProp = (MassProperty2)swModelExt.CreateMassProperty2();
+            mass = swMassProp.Mass * 1000;
+            area = swMassProp.SurfaceArea;
+
+            //todo Calculate Mass gross and cut time
+            //Nesting();
+
+            // traversing through part's tree
+            swFeat = (Feature)swModel.FirstFeature();
+
+            while (swFeat != null)
+            {
+                name = swFeat.GetTypeName2();
+                Debug.Print(name);
+
+                //case for calcute bending from flatten sketch ---> used in converted sheets from import body
+                if (name == "FlatPattern")
+                {
+                    bends = GetBendsFromSketch(swFeat);
+                    bends_0_5 = bends["<0,5m"];
+                    bends_0_5_1 = bends["0,5m<1m"];
+                    bends_1_1_5 = bends["1m<1,5m"];
+                    bends_1_5 = bends[">1,5m"];
+                }
+                else if (name == "CutListFolder")
+                {
+
+                }
+
+                swFeat = (Feature)swFeat.GetNextFeature();
+
+            }
+
+            threads = DetectCircularBodies(swBodies);
+
+            if (isPainted)
+            {
+
+                Operation operation = allOperations.FirstOrDefault(x => x.Name == "Malowanie");
+                PaintingInfo paintingInfo = GetPaintingTime(swModel, area);
+                operation.Time = paintingInfo.Time;
+                //operation.PricePerItem = paintingInfo.Price;
+                operation.QuantityPerItem = 1;
+                partOperations.Add(operation);
+
+
+            }
+            calculationPartVM.Operations = partOperations;
+
+            return calculationPartVM;
+        }
+
+
+        private Dictionary<string, int> GetBendsFromSketch(Feature swFeat)
+        {
+            Feature swSubFeat = (Feature)swFeat.GetFirstSubFeature();
+            Sketch sketch;
+            bool isConstruction;
+
+            Dictionary<string, int> bends = new Dictionary<string, int>();
+            bends.Add("<0,5m", 0);
+            bends.Add("0,5m<1m", 0);
+            bends.Add("1m<1,5m", 0);
+            bends.Add(">1,5m", 0);
+
+            string name;
+            object[] lines;
+
+            while (swSubFeat != null)
+            {
+                name = swSubFeat.GetTypeName2();
+
+                if (name == "ProfileFeature")
+                {
+                    sketch = (Sketch)swSubFeat.GetSpecificFeature2();
+                    lines = (object[])sketch.GetSketchSegments();
+                    foreach (SketchSegment line in lines)
+                    {
+                        isConstruction = line.ConstructionGeometry;
+                        if (isConstruction)
+                        {
+                            double length = line.GetLength() * 1000;
+                            if (length < 500)
+                            {
+                                bends["<0,5m"] = bends["<0,5m"] + 1;
+                            }
+                            else if (length >= 500 || length < 1000)
+                            {
+                                bends["0,5m<1m"] = bends["0,5m<1m"] + 1;
+                            }
+                            else if (length >= 1000 || length < 1500)
+                            {
+                                bends["1m<1,5m"] = bends["1m<1,5m"] + 1;
+                            }
+                            else
+                            {
+                                bends[">1,5m"] = bends[">1,5m"] + 1;
+                            }
+                        }
+                    }
+
+                    swSubFeat = null;
+                }
+                else
+                {
+                    swSubFeat = (Feature)swSubFeat.GetNextSubFeature();
+                }
+
+                Debug.Print(name);
+            }
+
+            return bends;
+        }
+
+        private int DetectCircularBodies(object[] swBodies)
+        {
+            int threadsCount = 0;
+            int faceCount;
+            int circularFaces = 0;
+            double[] massProps;
+            double bodyArea;
+            double bodyVolume;
+            double vaRatio;
+            bool isMetalSheet;
+            double[] faceNormal;
+            object[] faces;
+
+            foreach (Body2 swBody in swBodies)
+            {
+                isMetalSheet = swBody.IsSheetMetal();
+
+
+                if (isMetalSheet == false)
+                {
+                    string name = swBody.Name;
+                    massProps = (double[])swBody.GetMassProperties(7850);
+                    bodyArea = massProps[4] * 1000000;
+                    bodyVolume = massProps[3] * 1000000000;
+                    vaRatio = bodyVolume / bodyArea;
+                    faces = (object[])swBody.GetFaces();
+                    faceCount = swBody.GetFaceCount();
+                    foreach (Face2 face in faces)
+                    {
+                        faceNormal = (double[])face.Normal;
+                        if (faceNormal[0] == 0 && faceNormal[1] == 0 && faceNormal[2] == 0)
+                        {
+                            circularFaces++;
+                        }
+                    }
+
+
+                    if (circularFaces >= 2 && vaRatio > 0.3 && vaRatio < 0.8)
+                    {
+                        threadsCount++;
+                    }
+                    circularFaces = 0;
+                }
+            }
+
+            return threadsCount;
+        }
+        private PaintingInfo GetPaintingTime(ModelDoc2 swModel, double area)
+        {
+            PartDoc swPart = (PartDoc)swModel;
+            double paintingTime = 0;
+            double depth;
+            double width;
+            double height;
+            double[] partCoords;
+
+            partCoords = (double[])swPart.GetPartBox(false);
+
+            depth = Math.Abs(partCoords[2]) + Math.Abs(partCoords[5]);
+            height = Math.Abs(partCoords[1]) + Math.Abs(partCoords[4]);
+            width = Math.Abs(partCoords[0]) + Math.Abs(partCoords[3]);
+
+            return FindBestPaintingTime(depth, height, width, area);
+        }
+        private PaintingInfo FindBestPaintingTime(double depth, double height, double width, double area)
+        {
+            double boundX = 2400;
+            double boundY = 1200;
+            double boundZ = 800;
+            double verticalDistance = 300;
+            double horizontalDistance = 300;
+            double depthDistance = 300;
+            int verticalItemsPerOnce;
+            int depthItemsPerOnce;
+            double time;
+            double price;
+            double velocity = 0.8; //min/m
+            double rate = 850; //zł/hr
+            double ratio;
+            double areaPrice;
+            double areaRate = 0.25; //zł/dm2
+            double[] opt1 = { width, height, depth };
+            double[] opt2 = { width, depth, height };
+            double[] opt3 = { depth, width, height };
+            double[] opt4 = { depth, height, width };
+            double[] opt5 = { height, width, depth };
+            double[] opt6 = { height, depth, width };
+            double[][] opts = { opt1, opt2, opt3, opt4, opt5, opt6 };
+
+            area = area * 100; //converting to dm2
+
+            List<PaintingInfo> paintingObjs = new List<PaintingInfo>();
+
+            foreach (var array in opts)
+            {
+                rate = 850;
+                if (array[0] > boundX || array[1] > boundY || array[2] > 800)
+                {
+
+                }
+                else
+                {
+                    //adjusting horizontal distance for not hitting physically in painting machine
+                    if (array[0] < 400)
+                    {
+                        horizontalDistance = 300;
+                    }
+                    else if (array[0] > 400 && array[0] < 1100)
+                    {
+                        horizontalDistance = 400;
+                    }
+                    else
+                    {
+                        horizontalDistance = 500;
+                    }
+
+                    verticalItemsPerOnce = Convert.ToInt32(Math.Round(boundY / (array[1] + verticalDistance), 0));
+                    depthItemsPerOnce = Convert.ToInt32(Math.Round(boundZ / (array[2] + depthDistance), 0));
+                    time = velocity * (array[0] + horizontalDistance) / (1000 * (verticalItemsPerOnce * depthItemsPerOnce)) * 60; //per one item in s
+                    price = time * rate / 3600; //in zł
+
+                    areaPrice = area * areaRate;
+                    ratio = areaPrice / price;
+                    while (ratio > 2)
+                    {
+                        rate = rate * 1.02;
+                        price = time * rate / 3600; //in zł
+                        ratio = areaPrice / price;
+                    }
+                    PaintingInfo paintingObj = new PaintingInfo();
+                    paintingObj.Time = time;
+                    paintingObj.Price = price;
+                    paintingObj.Rate = rate;
+                    paintingObj.Ratio = ratio;
+                    paintingObjs.Add(paintingObj);
+                }
+            }
+
+            return paintingObjs.OrderBy(x => x.Price).FirstOrDefault();
+
+        }
 
     }
-
 }
+
 

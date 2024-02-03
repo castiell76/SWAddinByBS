@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 
 
-namespace SWApp
+namespace SWApp.Models
 {
 
     class PictureDispConverter : AxHost
@@ -20,8 +20,8 @@ namespace SWApp
 
         public static System.Drawing.Image Convert(object objIDispImage)
         {
-            System.Drawing.Image objPicture = default(System.Drawing.Image);
-            objPicture = (System.Drawing.Image)System.Windows.Forms.AxHost.GetPictureFromIPicture(objIDispImage);
+            System.Drawing.Image objPicture = default;
+            objPicture = GetPictureFromIPicture(objIDispImage);
             return objPicture;
         }
     }

@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace SWApp
+namespace SWApp.Models
 {
     public class FileProperty
     {
         public string name { get; set; }
         public string value { get; set; }
-       
+
     }
 }

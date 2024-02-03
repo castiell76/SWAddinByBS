@@ -13,9 +13,9 @@ using SolidWorks.Interop.sldworks;
 using System.Runtime.InteropServices;
 using Microsoft.VisualBasic.FileIO;
 
-namespace SWApp
+namespace SWApp.Models
 {
-  
+
     public class ExcelFile
     {
         SWObject swObject = new SWObject();
@@ -30,9 +30,9 @@ namespace SWApp
         XSSFDrawing drawing;
         XSSFClientAnchor anchor;
         XSSFPicture picture;
-        
 
-        public void CreateWorkBook(DataTable dt,string indexName, string filepath, string assemblyFilepath, string assemblyConfig)
+
+        public void CreateWorkBook(DataTable dt, string indexName, string filepath, string assemblyFilepath, string assemblyConfig)
         {
 
             //creating new workbook
@@ -91,9 +91,9 @@ namespace SWApp
 
             foreach (DataColumn column in dt.Columns)
             {
-                if(column.ColumnName == "status" || column.ColumnName == "createdBy" || column.ColumnName == "checkedBy" || column.ColumnName == "dxfExist" || column.ColumnName == "stepExist")
+                if (column.ColumnName == "status" || column.ColumnName == "createdBy" || column.ColumnName == "checkedBy" || column.ColumnName == "dxfExist" || column.ColumnName == "stepExist")
                 {
-                   
+
                 }
                 else
                 {
@@ -110,14 +110,14 @@ namespace SWApp
                 IRow row = sheet.CreateRow(i + 2);
                 for (int j = 0; j < dt.Columns.Count; j++)
                 {
-                   
+
                     DataColumn dc = dt.Columns[j];
                     row.Height = 2000;
                     if (dc.ColumnName == "filepath")
                     {
                         ICell cell = row.CreateCell(j);
                         sheet.SetColumnWidth(j, 7000);
-                        
+
                         configName = dt.Rows[i].Field<string>(10);
                         modelFilepath = dt.Rows[i].Field<string>(j);
                         imgFilepath = swObject.GetBitMap(modelFilepath, configName);
@@ -141,20 +141,20 @@ namespace SWApp
                         {
 
                         }
-                       
+
 
                     }
-                    else if(dc.ColumnName == "status" || dc.ColumnName == "createdBy" || dc.ColumnName == "checkedBy" || dc.ColumnName == "dxfExist" || dc.ColumnName == "stepExist")
+                    else if (dc.ColumnName == "status" || dc.ColumnName == "createdBy" || dc.ColumnName == "checkedBy" || dc.ColumnName == "dxfExist" || dc.ColumnName == "stepExist")
                     {
 
-                        
+
                     }
                     else
                     {
-                        
-                        if(dc.ColumnName == "comments")
+
+                        if (dc.ColumnName == "comments")
                         {
-                            ICell cell = row.CreateCell(j-5);
+                            ICell cell = row.CreateCell(j - 5);
                             cell.SetCellValue(dt.Rows[i].Field<string>(j));
                             sheet.AutoSizeColumn(j);
                             cell.CellStyle = dataStyle;
@@ -166,7 +166,7 @@ namespace SWApp
                             sheet.AutoSizeColumn(j);
                             cell.CellStyle = dataStyle;
                         }
-                        
+
                     }
 
                 }
@@ -207,12 +207,12 @@ namespace SWApp
                     workbook.Write(stream);
                 }
             }
-            catch (System.IO.IOException)
+            catch (IOException)
             {
                 MessageBox.Show("Plik tylko do odczytu");
             }
-           
+
         }
-        
+
     }
 }

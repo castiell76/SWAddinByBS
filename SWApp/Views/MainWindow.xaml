@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SWApp"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         mc:Ignorable="d"
              Height="Auto"
              Width="Auto"
@@ -13,7 +14,6 @@
              VerticalAlignment="Stretch" HorizontalAlignment="Stretch" d:DesignHeight="630">
 
     <Grid Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-
         <TabControl HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch" Width="Auto" >
             <TabItem x:Name="tab1" Header="Działania z plikami">
                 <Grid>
@@ -67,7 +67,7 @@
                             </Style>
                         </Button.Resources>
                     </Button >
-                    <Label Grid.Column="1" Content="Label" HorizontalAlignment="Left" Margin="67,115,0,0" VerticalAlignment="Top"/>
+                    <ui:Button Content="Button" HorizontalAlignment="Left" Margin="164,376,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="68" Width="127"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Generuj DXF" TabIndex="10">
@@ -470,4 +470,12 @@
             </TabItem>
         </TabControl>
     </Grid>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemesDictionary Theme="Light" />
+                <ui:ControlsDictionary />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
 </UserControl>

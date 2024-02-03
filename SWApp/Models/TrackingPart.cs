@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SWApp
+namespace SWApp.Models
 {
     public class TrackingPart
     {

@@ -6,9 +6,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace SWApp
+namespace SWApp.Models
 {
-     class NaturalSorting
+    class NaturalSorting
     {
         public static class SafeNativeMethods
         {

@@ -1,0 +1,693 @@
+﻿{
+"Operations": 
+[
+{
+	"Name":"Centrum - 5 osi - płyta", 
+	"Type":"Drewno", 
+	"Time": "1",
+	"Rate": "120",
+	"Unit": "s",
+	"TPZ": "72.84"
+},
+{
+	"Name":"Ciąć pret  L<500", 
+	"Type":"Krajalnia", 
+	"Time":"6",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "5"
+},
+{
+	"Name":"Ciąć pret  L<500<1000", 
+	"Type":"Krajalnia", 
+	"Time":"12",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "5"
+},
+{
+	"Name":"Ciąć profil < 20 x 20", 
+	"Type":"Krajalnia", 
+	"Time":"30",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "5"
+},
+{
+	"Name":"Ciąć profil < 50 x 50", 
+	"Type":"Krajalnia", 
+	"Time":"60",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "5"
+},
+{
+	"Name":"Cięcie - Ploter Kimla", 
+	"Type":"Tworzywa", 
+	"Time":"1",
+	"Rate": "110",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Czyszczenie końców profili", 
+	"Type":"Ślusarnia", 
+	"Time":"1",
+	"Rate": "110",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Drillowanie otworów + gwintowanie", 
+	"Type":"Ślusarnia", 
+	"Time":"42",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Druk - laminowanie (m2)", 
+	"Type":"Druk", 
+	"Time":"20",
+	"Rate": "2",
+	"Unit": "m2/min",
+	"TPZ": "15"
+},
+{
+	"Name":"Druk - lateks(m2)", 
+	"Type":"Druk", 
+	"Time":"0.06",
+	"Rate": "25",
+	"Unit": "m2/min",
+	"TPZ": "20"
+},
+{
+	"Name":"Druk - plotowanie duże kształty > niż 0,25 m2", 
+	"Type":"Druk", 
+	"Time":"15",
+	"Rate": "0.3",
+	"Unit": "m2/min",
+	"TPZ": "5"
+},
+{
+	"Name":"Druk - plotowanie nieregularne kształty <0,25 m2", 
+	"Type":"Druk", 
+	"Time":"9",
+	"Rate": "0",
+	"Unit": "m2/min",
+	"TPZ": "5"
+},
+{
+	"Name":"Druk - praca operatora", 
+	"Type":"Druk", 
+	"Time":"0.05",
+	"Rate": "28",
+	"Unit": "hr",
+	"TPZ": "50"
+},
+{
+	"Name":"Druk - przygotowanie", 
+	"Type":"Druk", 
+	"Time":"0.05",
+	"Rate": "28",
+	"Unit": "hr",
+	"TPZ": "50"
+},
+{
+	"Name":"Druk - rozcinanie", 
+	"Type":"Druk", 
+	"Time":"1",
+	"Rate": "2",
+	"Unit": "m2/min",
+	"TPZ": "2"
+},
+{
+	"Name":"Druk - transfer", 
+	"Type":"Druk", 
+	"Time":"0.33",
+	"Rate": "2",
+	"Unit": "m2/min",
+	"TPZ": "2"
+},
+{
+	"Name":"Druk - wybieranie", 
+	"Type":"Druk", 
+	"Time":"0.25",
+	"Rate": "3",
+	"Unit": "m2/min",
+	"TPZ": "2"
+},
+{
+	"Name":"Druk 3D", 
+	"Type":"Tworzywa", 
+	"Time":"1",
+	"Rate": "15",
+	"Unit": "s",
+	"TPZ": "20"
+},
+{
+	"Name":"Druk solwentowy(m2)", 
+	"Type":"Druk", 
+	"Time":"0.05",
+	"Rate": "25",
+	"Unit": "m2/min",
+	"TPZ": "25"
+},
+{
+	"Name":"Druk UV(m2)", 
+	"Type":"Druk", 
+	"Time":"0.15",
+	"Rate": "50",
+	"Unit": "m2/min",
+	"TPZ": "30"
+},
+{
+	"Name":"Druk UV z podkładem", 
+	"Type":"Druk", 
+	"Time":"0.1",
+	"Rate": "80",
+	"Unit": "m2/min",
+	"TPZ": "30"
+},
+{
+	"Name":"Fazowanie otworów", 
+	"Type":"Ślusarnia", 
+	"Time":"18",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Frezowanie krawędzi - frezarka dolnowrzecionowa", 
+	"Type":"Tworzywa", 
+	"Time":"1",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "10"
+},
+{
+	"Name":"Frezowanie - CNC", 
+	"Type":"Ślusarnia", 
+	"Time":"1",
+	"Rate": "130",
+	"Unit": "s",
+	"TPZ": "40"
+},
+{
+	"Name":"Frezowanie ręczne (drewno)", 
+	"Type":"Drewno", 
+	"Time":"2",
+	"Rate": "75",
+	"Unit": "min",
+	"TPZ": "15"
+},
+{
+	"Name":"Gięcie kształtowników - giętarka SAM", 
+	"Type":"Ślusarnia", 
+	"Time":"60",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "20"
+},
+{
+	"Name":"Gięcie rur - giętarka trzpieniowa SHUZ TUNG", 
+	"Type":"Ślusarnia", 
+	"Time":"60",
+	"Rate": "150",
+	"Unit": "s",
+	"TPZ": "60"
+},
+{
+	"Name":"Gięcie tworzyw", 
+	"Type":"Tworzywa", 
+	"Time":"1",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Giętarka do drutu", 
+	"Type":"Ślusarnia", 
+	"Time":"1",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Gratowanie blach", 
+	"Type":"Ślusarnia", 
+	"Time":"30",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "5"
+},
+{
+	"Name":"Gwintowanie", 
+	"Type":"Ślusarnia", 
+	"Time":"30",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Klejenie tworzyw klejem rozp.", 
+	"Type":"Tworzywa", 
+	"Time":"3",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Klejene tworzyw klejem UV", 
+	"Type":"Tworzywa", 
+	"Time":"8",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Kombo - lasero wykrawarka", 
+	"Type":"Combo", 
+	"Time":"1",
+	"Rate": "300",
+	"Unit": "s",
+	"TPZ": "6"
+},
+{
+	"Name":"Kontrola materiałów powierzonych", 
+	"Type":"Montaz i pakowanie", 
+	"Time":"1",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "6"
+},
+{
+	"Name":"Kosmetyka", 
+	"Type":"Drewno", 
+	"Time":"1",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "6"
+},
+{
+	"Name":"Lakierowanie - płyta", 
+	"Type":"Drewno", 
+	"Time":"1",
+	"Rate": "40",
+	"Unit": "s",
+	"TPZ": "30"
+},
+{
+	"Name":"Laser do blach", 
+	"Type":"Laser blachy", 
+	"Time":"1",
+	"Rate": "350",
+	"Unit": "s",
+	"TPZ": "3"
+},
+{
+	"Name":"Laser do profili BLM", 
+	"Type":"Laser rury", 
+	"Time":"1",
+	"Rate": "400",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Malowanie", 
+	"Type":"Malarnia", 
+	"Time":"1",
+	"Rate": "850",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Montaż", 
+	"Type":"Montaż i pakowanie", 
+	"Time":"1",
+	"Rate": "75",
+	"Unit": "s",
+	"TPZ": "60"
+},
+{
+	"Name":"Nesting - płyta", 
+	"Type":"Drewno", 
+	"Time":"1",
+	"Rate": "120",
+	"Unit": "s",
+	"TPZ": "20"
+},
+{
+	"Name":"Oklejanie - okleiniarka", 
+	"Type":"Drewno", 
+	"Time":"1",
+	"Rate": "120",
+	"Unit": "s",
+	"TPZ": "10"
+},
+{
+	"Name":"Oklejanie - ręczne", 
+	"Type":"Drewno", 
+	"Time":"1",
+	"Rate": "75",
+	"Unit": "s",
+	"TPZ": "10"
+},
+{
+	"Name":"Operacje ślusarskie", 
+	"Type":"Ślusarnia", 
+	"Time":"1",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Pakowanie", 
+	"Type":"Montaż i pakowanie", 
+	"Time":"1",
+	"Rate": "70",
+	"Unit": "s",
+	"TPZ": "60"
+},
+{
+	"Name":"Piła formatowa", 
+	"Type":"Drewno", 
+	"Time":"1",
+	"Rate": "65",
+	"Unit": "s",
+	"TPZ": "10"
+},
+{
+	"Name":"Piła panelowa", 
+	"Type":"Drewno", 
+	"Time":"1",
+	"Rate": "110",
+	"Unit": "s",
+	"TPZ": "10"
+},
+{
+	"Name":"Ploter Kimla - rozcinanie nożem", 
+	"Type":"Tworzywa", 
+	"Time":"5",
+	"Rate": "0.5",
+	"Unit": "m/min",
+	"TPZ": "5"
+},
+{
+	"Name":"Ploter Kimla rozcinanie frezem", 
+	"Type":"Tworzywa", 
+	"Time":"0.66",
+	"Rate": "5",
+	"Unit": "m/min",
+	"TPZ": "5"
+},
+{
+	"Name":"Prostowanie blach/profili", 
+	"Type":"Ślusarnia", 
+	"Time":"60",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "5"
+},
+{
+	"Name":"Skipper", 
+	"Type":"Drewno", 
+	"Time":"1",
+	"Rate": "110",
+	"Unit": "s",
+	"TPZ": "100"
+},
+{
+	"Name":"Spawanie laserem", 
+	"Type":"Spawalnia", 
+	"Time":"3",
+	"Rate": "130",
+	"Unit": "s",
+	"TPZ": "30"
+},
+{
+	"Name":"Spawanie MIG/MAG", 
+	"Type":"Spawalnia", 
+	"Time":"9",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "30"
+},
+{
+	"Name":"Spawanie Robot", 
+	"Type":"Spawalnia", 
+	"Time":"1",
+	"Rate": "270",
+	"Unit": "s",
+	"TPZ": "180"
+},
+{
+	"Name":"Spawanie TIG", 
+	"Type":"Spawalnia", 
+	"Time":"36",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "30"
+},
+{
+	"Name":"Szlifowanie", 
+	"Type":"Szlifiernia", 
+	"Time":"1",
+	"Rate": "120",
+	"Unit": "s",
+	"TPZ": "10"
+},
+{
+	"Name":"Szlifowanie INOX", 
+	"Type":"Ślusarnia", 
+	"Time":"1",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "60"
+},
+{
+	"Name":"Szlifowanie krawędziowe", 
+	"Type":"Drewno", 
+	"Time":"5",
+	"Rate": "75",
+	"Unit": "min",
+	"TPZ": "30"
+},
+{
+	"Name":"Szlifowanie oscylacyjne", 
+	"Type":"Drewno", 
+	"Time":"1",
+	"Rate": "80",
+	"Unit": "s",
+	"TPZ": "10"
+},
+{
+	"Name":"Szlifowanie krawędziowe", 
+	"Type":"Drewno", 
+	"Time":"5",
+	"Rate": "75",
+	"Unit": "min",
+	"TPZ": "30"
+},
+{
+	"Name":"Śrutowanie", 
+	"Type":"Ślusarnia", 
+	"Time":"60",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "20"
+},
+{
+	"Name":"Toczenie", 
+	"Type":"Ślusarnia", 
+	"Time":"1",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "75"
+},
+{
+	"Name":"Tworzywa - prace manualne", 
+	"Type":"Tworzywa", 
+	"Time":"1",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Walcowanie blach", 
+	"Type":"Ślusarnia", 
+	"Time":"90",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "10"
+},
+{
+	"Name":"Wciskanie PEM", 
+	"Type":"Ślusarnia", 
+	"Time":"24",
+	"Rate": "110",
+	"Unit": "s",
+	"TPZ": "10"
+},
+{
+	"Name":"Wiercenie - wiertarka wielowrzecionowa", 
+	"Type":"Drewno", 
+	"Time":"45",
+	"Rate": "75",
+	"Unit": "s",
+	"TPZ": "10"
+},
+{
+	"Name":"Wiercenie - wiertarka pionowa", 
+	"Type":"Drewno", 
+	"Time":"1",
+	"Rate": "75",
+	"Unit": "s",
+	"TPZ": "10"
+},
+{
+	"Name":"Wiercenie otworów < 6; g=3mm", 
+	"Type":"Ślusarnia", 
+	"Time":"18",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Wiercenie otworów < 8; 8<10mm", 
+	"Type":"Ślusarnia", 
+	"Time":"48",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Wiercenie otworów <8; g=3mm", 
+	"Type":"Ślusarnia", 
+	"Time":"30",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Wiercenie otworów > 8", 
+	"Type":"Ślusarnia", 
+	"Time":"60",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Zaginanie blach - Centrum", 
+	"Type":"Zaginanie blach", 
+	"Time":"1",
+	"Rate": "300",
+	"Unit": "s",
+	"TPZ": "15"
+},
+{
+	"Name":"Zaginanie blach - Prasa", 
+	"Type":"Zaginanie blach", 
+	"Time":"18",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "20"
+},
+{
+	"Name":"Zaginanie blach - Ręcznie", 
+	"Type":"Ślusarnia", 
+	"Time":"60",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "20"
+},
+{
+	"Name":"Zaginanie blach - Zaginarka", 
+	"Type":"Zaginanie blach", 
+	"Time":"30",
+	"Rate": "130",
+	"Unit": "s",
+	"TPZ": "20"
+},
+{
+	"Name":"Zaginanie blach 0.5m < L < 1m", 
+	"Type":"Zaginanie blach", 
+	"Time":"24",
+	"Rate": "150",
+	"Unit": "s",
+	"TPZ": "20"
+},
+{
+	"Name":"Zaginanie blach 1m < L < 1.5m", 
+	"Type":"Zaginanie blach", 
+	"Time":"30",
+	"Rate": "150",
+	"Unit": "s",
+	"TPZ": "20"
+},
+{
+	"Name":"Zaginanie blach L < 0.5m", 
+	"Type":"Zaginanie blach", 
+	"Time":"18",
+	"Rate": "150",
+	"Unit": "s",
+	"TPZ": "20"
+},
+{
+	"Name":"Zaginanie blach  L > 1.5m", 
+	"Type":"Zaginanie blach", 
+	"Time":"48",
+	"Rate": "150",
+	"Unit": "s",
+	"TPZ": "20"
+},
+{
+	"Name":"Zaginanie prętów - prasa", 
+	"Type":"Ślusarnia", 
+	"Time":"12",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "20"
+},
+{
+	"Name":"Zaginanie prętów - ręczne", 
+	"Type":"Ślusarnia", 
+	"Time":"18",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "10"
+},
+{
+	"Name":"Zgrzewanie doczołowe", 
+	"Type":"Ślusarnia", 
+	"Time":"42",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "20"
+},
+{
+	"Name":"Zaginanie punktowe", 
+	"Type":"Ślusarnia", 
+	"Time":"42",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "20"
+},
+{
+	"Name":"Zgrzewanie szpilek", 
+	"Type":"Ślusarnia", 
+	"Time":"30",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "10"
+},
+{
+	"Name":"Zwijanie profili (rur)", 
+	"Type":"Ślusarnia", 
+	"Time":"30",
+	"Rate": "100",
+	"Unit": "s",
+	"TPZ": "20"
+}
+]
+}

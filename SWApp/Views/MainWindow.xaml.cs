@@ -13,11 +13,13 @@ using System.Xml;
 using Microsoft.Win32;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
-using static SWApp.NaturalSorting;
+using static SWApp.Models.NaturalSorting;
 //using MachinelearningwithFullPhotos;
 using Aspose.Pdf.Operators;
 using System.Windows.Shapes;
 using System.Windows.Media;
+using SWApp.Models;
+using SWApp.VM;
 
 namespace SWApp
 {
@@ -28,7 +30,7 @@ namespace SWApp
     public partial class MainWindow : UserControl
     {
         
-        private readonly ViewModel _viewModel = new ViewModel(); 
+        private readonly ProfilesVM _viewModel = new ProfilesVM(); 
         SWObject sWObject = new SWObject();
         ModelDoc2 swModel;
         FeatureManager swFeatMgr;
@@ -43,7 +45,7 @@ namespace SWApp
         public MainWindow()
         {
             InitializeComponent();
-            _viewModel = new ViewModel();
+            _viewModel = new ProfilesVM();
             //generate rows for datagrid profiles
             dataGridProfile.ItemsSource = _viewModel.ProfilesSWVM;
 
@@ -103,7 +105,7 @@ namespace SWApp
                     ConfigurationManager swConfigurationManager;
                     Configuration swConf;
                     AssemblyDoc swAss;
-                    swAss = swApp.ActiveDoc;
+                    swAss = (AssemblyDoc)swApp.ActiveDoc;
                     object[] swComps;
                     int options = 1;
                     int swCompsCount;
@@ -128,7 +130,7 @@ namespace SWApp
                         sWObject.saveDXFFromDrawing(txtFolderDir.Text, (bool)cbDXFDir.IsChecked);
                     }
                    
-                    swComps = swAss.GetComponents(false);
+                    swComps = (object[])swAss.GetComponents(false);
                     swCompsCount = swAss.GetComponentCount(false);
                     pb.Start(0, 1000,"In Progress");
 
@@ -252,7 +254,7 @@ namespace SWApp
         private void BtnSort_Click(object sender, RoutedEventArgs e)
         {
             SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-            swModel = swApp.ActiveDoc;
+            swModel = (ModelDoc2)swApp.ActiveDoc;
             sWObject.SortTree_All(cboxSort.IsChecked == true, swModel);
         }
 
@@ -262,7 +264,7 @@ namespace SWApp
             {
                 SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
                
-                swModel = swApp.ActiveDoc;
+                swModel = (ModelDoc2)swApp.ActiveDoc;
                 int modelType = swModel.GetType();
 
                 string material;
@@ -280,7 +282,7 @@ namespace SWApp
 
                 if (modelType == (int)swDocumentTypes_e.swDocASSEMBLY)
                 {
-                    AssemblyDoc swAss = swApp.ActiveDoc;
+                    AssemblyDoc swAss = (AssemblyDoc)swApp.ActiveDoc;
                     if (swAss.HasUnloadedComponents() == true || swAss.GetLightWeightComponentCount() != 0)
                     {
                         MessageBox.Show("Przed konwersją należy przywrócić wygaszone/odciążone pliki w złożeniu");
@@ -467,7 +469,7 @@ namespace SWApp
                 swConfig = (Configuration)swConfMgr.ActiveConfiguration;
                 swComp = (Component2)swConfig.GetRootComponent3(true);
                 TreeControlItem node = swFeatMgr.GetFeatureTreeRootItem2((int)swFeatMgrPane_e.swFeatMgrPaneBottom);
-                swModel = swComp.GetModelDoc2();
+                swModel = (ModelDoc2)swComp.GetModelDoc2();
                 sWObject.SetCustomProperty(swModel, "nr rysunku", "0", "");
                 node = node.GetFirstChild();
                 List<string> doneParts = new List<string>();
@@ -571,14 +573,14 @@ namespace SWApp
                 List<object> comps = new List<object>(profilesSW);
                 List<string> compsNames = new List<string>();
                 SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-                AssemblyDoc swAss = swApp.ActiveDoc;
+                AssemblyDoc swAss = (AssemblyDoc)swApp.ActiveDoc;
                 if (swAss.HasUnloadedComponents() == true || swAss.GetLightWeightComponentCount() != 0)
                 {
                     MessageBox.Show("Przed konwersją należy przywrócić wygaszone/odciążone pliki w złożeniu");
                 }
                 else
                 {
-                    ModelDoc2 swModel = swApp.ActiveDoc;
+                    ModelDoc2 swModel = (ModelDoc2)swApp.ActiveDoc;
                     swModel.Save3(4, 0, 0);
                     swFeatMgr = swModel.FeatureManager;
                     TreeControlItem rootNode = swFeatMgr.GetFeatureTreeRootItem2(0);
@@ -601,7 +603,7 @@ namespace SWApp
         private void BtnSplitPartsToAssembly_Click(object sender, RoutedEventArgs e)
         {
             SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-            swModel = swApp.ActiveDoc;
+            swModel = (ModelDoc2)swApp.ActiveDoc;
             string partFilepath = swModel.GetPathName();
             List<string> filepathWithName = sWObject.CreateAssembly();
 

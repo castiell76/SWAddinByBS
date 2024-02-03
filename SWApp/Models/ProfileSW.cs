@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SWApp
+namespace SWApp.Models
 {
     public class ProfileSW : INotifyPropertyChanged
     {
@@ -76,7 +76,7 @@ namespace SWApp
         }
         public string Type
         {
-            get { return type;  }
+            get { return type; }
             set { type = value; OnPropertyChanged(); }
 
 
@@ -93,13 +93,13 @@ namespace SWApp
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName]string name = null)
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
         private void UpdateType()
         {
-            if (thickness == 0 && y == 0 && x!= 0 && length !=0)
+            if (thickness == 0 && y == 0 && x != 0 && length != 0)
             {
                 Type = "pręt okrągły";
             }
@@ -111,7 +111,7 @@ namespace SWApp
             {
                 Type = "rura okrągła";
             }
-            else if (y !=0 && thickness != 0 && x!=0 && length != 0)
+            else if (y != 0 && thickness != 0 && x != 0 && length != 0)
             {
                 Type = "rura prostokątna";
             }
@@ -119,7 +119,7 @@ namespace SWApp
             {
                 Type = "wprowadź dane profila";
             }
-            
+
         }
     }
 }

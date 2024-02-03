@@ -7,16 +7,17 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using SWApp.Models;
 
-namespace SWApp
+namespace SWApp.VM
 {
     public class SWTreeNode : INotifyPropertyChanged
     {
         public SWTreeNode()
         {
-            this.Items = new ObservableCollection<SWTreeNode>();
-            this.Materials = new ObservableCollection<Material>();
-            this.Operations = new ObservableCollection<Operation>();
+            Items = new ObservableCollection<SWTreeNode>();
+            Materials = new ObservableCollection<Material>();
+            Operations = new ObservableCollection<Operation>();
         }
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
@@ -26,14 +27,15 @@ namespace SWApp
         private ObservableCollection<Material> _materials { get; set; }
         public ObservableCollection<Material> Materials
         {
-            get { return _materials;  }
+            get { return _materials; }
             set { _materials = value; OnPropertyChanged(); }
         }
-        public int ID {  get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
+        public string Path { get; set; }
         public string Description { get; set; }
         public ObservableCollection<Operation> Operations { get; set; }
-        public List<SWTreeNode> Childs {  get; set; }
+        public List<SWTreeNode> Childs { get; set; }
         public SWTreeNode Parent { get; set; }
         public int Quantity { get; set; }
 
