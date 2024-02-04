@@ -32,14 +32,14 @@ namespace SWApp
         {
             var selectedItem = (SWTreeNode)swTreeView.SelectedItem;
             selectedItem.AddMaterial(new Material() { Name = "Blacha", Description="JANEK", ID=1 });
-            dgCalculationModuleMaterials.ItemsSource = selectedItem.Materials;
+            
         }
 
         private void swTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (e.NewValue is SWTreeNode selectedNode)
             {
-                dgCalculationModuleMaterials.ItemsSource = selectedNode.Materials;
+                
                 dgCalculationModuleOperations.ItemsSource = selectedNode.Operations;
             }
         }
@@ -73,10 +73,10 @@ namespace SWApp
             var selectedNode = (SWTreeNode)swTreeView.SelectedItem;
             swObject.OpenSelectedPart(selectedNode.Path);
             CalculationPartVM calcPart = swObject.CalculateConvertedPart(true);
-            selectedNode.Operations = calcPart.Operations;
-            selectedNode.Materials = calcPart.Materials;
-            dgCalculationModuleMaterials.ItemsSource = selectedNode.Materials;
-            dgCalculationModuleOperations.ItemsSource = selectedNode.Operations;
+            selectedNode.Assets = calcPart.CalculationItems;
+            //selectedNode.Materials = calcPart.Materials;
+            //dgCalculationModuleMaterials.ItemsSource = selectedNode.Materials;
+            dgCalculationModuleOperations.ItemsSource = selectedNode.Assets;
         }
     }
 }

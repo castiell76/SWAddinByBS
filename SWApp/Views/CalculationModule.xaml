@@ -17,7 +17,7 @@
                 <MenuItem Header="Przypisz operacje" Click="AssignOperations_Click"></MenuItem>
             </MenuItem>
         </Menu>
-        <TreeView x:Name="swTreeView" HorizontalAlignment="Left" VerticalAlignment="Top" Height="370" Width="168" Margin="0,24,0,0" AllowDrop="True" IsManipulationEnabled="True" SelectedItemChanged="swTreeView_SelectedItemChanged" 
+        <TreeView x:Name="swTreeView" HorizontalAlignment="Left" VerticalAlignment="Top" Height="400" Width="163" Margin="0,24,0,0" AllowDrop="True" IsManipulationEnabled="True" SelectedItemChanged="swTreeView_SelectedItemChanged" 
                   MouseRightButtonDown="swTreeView_MouseRightButtonDown">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type local:SWTreeNode}" ItemsSource="{Binding Items}">
@@ -26,7 +26,7 @@
 
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
-            
+
             <TreeView.ContextMenu>
                 <ContextMenu x:Name="cmNodes" >
                     <MenuItem x:Name="cmAddNode" Header="Dodaj" />
@@ -34,31 +34,22 @@
                     <MenuItem x:Name="cmDeleteNode" Header="Usuń"/>
                 </ContextMenu>
             </TreeView.ContextMenu>
-            
-        </TreeView>
-        <DataGrid Margin="168,24,377,10" x:Name="dgCalculationModuleMaterials">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Nazwa" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Cena" Binding="{Binding Price, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
-            </DataGrid.Columns>
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem x:Name="cmAddMaterial" Header="Dodaj (Ctrl+N)" Click="cmAddMaterial_Click" ></MenuItem>
-                </ContextMenu>
-            </DataGrid.ContextMenu>
-        </DataGrid>
 
-        <DataGrid Margin="423,24,60,10" x:Name="dgCalculationModuleOperations">
+        </TreeView>
+
+        <DataGrid Margin="199,24,60,10" x:Name="dgCalculationModuleOperations">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Operacje" Binding="{Binding Operations, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Operacje" Binding="{Binding CalculationItems, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
     <!--<Window.Resources>
         <ResourceDictionary>
-            --><!-- For the context menu to work, we must shift it into a style, which means that the context menu is now in a
+            -->
+    <!-- For the context menu to work, we must shift it into a style, which means that the context menu is now in a
         visual tree that is more closely related to the current data context. All we have to do then is set the style, 
-        which hooks up the context menu. --><!--
+        which hooks up the context menu. -->
+    <!--
             <Style x:Key="ContextMenuStyle" TargetType="{x:Type StackPanel}">
                 <Setter Property="ContextMenu" Value="{DynamicResource TreeViewContextMenu}"/>
             </Style>

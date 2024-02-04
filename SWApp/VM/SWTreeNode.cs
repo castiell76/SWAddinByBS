@@ -30,6 +30,7 @@ namespace SWApp.VM
             get { return _materials; }
             set { _materials = value; OnPropertyChanged(); }
         }
+        public ObservableCollection<CalculationItem> Assets { get; set; }
         public int ID { get; set; }
         public string Name { get; set; }
         public string Path { get; set; }
