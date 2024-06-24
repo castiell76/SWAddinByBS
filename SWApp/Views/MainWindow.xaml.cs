@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using System.Windows.Media;
 using SWApp.Models;
 using SWApp.VM;
+using Wpf.Ui.Appearance;
 
 namespace SWApp
 {
@@ -766,5 +767,13 @@ namespace SWApp
             CalculationModule calculationModule = new CalculationModule();
             calculationModule.ShowDialog();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            
+            ApplicationThemeManager.Apply(ApplicationTheme.Light);
+            ApplicationThemeManager.Apply(this);
+        }
+
     }
 }

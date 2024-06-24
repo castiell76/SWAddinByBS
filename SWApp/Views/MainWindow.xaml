@@ -9,8 +9,8 @@
         mc:Ignorable="d"
              Height="Auto"
              Width="Auto"
-             MinHeight="630.4"
-             MinWidth="461.6"
+             MinHeight="479"
+             MinWidth="271"
              VerticalAlignment="Stretch" HorizontalAlignment="Stretch" d:DesignHeight="630">
 
     <Grid Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -22,7 +22,7 @@
                         <ColumnDefinition Width="92*"/>
                         <ColumnDefinition Width="209*"/>
                     </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="dataGridProfile" Height="Auto"  Width="Auto" CanUserReorderColumns="False" CanUserSortColumns="True" MinColumnWidth="60" 
+                    <ui:DataGrid x:Name="dataGridProfile" Height="Auto"  Width="Auto" CanUserReorderColumns="False" CanUserSortColumns="True" MinColumnWidth="60" 
                               TabIndex="100" CanUserResizeColumns="True" AutoGenerateColumns="False" KeyDown="DataGridProfile_KeyDown" FontSize="10" Margin="0,0,0,372" Grid.ColumnSpan="3">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Nazwa" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
@@ -43,7 +43,7 @@
 
                             </ContextMenu>
                         </DataGrid.ContextMenu>
-                    </DataGrid>
+                    </ui:DataGrid>
                     <Button x:Name="btnCreateProfiles" Content="Generuj profile" Margin="201,0,0,215" HorizontalAlignment="Left" VerticalAlignment="Bottom" TabIndex="200" Click="Btn_Click" Height="35" Width="112" Grid.Column="2">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
@@ -67,7 +67,7 @@
                             </Style>
                         </Button.Resources>
                     </Button >
-                    <ui:Button Content="Button" HorizontalAlignment="Left" Margin="164,376,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="68" Width="127"/>
+                    <ui:Button Content="Button" HorizontalAlignment="Left" Margin="164,376,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="68" Width="127" Click="Button_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Generuj DXF" TabIndex="10">
@@ -473,7 +473,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ui:ThemesDictionary Theme="Light" />
+                <ui:ThemesDictionary Theme="Dark" />
                 <ui:ControlsDictionary />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
