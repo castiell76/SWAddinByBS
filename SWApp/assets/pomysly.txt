@@ -1,0 +1,4 @@
+t³umaczenie dokumentacji z chatgpt
+po³¹czenie z sigm¹, ale potrzebujê api
+wytrenowaæ model do przewidywania szansy na wejœcie
+poprawiæ layout

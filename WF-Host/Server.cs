@@ -1,7 +1,10 @@
-﻿using SolidWorks.Interop.sldworks;
+﻿using OpenAI;
+using PdfSharp.Drawing.BarCodes;
+using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swpublished;
 using System;
 using System.Runtime.InteropServices;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 
 namespace WF_Host
@@ -89,8 +92,10 @@ namespace WF_Host
             addinkey = hkcu.CreateSubKey(keyname);
             addinkey.SetValue(null, 1, Microsoft.Win32.RegistryValueKind.DWord);
             string cos = "%~dp0\\WF-Host.dll";
+            string openAitlb = "OpenAIClient.dll";
 
             System.Diagnostics.Process.Start("CMD.exe", "%windir%\\Microsoft.NET\\Framework64\\v4.0.30319\\regasm / tlb / codebase " + cos);
+            System.Diagnostics.Process.Start("CMD.exe", "%windir%\\Microsoft.NET\\Framework64\\v4.0.30319\\regasm / tlb  " + openAitlb);
         }
 
         [ComUnregisterFunction]

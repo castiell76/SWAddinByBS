@@ -770,9 +770,12 @@ namespace SWApp
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            GPT gpt = new GPT();
             
-            ApplicationThemeManager.Apply(ApplicationTheme.Light);
-            ApplicationThemeManager.Apply(this);
+            btnTest.Content = gpt.GetGPT("Witam serdecznie, jestem przyjacielem pana rodziny");
+
+            //ApplicationThemeManager.Apply(ApplicationTheme.Light);
+            //ApplicationThemeManager.Apply(this);
         }
 
     }

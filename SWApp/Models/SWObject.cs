@@ -75,7 +75,7 @@ namespace SWApp
             {"SKALA","SCALE" },
             {"MONTAŻ","INSTALLATION" }
         };
-        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
+        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\ebabs\\Source\\Repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
 
 
 
@@ -247,6 +247,7 @@ namespace SWApp
         public void SetAllProperties(TreeControlItem node, List<string> doneParts, List<string>allParts, List<FileProperty> fileProperties, string parentNum, bool copyToAllConfigs, bool setQty, bool setThickness, bool clearNums, 
                 bool setNums, bool addEngineer, bool AddCheckingEngineer, bool setMaterial, string material, string engineer, string checkingEngineer)
         {
+
             ModelDoc2 swModel;
 
             int drawingNum = 1;

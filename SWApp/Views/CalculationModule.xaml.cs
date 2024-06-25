@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-using static PdfSharp.Snippets.Font.NewFontResolver;
 
 namespace SWApp
 {

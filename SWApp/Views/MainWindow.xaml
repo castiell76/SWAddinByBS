@@ -14,7 +14,15 @@
              VerticalAlignment="Stretch" HorizontalAlignment="Stretch" d:DesignHeight="630">
 
     <Grid Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <TabControl HorizontalAlignment="Stretch" Height="Auto" VerticalAlignment="Stretch" Width="Auto" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="17*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="151*"/>
+            <RowDefinition Height="164*"/>
+        </Grid.RowDefinitions>
+        <TabControl Height="Auto" Width="Auto" Grid.RowSpan="2" Grid.ColumnSpan="2" >
             <TabItem x:Name="tab1" Header="Działania z plikami">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -44,6 +52,7 @@
                             </ContextMenu>
                         </DataGrid.ContextMenu>
                     </ui:DataGrid>
+
                     <Button x:Name="btnCreateProfiles" Content="Generuj profile" Margin="201,0,0,215" HorizontalAlignment="Left" VerticalAlignment="Bottom" TabIndex="200" Click="Btn_Click" Height="35" Width="112" Grid.Column="2">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
@@ -58,6 +67,7 @@
                     <CheckBox x:Name="cboxSort" Margin="0,0,10.2,71.4" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="160" Grid.Column="2">
                         <TextBlock Text="Uwzględnij również komponenty ze wszystkich podzłożeń" TextWrapping="Wrap" Height="49" Width="138" ></TextBlock>
                     </CheckBox>
+
                     <Button x:Name="btnSort" Content="Sortuj" Click="BtnSort_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="29" Width="71" Margin="0,0,59.2,19.4" Grid.Column="2">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
@@ -67,7 +77,7 @@
                             </Style>
                         </Button.Resources>
                     </Button >
-                    <ui:Button Content="Button" HorizontalAlignment="Left" Margin="164,376,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Height="68" Width="127" Click="Button_Click"/>
+                    <ui:Button x:Name="btnTest" Content="Button" Margin="31,383,0,0" VerticalAlignment="Top" Height="68" Width="127" Click="Button_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Generuj DXF" TabIndex="10">
