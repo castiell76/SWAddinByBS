@@ -1,0 +1,490 @@
+﻿<UserControl x:Class="SWApp.MainWindow"
+             
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SWApp"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        mc:Ignorable="d"
+             Height="Auto"
+             Width="Auto"
+             MinHeight="479"
+             MinWidth="271"
+             VerticalAlignment="Stretch" HorizontalAlignment="Stretch" d:DesignHeight="630">
+
+    <Grid Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="17*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="151*"/>
+            <RowDefinition Height="164*"/>
+        </Grid.RowDefinitions>
+        <TabControl Height="Auto" Width="Auto" Grid.RowSpan="2" Grid.ColumnSpan="2" >
+            <TabItem x:Name="tab1" Header="Działania z plikami">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="154*"/>
+                        <ColumnDefinition Width="92*"/>
+                        <ColumnDefinition Width="209*"/>
+                    </Grid.ColumnDefinitions>
+                    <ui:DataGrid x:Name="dataGridProfile" Height="Auto"  Width="Auto" CanUserReorderColumns="False" CanUserSortColumns="True" MinColumnWidth="60" 
+                              TabIndex="100" CanUserResizeColumns="True" AutoGenerateColumns="False" KeyDown="DataGridProfile_KeyDown" FontSize="10" Margin="0,0,0,372" Grid.ColumnSpan="3">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nazwa" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="X"  Binding="{Binding X, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Y" Binding="{Binding Y, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Grubość" Binding="{Binding Thickness, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Długość" Binding="{Binding Length, UpdateSourceTrigger=PropertyChanged}" ></DataGridTextColumn>
+                            <DataGridTextColumn Header="Ilość zacięć" Binding="{Binding DraftCount, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Typ" Binding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="*"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem x:Name="miAdd" Header="Dodaj (Ctrl+N)" Click="miAdd_Click" >
+                                </MenuItem>
+                                <MenuItem x:Name="miDelete" Header="Usuń (Del)" Click="miDelete_Click"></MenuItem>
+                                <MenuItem x:Name="miCopy" Header="Kopiuj (Ctrl+C)" Click="MiCopy_Click"></MenuItem>
+                                <MenuItem x:Name="miPaste" Header="Wklej (Ctrl+V)" Click="MiPaste_Click"></MenuItem>
+
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                    </ui:DataGrid>
+
+                    <Button x:Name="btnCreateProfiles" Content="Generuj profile" Margin="201,0,0,215" HorizontalAlignment="Left" VerticalAlignment="Bottom" TabIndex="200" Click="Btn_Click" Height="35" Width="112" Grid.Column="2">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"></Setter>
+                                <Setter Property="BorderThickness" Value="2"></Setter>
+                                <Setter Property="Background" Value="Black"></Setter>
+                            </Style>
+                        </Button.Resources>
+                    </Button >
+                    <Border  VerticalAlignment="Bottom" BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Right"  Height="166" Width="179" CornerRadius="10" Grid.Column="2" Margin="0,0,0.2,0.4"/>
+                    <TextBlock Text="Sortowanie elementów drzewa" Margin="0,0,10.2,135.4" VerticalAlignment="Bottom"  FontSize="10" Foreground="Gray" HorizontalAlignment="Right" Width="147" Grid.Column="2"/>
+                    <CheckBox x:Name="cboxSort" Margin="0,0,10.2,71.4" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="160" Grid.Column="2">
+                        <TextBlock Text="Uwzględnij również komponenty ze wszystkich podzłożeń" TextWrapping="Wrap" Height="49" Width="138" ></TextBlock>
+                    </CheckBox>
+
+                    <Button x:Name="btnSort" Content="Sortuj" Click="BtnSort_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="29" Width="71" Margin="0,0,59.2,19.4" Grid.Column="2">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"></Setter>
+                                <Setter Property="BorderThickness" Value="2"></Setter>
+                                <Setter Property="Background" Value="Black"></Setter>
+                            </Style>
+                        </Button.Resources>
+                    </Button >
+                </Grid>
+            </TabItem>
+            <TabItem Header="Generuj DXF" TabIndex="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="59*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="BtnFolderDir" Content="Wybierz folder" Click="BtnFolderDir_Click" VerticalAlignment="Top" HorizontalAlignment="Left" Height="42" Width="104" Margin="256.9,45,0,0" Grid.Column="1">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"></Setter>
+                                <Setter Property="BorderThickness" Value="2"></Setter>
+                                <Setter Property="Background" Value="Black"></Setter>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                    <Button x:Name="btnGenDXF" Content="Generuj pliki DXF" Click="BtnGenDXF_Click" VerticalAlignment="Top" HorizontalAlignment="Left" Height="42" Width="104" Margin="256.9,204,0,0" Grid.Column="1">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"></Setter>
+                                <Setter Property="BorderThickness" Value="2"></Setter>
+                                <Setter Property="Background" Value="Black"></Setter>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                    <CheckBox x:Name="cbDXFDir" Content="Domyślne miejsce zapisu&#xA;Zapisuje plik w folderze głównego złożenia SolidWorks" HorizontalAlignment="Left"  VerticalAlignment="Top" 
+                               IsChecked="True" Grid.ColumnSpan="2"/>
+                    <TextBox x:Name="txtFolderDir" TextWrapping="Wrap" IsEnabled="False" Text="" VerticalAlignment="Top" Margin="0,45,0,0" Height="41" HorizontalAlignment="Left" Width="272" Grid.ColumnSpan="2">
+                        <TextBox.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"></Setter>
+                                <Setter Property="BorderThickness" Value="2"></Setter>
+                                <Setter Property="Background" Value="Black"></Setter>
+                            </Style>
+                        </TextBox.Resources>
+
+                    </TextBox >
+                    <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="0,99,0,0" Width="245" Height="160" Grid.ColumnSpan="2">
+                        <StackPanel x:Name="spCheckboxes" Grid.Column="2" HorizontalAlignment="Left" Margin="8.4,7.4,0,-2.2" Width="225" >
+                            <TextBlock Text="Opcje eksportu" Background="Bisque" HorizontalAlignment="Center"></TextBlock>
+                            <CheckBox x:Name="cbCreateDXF" Content="Generuj pliki DXF" Grid.Column="2"/>
+                            <CheckBox x:Name="cbCreateSTEP" Content="Generuj pliki STEP" Grid.Column="2"/>
+                            <CheckBox x:Name="cbPBSheet" Content="Wygeneruj arkusze blachy (PB)" Grid.Column="2"/>
+                            <CheckBox x:Name="cbPTSheet" Content="Wygeneruj tworzywa (PT)" Grid.Column="2"/>
+                            <CheckBox x:Name="cbDXFFromDrawing" Content="Uwzględnij DXF z arkuszy rysunków" Grid.Column="2"/>
+                            <CheckBox x:Name="cbAllDXF" Checked="CbAllDXF_Checked" Unchecked="CbAllDXF_Unchecked" Grid.Column="2" Margin="0,0,9.8,0" Height="32">
+                                <TextBlock Text="Wygeneruj z niestandardowych nazw części" TextWrapping="Wrap"></TextBlock>
+                            </CheckBox>
+                            <CheckBox x:Name="cbCreateDXFForSigma" Checked="CbCreateDXFForSigma_Checked" Content="Stwórz do Sigmy"></CheckBox>
+                        </StackPanel>
+                    </Border>
+                    <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="207.9,99,0,0" Width="196" Height="85" Grid.Column="1">
+                        <StackPanel Margin="16,0,0,0">
+                            <TextBlock Text="Opcje eksportu DXF dla części" Background="Bisque" HorizontalAlignment="Center" Margin="-10,0,-3.6,0" Width="164"></TextBlock>
+                            <CheckBox x:Name="cbSketchInclude" Content="Uwzględnij szkice"></CheckBox>
+                            <CheckBox x:Name="cbFormingToolsInclude">
+                                <TextBlock Text="Uwzględnij narzędzia formowania" TextWrapping="Wrap"></TextBlock>
+                            </CheckBox>
+                        </StackPanel>
+                    </Border>
+                    <DataGrid x:Name="dgExport" Margin="10,264,210.2,10.4" Width="Auto" Height="Auto" AutoGenerateColumns="False" IsReadOnly="True" Grid.ColumnSpan="2">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nazwa części" Binding="{Binding name}" Width="*">
+
+                            </DataGridTextColumn>
+                            <DataGridCheckBoxColumn Header="DXF?"  Binding="{Binding dxfCreated}">
+                                <DataGridCheckBoxColumn.ElementStyle>
+                                    <Style TargetType="{x:Type CheckBox}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="Background" Value="LightGreen"></Setter>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="False">
+                                                <Setter Property="Background" Value="IndianRed"></Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridCheckBoxColumn.ElementStyle>
+                            </DataGridCheckBoxColumn>
+                            <DataGridCheckBoxColumn Header="Step?" Binding="{Binding stepCreated}" Width="40">
+                                <DataGridCheckBoxColumn.ElementStyle>
+                                    <Style TargetType="{x:Type CheckBox}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="Background" Value="LightGreen"></Setter>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="False">
+                                                <Setter Property="Background" Value="IndianRed"></Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridCheckBoxColumn.ElementStyle>
+                            </DataGridCheckBoxColumn>
+                        </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem x:Name="miExportOpen" Header="Otwórz" IsEnabled="False" Click="miExportOpen_Click"></MenuItem>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                    </DataGrid>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Właściwości plików" TabIndex="30">
+                <Grid>
+                    <StackPanel Margin="10,150,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="265" Height="151">
+                        <CheckBox x:Name="cbCopyPropsToAllConfigs" Content="Kopiuj właściwości do wszystkich konfiguracji" Grid.Column="3"/>
+                        <CheckBox x:Name="cbSetQuantity" Content="Ustaw sztuki na komplet"  Grid.Column="3"/>
+                        <CheckBox x:Name="cbSetThickness" Content="Ustaw grubości materiałów"  Grid.Column="3"/>
+                        <CheckBox x:Name="cbClearNums" Content="Wyczyść numery rysunków"  Grid.Column="3"/>
+                        <CheckBox x:Name="cbSetNums" Content="Numeruj części"  Grid.Column="3"/>
+                        <CheckBox x:Name="cbDevelopedBy" Content="Dodaj inżyniera projektu" />
+                        <ComboBox x:Name="comboDevelopedBy" Margin="0,0,181,0" SelectionChanged="ComboDevelopedBy_SelectionChanged" TextBoxBase.SelectionChanged="comboDevelopedBy_SelectionChanged_1" IsEditable="True" ItemsSource="{Binding}">
+                        </ComboBox>
+                        <CheckBox x:Name="cbCheckedBy"  Content="Dodaj sprawdzającego projekt"/>
+                        <ComboBox x:Name="comboCheckedBy" ItemsSource="{Binding}" Margin="0,0,181,0" SelectionChanged="ComboCheckedBy_SelectionChanged" TextBoxBase.SelectionChanged="comboCheckedBy_SelectionChanged_1" IsEditable="True"/>
+                    </StackPanel>
+                    <StackPanel  HorizontalAlignment="Left" VerticalAlignment="Top" Height="118" Margin="256,10,0,0" Width="190">
+                        <CheckBox x:Name="cbSetMaterial" Content="Dodaj materiał" Margin="0,0,0.4,0" Checked="CbSetMaterial_Checked" Unchecked="CbSetMaterial_Unchecked" />
+                        <ListBox x:Name="lbMaterials" ItemsSource="{Binding}" Height="98" IsEnabled="False" ScrollViewer.VerticalScrollBarVisibility="Visible" />
+                    </StackPanel>
+
+                    <Button x:Name="btnRevision" Content="Podnieś rewizję" Click="BtnRevision_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,306,0,0" Height="29" Width="90">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"></Setter>
+                                <Setter Property="BorderThickness" Value="2"></Setter>
+                                <Setter Property="Background" Value="Black"></Setter>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                    <TextBlock x:Name="tbRevision" VerticalAlignment="Top" HorizontalAlignment="Left" Height="30" Width="84" Margin="109,305,0,0" TextWrapping="Wrap" RenderTransformOrigin="0.5,0.5" TextAlignment="Center" >
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="-0.74"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                    <StackPanel Margin="280,168,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="97" Width="142">
+                        <CheckBox x:Name="cbGenerateDrawings" Content="Stwórz rysunki" Height="22" Margin="0,0,0.4,0" Checked="CbGenerateDrawings_Checked" Unchecked="CbGenerateDrawings_Unchecked"/>
+                        <StackPanel Margin="0,0,0.4,0" Height="81">
+                            <RadioButton x:Name="rbDrawingsTogether" Margin="0,0,0.4,10" IsEnabled="False">
+                                <TextBlock Text="Rysunki w jednym pliku" TextWrapping="Wrap"/>
+                            </RadioButton>
+                            <RadioButton x:Name="rbDrawingsSplitted" Margin="0,0,0.4,23" Height="30" IsEnabled="false">
+                                <TextBlock Text="Rysunki w osobnych plikach" TextWrapping="Wrap"/>
+                            </RadioButton>
+                        </StackPanel>
+
+                    </StackPanel>
+                    <TextBlock x:Name="tbIndex"  FontSize="20"  Margin="147,569,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="159" Height="23" FontWeight="Bold"/>
+                    <TextBlock x:Name="tbassFilepath" Visibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Center" Grid.Column="1" Margin="90,0,233.2,0.4" Height="16" Width="0" Grid.Row="1"></TextBlock>
+                    <TextBlock x:Name="tbassConfig" Visibility="Hidden" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Column="1" Margin="0,0,0.2,0.4" Height="16" Width="0" Grid.Row="1"></TextBlock>
+                    <DataGrid x:Name="dgAllProperties"  ItemsSource="{Binding list}" 
+                              AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,340,0,38">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ścieżka" Binding="{Binding filepath}" Visibility="Hidden"></DataGridTextColumn>
+                            <DataGridTextColumn Header="nazwa" Binding="{Binding name}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="opis" Binding="{Binding description}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="materiał" Binding="{Binding material}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="Background" Value="#FFCD413C" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="grubosc materialu" Binding="{Binding thickness}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="Background" Value="#FFCD413C" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="masa" Binding="{Binding mass}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="powierzchnia dm2" Binding="{Binding area}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="ilość farby" Binding="{Binding paintQty}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="nr rysunku" Binding="{Binding drawingNum}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="Background" Value="#FFCD413C" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="szt na kpl" Binding="{Binding Qty}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="Background" Value="#FFCD413C" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="konfiguracja" Binding="{Binding configuration}" IsReadOnly="True"></DataGridTextColumn>
+                            <DataGridTextColumn Header="status" Binding="{Binding status}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="Background" Value="#FFCD413C" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="utworzyl" Binding="{Binding createdBy}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="Background" Value="#FFCD413C" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="sprawdzil"  Binding="{Binding checkedBy}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter Property="Background" Value="#FFCD413C" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridCheckBoxColumn Header="DXF" Binding="{Binding dxfExist}">
+                                <DataGridCheckBoxColumn.ElementStyle>
+                                    <Style TargetType="{x:Type CheckBox}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="Background" Value="LightGreen"></Setter>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="False">
+                                                <Setter Property="Background" Value="#FFCD413C"></Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridCheckBoxColumn.ElementStyle>
+                            </DataGridCheckBoxColumn>
+                            <DataGridCheckBoxColumn Header="Step" Binding="{Binding stepExist}">
+                                <DataGridCheckBoxColumn.ElementStyle>
+                                    <Style TargetType="{x:Type CheckBox}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="Background" Value="LightGreen"></Setter>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="False">
+                                                <Setter Property="Background" Value="#FFCD413C"></Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridCheckBoxColumn.ElementStyle>
+                            </DataGridCheckBoxColumn>
+                            <DataGridTextColumn Header="uwagi" Binding="{Binding comments}" Width="*"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid >
+                    <Button x:Name="btnTakeProperties" Content="Pobierz dane" Click="btnTakeProperties_Click_1"  HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="31" Width="122" Margin="10,0,0,2.4" Grid.Row="1">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"></Setter>
+                                <Setter Property="BorderThickness" Value="2"></Setter>
+                                <Setter Property="Background" Value="Black"></Setter>
+                            </Style>
+                        </Button.Resources>
+                    </Button >
+                    <Button x:Name="btnSaveToExcel" Content="Zapisz do xls" Click="BtnSaveToExcel_Click" Margin="0,0,10.2,2.4"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="31" Width="122" Grid.Column="1" Grid.Row="1">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"></Setter>
+                                <Setter Property="BorderThickness" Value="2"></Setter>
+                                <Setter Property="Background" Value="Black"></Setter>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                    <Button x:Name="btnProperties" Content="Dodaj właściwości" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BtnProperties_Click"  Height="38" Width="108" Margin="289,277,0,0" >
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"></Setter>
+                                <Setter Property="BorderThickness" Value="2"></Setter>
+                                <Setter Property="Background" Value="Black"></Setter>
+                            </Style>
+                        </Button.Resources>
+                    </Button >
+                    <DataGrid x:Name="dgProperties" Margin="0,10,0,0" ColumnWidth="500" AlternationCount="8" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" RowDetailsVisibilityMode="Visible" AutoGenerateColumns="False" FontSize="14" RowHeight="25"      
+                              VerticalAlignment="Top" HorizontalAlignment="Left" Height="135" Width="251">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Właściwość" Width="175" Binding="{Binding name}" IsReadOnly="True">
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Wartość" Width="*" Binding="{Binding value}">
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Konwersja na arkusz blachy">
+                <Grid Height="Auto" Width="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="471*"/>
+                        <ColumnDefinition Width="389*"/>
+                    </Grid.ColumnDefinitions>
+                    <DataGrid x:Name="dgConvert" Height="Auto" Width="Auto" AutoGenerateColumns="False" CanUserResizeColumns="True" IsReadOnly="True" Margin="10,0,10.2,48.4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.ColumnSpan="2" MinColumnWidth="150">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Nazwa części" Binding="{Binding name}">
+
+                            </DataGridTextColumn>
+                            <DataGridCheckBoxColumn Header="Czy wykonano?" Binding="{Binding isDone}">
+                                <DataGridCheckBoxColumn.ElementStyle>
+                                    <Style TargetType="{x:Type CheckBox}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsChecked" Value="True">
+                                                <Setter Property="Background" Value="LightGreen"></Setter>
+                                            </Trigger>
+                                            <Trigger Property="IsChecked" Value="False">
+                                                <Setter Property="Background" Value="IndianRed"></Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridCheckBoxColumn.ElementStyle>
+                            </DataGridCheckBoxColumn>
+                            <DataGridTextColumn Header="Uwagi" Binding="{Binding comments}" Width="*" >
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Style.Triggers>
+                                            <Trigger Property="Text" Value="konwersja udana">
+                                                <Setter Property="Background" Value="LightGreen"></Setter>
+                                                <Setter Property="ToolTip" Value="Elementy oznaczone tym kolorem zostały przekonwertowane, a ich objętość przed konwersją i po jest taka sama"></Setter>
+                                            </Trigger>
+                                            <Trigger Property="Text" Value="konwersja nieudana">
+                                                <Setter Property="Background" Value="IndianRed"></Setter>
+                                                <Setter Property="ToolTip" Value="Elementy oznaczone tym kolorem nie zostały przekonwertowane, różnica objętości przed konwersją i po jest znaczna lub detal nie jest arkuszem blachy"></Setter>
+                                            </Trigger>
+                                            <Trigger Property="Text" Value="drobne różnice po konwersji">
+                                                <Setter Property="Background" Value="Yellow"></Setter>
+                                                <Setter Property="ToolTip" Value="Elementy oznaczone tym kolorem zostały przekonwertowane, a ich objętość przed konwersją i po jest zbliżona - prawdopodobnie trzeba poprawić sfazowania i/lub podcięcia w narożach lub promień gięcia jest inny"></Setter>
+                                            </Trigger>
+                                            <Trigger Property="Text" Value="obiekt nie jest bryłą">
+                                                <Setter Property="Background" Value="IndianRed"></Setter>
+                                                <Setter Property="ToolTip" Value="Obiekt nie jest bryłą w programie"></Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem x:Name="miConvertOpen" Header="Otwórz" Click="MiConvertOpen_Click" IsEnabled="False"></MenuItem>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
+
+                    </DataGrid>
+                    <Button x:Name="btnConvertToSheet" Margin="188,0,0,0.4" Content="Generuj" Click="BtnConvertToSheet_Click" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="43" Width="106" Grid.ColumnSpan="2">
+                        <Button.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="10"></Setter>
+                                <Setter Property="BorderThickness" Value="2"></Setter>
+                                <Setter Property="Background" Value="Black"></Setter>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </Grid>
+
+            </TabItem>
+            <TabItem Header="Działania na rysunkach">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="45*"/>
+                        <ColumnDefinition Width="562*"/>
+                        <ColumnDefinition Width="75*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="btnSaveSplittedPDFs" Margin="85,136,127,386" Click="BtnSaveSplittedPDFs_Click" Grid.Column="1">
+
+                    </Button>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Moduł wycen" MouseUp="TabItem_MouseUp">
+            </TabItem>
+        </TabControl>
+    </Grid>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemesDictionary Theme="Dark" />
+                <ui:ControlsDictionary />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+</UserControl>

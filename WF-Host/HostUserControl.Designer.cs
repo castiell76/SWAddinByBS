@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
-using SWApp; // Upewnij się, że masz prawidłową przestrzeń nazw dla MainWindow
+using SWApp; 
 
 namespace WF_Host
 {
@@ -13,7 +13,6 @@ namespace WF_Host
         private System.ComponentModel.IContainer components = null;
         private ElementHost elementHost2;
         private MainWindow mainWindow2;
-
 
         private void InitializeComponent()
         {
@@ -30,14 +29,14 @@ namespace WF_Host
             elementHost2.Name = "elementHost2";
             elementHost2.TabIndex = 1;
             elementHost2.Child = mainWindow2;
-
+           
             // HostUserControl
             AccessibleRole = AccessibleRole.ScrollBar;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.Desktop;
+            BackColor = SystemColors.Control;
             Controls.Add(elementHost2);
-            ForeColor = SystemColors.Desktop;
+            ForeColor = SystemColors.Control;
             Margin = new Padding(4, 3, 4, 3);
             Name = "HostUserControl";
             Size = new Size(646, 721);
