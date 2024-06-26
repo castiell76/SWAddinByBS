@@ -77,7 +77,6 @@
                             </Style>
                         </Button.Resources>
                     </Button >
-                    <ui:Button x:Name="btnTest" Content="Button" Margin="31,383,0,0" VerticalAlignment="Top" Height="68" Width="127" Click="Button_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Generuj DXF" TabIndex="10">

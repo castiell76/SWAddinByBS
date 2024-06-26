@@ -757,10 +757,6 @@ namespace SWApp
 
         //}
 
-        private void testLine_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
 
         private void TabItem_MouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -768,15 +764,6 @@ namespace SWApp
             calculationModule.ShowDialog();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            GPT gpt = new GPT();
-            
-            btnTest.Content = gpt.GetGPT("Witam serdecznie, jestem przyjacielem pana rodziny");
-
-            //ApplicationThemeManager.Apply(ApplicationTheme.Light);
-            //ApplicationThemeManager.Apply(this);
-        }
 
     }
 }

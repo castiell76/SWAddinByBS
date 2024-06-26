@@ -25,18 +25,6 @@ namespace SWApp.Models
             string apiKey = "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";
             ChatClient client = new(model: "gpt-3.5-turbo", apiKey);
             ChatCompletion completion = client.CompleteChat($"Przetłumacz wyrażenie: {phraseToTranslate}");
-            //string keyFromEnvironment = Environment.GetEnvironmentVariable(apiKey);
-            //AzureOpenAIClient azureClient = new(
-            //new Uri("https://your-azure-openai-resource.com"),
-            //new AzureKeyCredential(keyFromEnvironment));
-
-
-            //ChatClient chatClient = azureClient.GetChatClient("my-gpt-35-turbo-deployment");
-            //ChatCompletion completion = chatClient.CompleteChat(
-            //[
-            //    new SystemChatMessage("Przetłumacz podane zdanie na język angielski"),
-            //    new UserChatMessage(phraseToTranslate),
-            //]);
 
             return completion.ToString();
 
