@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
-using SWApp; 
+using SWApp.Views; 
 
 namespace WF_Host
 {

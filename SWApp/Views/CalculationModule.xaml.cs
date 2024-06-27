@@ -1,7 +1,7 @@
 ﻿using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using SWApp.Models;
-using SWApp.VM;
+using SWApp.Viewmodels;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;

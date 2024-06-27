@@ -8,7 +8,7 @@ using System.Windows.Media.Media3D;
 using SWApp.Models;
 using Material = SWApp.Models.Material;
 
-namespace SWApp.VM
+namespace SWApp.Viewmodels
 {
     public class CalculationPartVM
     {

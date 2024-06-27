@@ -2,7 +2,6 @@
   <PropertyGroup>
     <GenerateProgramFile>false</GenerateProgramFile>
     <TargetFramework>net8.0-windows7.0</TargetFramework>
-	  
     <OutputType>Library</OutputType>
     <WarningLevel>4</WarningLevel>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -24,13 +23,13 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
+	  <ForceDesignerDPIUnaware>true</ForceDesignerDPIUnaware>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <WarningLevel>3</WarningLevel>
     <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
-
   <PropertyGroup>
     <ManifestCertificateThumbprint>2D273C46C9D891FD6D4BF8857321BC5DCF01CE6C</ManifestCertificateThumbprint>
   </PropertyGroup>
@@ -113,19 +112,24 @@
     <PackageReference Include="Azure.AI.OpenAI" Version="2.0.0-beta.2" />
     <PackageReference Include="Azure.Identity" Version="1.12.0" />
     <PackageReference Include="BouncyCastle.Cryptography" Version="2.4.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="Enums.NET" Version="5.0.0" />
     <PackageReference Include="MathNet.Numerics.Signed" Version="5.0.0" />
     <PackageReference Include="Microsoft-Windows10-APICodePack-Core" Version="1.1.8" />
     <PackageReference Include="Microsoft-Windows10-APICodePack-Shell" Version="1.1.8" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
+    <PackageReference Include="Microsoft.ML" Version="3.0.1" />
+    <PackageReference Include="Microsoft.ML.FastTree" Version="3.0.1" />
     <PackageReference Include="Microsoft.VisualBasic" Version="10.4.0-preview.18571.3" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="9.0.0-preview.5.24306.8" />
+    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NPOI" Version="2.7.0" />
     <PackageReference Include="OpenAI" Version="2.0.0-beta.7" />
     <PackageReference Include="PDFsharp" Version="6.1.0" />
+    <PackageReference Include="Plotly.NET" Version="3.0.1" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="SixLabors.Fonts" Version="2.0.3" />
@@ -151,7 +155,18 @@
     <Compile Remove="Program.cs" />
     <EmbeddedResource Remove="FormTest.resx" />
     <None Remove="App.config" />
+    <None Remove="assets\logo.png" />
     <Page Remove="App.xaml" />
+  </ItemGroup>
+  <ItemGroup Label="PriceForecastMLM">
+    <None Include="PriceForecastMLM.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="assets\logo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <PropertyGroup>
     <NeutralLanguage>aa</NeutralLanguage>

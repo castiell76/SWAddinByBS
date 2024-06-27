@@ -34,7 +34,7 @@ using NPOI.SS.Formula.PTG;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 using SWApp.Models;
-using SWApp.VM;
+using SWApp.Viewmodels;
 
 namespace SWApp
 {

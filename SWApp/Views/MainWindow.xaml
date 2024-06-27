@@ -1,27 +1,55 @@
-﻿<UserControl x:Class="SWApp.MainWindow"
-             
+﻿<UserControl x:Class="SWApp.Views.MainWindow"
+            
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SWApp"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:viewmodels="clr-namespace:SWApp.Viewmodels"
         mc:Ignorable="d"
              Height="Auto"
              Width="Auto"
              MinHeight="479"
              MinWidth="271"
+             Background="White"
              VerticalAlignment="Stretch" HorizontalAlignment="Stretch" d:DesignHeight="630">
+    <UserControl.DataContext>
+        <viewmodels:MainWindowViewModel />
+    </UserControl.DataContext>
+
     <Grid>
 
-        <ui:NavigationView PaneDisplayMode="LeftFluent" IsBackButtonVisible="Auto" Grid.Column="0">
-            <ui:NavigationView.MenuItems>
-                <ui:NavigationViewItem Content="Home" Icon="Działania na plikach"/>
-            </ui:NavigationView.MenuItems>
+        <ui:NavigationView 
+            PaneDisplayMode="Left"
+            IsBackButtonVisible="Visible" 
+            BreadcrumbBar="{Binding ElementName=BreadcrumbBar}"
+            FrameMargin="0"
+            IsPaneToggleVisible="True"
+            Transition="FadeInWithSlide"
+            MenuItemsSource="{Binding MenuItems, Mode=OneWay}"
+            >
+            <ui:NavigationView.Header>
+                <StackPanel>
+                    <ui:BreadcrumbBar x:Name="BreadcrumBar"></ui:BreadcrumbBar>
+                </StackPanel>
+            </ui:NavigationView.Header>
+            <ui:NavigationView.AutoSuggestBox>
+                <ui:AutoSuggestBox x:Name="AutoSuggestBox" PlaceholderText="Szukaj">
+                    <ui:AutoSuggestBox.Icon>
+                        <ui:IconSourceElement>
+                            <ui:SymbolIconSource Symbol="Search24" />
+                        </ui:IconSourceElement>
+                    </ui:AutoSuggestBox.Icon>
+                </ui:AutoSuggestBox>
+            </ui:NavigationView.AutoSuggestBox>
+            <ui:NavigationView.ContentOverlay>
+                <Grid>
+                    <ui:SnackbarPresenter x:Name="SnackbarPresenter"></ui:SnackbarPresenter>
+                </Grid>
+            </ui:NavigationView.ContentOverlay>
         </ui:NavigationView>
-        <ContentControl Grid.Column="1" Name="ContentArea">
-            
-        </ContentControl>
+        <ContentPresenter x:Name="RootContentDialog" Grid.Row="0"></ContentPresenter>
     </Grid>
     <UserControl.Resources>
         <ResourceDictionary>

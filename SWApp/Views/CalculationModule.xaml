@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-      xmlns:local="clr-namespace:SWApp.VM"
+      xmlns:local="clr-namespace:SWApp.Viewmodels"
         
         mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -19,13 +19,13 @@
         </Menu>
         <TreeView x:Name="swTreeView" HorizontalAlignment="Left" VerticalAlignment="Top" Height="400" Width="163" Margin="0,24,0,0" AllowDrop="True" IsManipulationEnabled="True" SelectedItemChanged="swTreeView_SelectedItemChanged" 
                   MouseRightButtonDown="swTreeView_MouseRightButtonDown">
-            <TreeView.ItemTemplate>
+            <!--<TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type local:SWTreeNode}" ItemsSource="{Binding Items}">
 
                     <TextBlock Text="{Binding Name}"></TextBlock>
 
                 </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
+            </TreeView.ItemTemplate>-->
 
             <TreeView.ContextMenu>
                 <ContextMenu x:Name="cmNodes" >

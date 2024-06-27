@@ -19,11 +19,11 @@ using Aspose.Pdf.Operators;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using SWApp.Models;
-using SWApp.VM;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Markup;
+using SWApp.Viewmodels;
 
-namespace SWApp
+namespace SWApp.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -47,7 +47,8 @@ namespace SWApp
         public MainWindow()
         {
             InitializeComponent();
-            
+            DataContext = new MainWindowViewModel();
+
             _viewModel = new ProfilesVM();
             //generate rows for datagrid profiles
             //dataGridProfile.ItemsSource = _viewModel.ProfilesSWVM;

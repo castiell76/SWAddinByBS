@@ -13,6 +13,7 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <EnableComHosting>true</EnableComHosting>
     <EnableRegFreeCom>true</EnableRegFreeCom>
+
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <RegisterForComInterop>false</RegisterForComInterop>

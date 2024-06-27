@@ -22,7 +22,7 @@ namespace SWApp.Views.Pages
     {
         public CrossSectionsPage()
         {
-            InitializeComponent();
+            
         }
     }
 }

@@ -1,4 +1,4 @@
-ï»¿<UserControl x:Class="SWApp.MainWindow"
+<UserControl x:Class="SWApp.MainWindow"
              
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -23,7 +23,7 @@
             <RowDefinition Height="164*"/>
         </Grid.RowDefinitions>
         <TabControl Height="Auto" Width="Auto" Grid.RowSpan="2" Grid.ColumnSpan="2" >
-            <TabItem x:Name="tab1" Header="DziaÅ‚ania z plikami">
+            <TabItem x:Name="tab1" Header="Dzia³ania z plikami">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="154*"/>
@@ -36,16 +36,16 @@
                             <DataGridTextColumn Header="Nazwa" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
                             <DataGridTextColumn Header="X"  Binding="{Binding X, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Y" Binding="{Binding Y, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="GruboÅ›Ä‡" Binding="{Binding Thickness, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="DÅ‚ugoÅ›Ä‡" Binding="{Binding Length, UpdateSourceTrigger=PropertyChanged}" ></DataGridTextColumn>
-                            <DataGridTextColumn Header="IloÅ›Ä‡ zaciÄ™Ä‡" Binding="{Binding DraftCount, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Gruboœæ" Binding="{Binding Thickness, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="D³ugoœæ" Binding="{Binding Length, UpdateSourceTrigger=PropertyChanged}" ></DataGridTextColumn>
+                            <DataGridTextColumn Header="Iloœæ zaciêæ" Binding="{Binding DraftCount, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
                             <DataGridTextColumn Header="Typ" Binding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="*"></DataGridTextColumn>
                         </DataGrid.Columns>
                         <DataGrid.ContextMenu>
                             <ContextMenu>
                                 <MenuItem x:Name="miAdd" Header="Dodaj (Ctrl+N)" Click="miAdd_Click" >
                                 </MenuItem>
-                                <MenuItem x:Name="miDelete" Header="UsuÅ„ (Del)" Click="miDelete_Click"></MenuItem>
+                                <MenuItem x:Name="miDelete" Header="Usuñ (Del)" Click="miDelete_Click"></MenuItem>
                                 <MenuItem x:Name="miCopy" Header="Kopiuj (Ctrl+C)" Click="MiCopy_Click"></MenuItem>
                                 <MenuItem x:Name="miPaste" Header="Wklej (Ctrl+V)" Click="MiPaste_Click"></MenuItem>
 
@@ -63,9 +63,9 @@
                         </Button.Resources>
                     </Button >
                     <Border  VerticalAlignment="Bottom" BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Right"  Height="166" Width="179" CornerRadius="10" Grid.Column="2" Margin="0,0,0.2,0.4"/>
-                    <TextBlock Text="Sortowanie elementÃ³w drzewa" Margin="0,0,10.2,135.4" VerticalAlignment="Bottom"  FontSize="10" Foreground="Gray" HorizontalAlignment="Right" Width="147" Grid.Column="2"/>
+                    <TextBlock Text="Sortowanie elementów drzewa" Margin="0,0,10.2,135.4" VerticalAlignment="Bottom"  FontSize="10" Foreground="Gray" HorizontalAlignment="Right" Width="147" Grid.Column="2"/>
                     <CheckBox x:Name="cboxSort" Margin="0,0,10.2,71.4" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="160" Grid.Column="2">
-                        <TextBlock Text="UwzglÄ™dnij rÃ³wnieÅ¼ komponenty ze wszystkich podzÅ‚oÅ¼eÅ„" TextWrapping="Wrap" Height="49" Width="138" ></TextBlock>
+                        <TextBlock Text="Uwzglêdnij równie¿ komponenty ze wszystkich podz³o¿eñ" TextWrapping="Wrap" Height="49" Width="138" ></TextBlock>
                     </CheckBox>
 
                     <Button x:Name="btnSort" Content="Sortuj" Click="BtnSort_Click" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="29" Width="71" Margin="0,0,59.2,19.4" Grid.Column="2">
@@ -103,7 +103,7 @@
                             </Style>
                         </Button.Resources>
                     </Button>
-                    <CheckBox x:Name="cbDXFDir" Content="DomyÅ›lne miejsce zapisu&#xA;Zapisuje plik w folderze gÅ‚Ã³wnego zÅ‚oÅ¼enia SolidWorks" HorizontalAlignment="Left"  VerticalAlignment="Top" 
+                    <CheckBox x:Name="cbDXFDir" Content="Domyœlne miejsce zapisu&#xA;Zapisuje plik w folderze g³ównego z³o¿enia SolidWorks" HorizontalAlignment="Left"  VerticalAlignment="Top" 
                                IsChecked="True" Grid.ColumnSpan="2"/>
                     <TextBox x:Name="txtFolderDir" TextWrapping="Wrap" IsEnabled="False" Text="" VerticalAlignment="Top" Margin="0,45,0,0" Height="41" HorizontalAlignment="Left" Width="272" Grid.ColumnSpan="2">
                         <TextBox.Resources>
@@ -122,25 +122,25 @@
                             <CheckBox x:Name="cbCreateSTEP" Content="Generuj pliki STEP" Grid.Column="2"/>
                             <CheckBox x:Name="cbPBSheet" Content="Wygeneruj arkusze blachy (PB)" Grid.Column="2"/>
                             <CheckBox x:Name="cbPTSheet" Content="Wygeneruj tworzywa (PT)" Grid.Column="2"/>
-                            <CheckBox x:Name="cbDXFFromDrawing" Content="UwzglÄ™dnij DXF z arkuszy rysunkÃ³w" Grid.Column="2"/>
+                            <CheckBox x:Name="cbDXFFromDrawing" Content="Uwzglêdnij DXF z arkuszy rysunków" Grid.Column="2"/>
                             <CheckBox x:Name="cbAllDXF" Checked="CbAllDXF_Checked" Unchecked="CbAllDXF_Unchecked" Grid.Column="2" Margin="0,0,9.8,0" Height="32">
-                                <TextBlock Text="Wygeneruj z niestandardowych nazw czÄ™Å›ci" TextWrapping="Wrap"></TextBlock>
+                                <TextBlock Text="Wygeneruj z niestandardowych nazw czêœci" TextWrapping="Wrap"></TextBlock>
                             </CheckBox>
-                            <CheckBox x:Name="cbCreateDXFForSigma" Checked="CbCreateDXFForSigma_Checked" Content="StwÃ³rz do Sigmy"></CheckBox>
+                            <CheckBox x:Name="cbCreateDXFForSigma" Checked="CbCreateDXFForSigma_Checked" Content="Stwórz do Sigmy"></CheckBox>
                         </StackPanel>
                     </Border>
                     <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Black" BorderThickness="2" CornerRadius="10" Margin="207.9,99,0,0" Width="196" Height="85" Grid.Column="1">
                         <StackPanel Margin="16,0,0,0">
-                            <TextBlock Text="Opcje eksportu DXF dla czÄ™Å›ci" Background="Bisque" HorizontalAlignment="Center" Margin="-10,0,-3.6,0" Width="164"></TextBlock>
-                            <CheckBox x:Name="cbSketchInclude" Content="UwzglÄ™dnij szkice"></CheckBox>
+                            <TextBlock Text="Opcje eksportu DXF dla czêœci" Background="Bisque" HorizontalAlignment="Center" Margin="-10,0,-3.6,0" Width="164"></TextBlock>
+                            <CheckBox x:Name="cbSketchInclude" Content="Uwzglêdnij szkice"></CheckBox>
                             <CheckBox x:Name="cbFormingToolsInclude">
-                                <TextBlock Text="UwzglÄ™dnij narzÄ™dzia formowania" TextWrapping="Wrap"></TextBlock>
+                                <TextBlock Text="Uwzglêdnij narzêdzia formowania" TextWrapping="Wrap"></TextBlock>
                             </CheckBox>
                         </StackPanel>
                     </Border>
                     <DataGrid x:Name="dgExport" Margin="10,264,210.2,10.4" Width="Auto" Height="Auto" AutoGenerateColumns="False" IsReadOnly="True" Grid.ColumnSpan="2">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Nazwa czÄ™Å›ci" Binding="{Binding name}" Width="*">
+                            <DataGridTextColumn Header="Nazwa czêœci" Binding="{Binding name}" Width="*">
 
                             </DataGridTextColumn>
                             <DataGridCheckBoxColumn Header="DXF?"  Binding="{Binding dxfCreated}">
@@ -174,33 +174,33 @@
                         </DataGrid.Columns>
                         <DataGrid.ContextMenu>
                             <ContextMenu>
-                                <MenuItem x:Name="miExportOpen" Header="OtwÃ³rz" IsEnabled="False" Click="miExportOpen_Click"></MenuItem>
+                                <MenuItem x:Name="miExportOpen" Header="Otwórz" IsEnabled="False" Click="miExportOpen_Click"></MenuItem>
                             </ContextMenu>
                         </DataGrid.ContextMenu>
                     </DataGrid>
 
                 </Grid>
             </TabItem>
-            <TabItem Header="WÅ‚aÅ›ciwoÅ›ci plikÃ³w" TabIndex="30">
+            <TabItem Header="W³aœciwoœci plików" TabIndex="30">
                 <Grid>
                     <StackPanel Margin="10,150,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="265" Height="151">
-                        <CheckBox x:Name="cbCopyPropsToAllConfigs" Content="Kopiuj wÅ‚aÅ›ciwoÅ›ci do wszystkich konfiguracji" Grid.Column="3"/>
+                        <CheckBox x:Name="cbCopyPropsToAllConfigs" Content="Kopiuj w³aœciwoœci do wszystkich konfiguracji" Grid.Column="3"/>
                         <CheckBox x:Name="cbSetQuantity" Content="Ustaw sztuki na komplet"  Grid.Column="3"/>
-                        <CheckBox x:Name="cbSetThickness" Content="Ustaw gruboÅ›ci materiaÅ‚Ã³w"  Grid.Column="3"/>
-                        <CheckBox x:Name="cbClearNums" Content="WyczyÅ›Ä‡ numery rysunkÃ³w"  Grid.Column="3"/>
-                        <CheckBox x:Name="cbSetNums" Content="Numeruj czÄ™Å›ci"  Grid.Column="3"/>
-                        <CheckBox x:Name="cbDevelopedBy" Content="Dodaj inÅ¼yniera projektu" />
+                        <CheckBox x:Name="cbSetThickness" Content="Ustaw gruboœci materia³ów"  Grid.Column="3"/>
+                        <CheckBox x:Name="cbClearNums" Content="Wyczyœæ numery rysunków"  Grid.Column="3"/>
+                        <CheckBox x:Name="cbSetNums" Content="Numeruj czêœci"  Grid.Column="3"/>
+                        <CheckBox x:Name="cbDevelopedBy" Content="Dodaj in¿yniera projektu" />
                         <ComboBox x:Name="comboDevelopedBy" Margin="0,0,181,0" SelectionChanged="ComboDevelopedBy_SelectionChanged" TextBoxBase.SelectionChanged="comboDevelopedBy_SelectionChanged_1" IsEditable="True" ItemsSource="{Binding}">
                         </ComboBox>
-                        <CheckBox x:Name="cbCheckedBy"  Content="Dodaj sprawdzajÄ…cego projekt"/>
+                        <CheckBox x:Name="cbCheckedBy"  Content="Dodaj sprawdzaj¹cego projekt"/>
                         <ComboBox x:Name="comboCheckedBy" ItemsSource="{Binding}" Margin="0,0,181,0" SelectionChanged="ComboCheckedBy_SelectionChanged" TextBoxBase.SelectionChanged="comboCheckedBy_SelectionChanged_1" IsEditable="True"/>
                     </StackPanel>
                     <StackPanel  HorizontalAlignment="Left" VerticalAlignment="Top" Height="118" Margin="256,10,0,0" Width="190">
-                        <CheckBox x:Name="cbSetMaterial" Content="Dodaj materiaÅ‚" Margin="0,0,0.4,0" Checked="CbSetMaterial_Checked" Unchecked="CbSetMaterial_Unchecked" />
+                        <CheckBox x:Name="cbSetMaterial" Content="Dodaj materia³" Margin="0,0,0.4,0" Checked="CbSetMaterial_Checked" Unchecked="CbSetMaterial_Unchecked" />
                         <ListBox x:Name="lbMaterials" ItemsSource="{Binding}" Height="98" IsEnabled="False" ScrollViewer.VerticalScrollBarVisibility="Visible" />
                     </StackPanel>
 
-                    <Button x:Name="btnRevision" Content="PodnieÅ› rewizjÄ™" Click="BtnRevision_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,306,0,0" Height="29" Width="90">
+                    <Button x:Name="btnRevision" Content="Podnieœ rewizjê" Click="BtnRevision_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,306,0,0" Height="29" Width="90">
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"></Setter>
@@ -220,7 +220,7 @@
                         </TextBlock.RenderTransform>
                     </TextBlock>
                     <StackPanel Margin="280,168,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="97" Width="142">
-                        <CheckBox x:Name="cbGenerateDrawings" Content="StwÃ³rz rysunki" Height="22" Margin="0,0,0.4,0" Checked="CbGenerateDrawings_Checked" Unchecked="CbGenerateDrawings_Unchecked"/>
+                        <CheckBox x:Name="cbGenerateDrawings" Content="Stwórz rysunki" Height="22" Margin="0,0,0.4,0" Checked="CbGenerateDrawings_Checked" Unchecked="CbGenerateDrawings_Unchecked"/>
                         <StackPanel Margin="0,0,0.4,0" Height="81">
                             <RadioButton x:Name="rbDrawingsTogether" Margin="0,0,0.4,10" IsEnabled="False">
                                 <TextBlock Text="Rysunki w jednym pliku" TextWrapping="Wrap"/>
@@ -238,10 +238,10 @@
                               AutoGenerateColumns="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,340,0,38">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Å›cieÅ¼ka" Binding="{Binding filepath}" Visibility="Hidden"></DataGridTextColumn>
+                            <DataGridTextColumn Header="œcie¿ka" Binding="{Binding filepath}" Visibility="Hidden"></DataGridTextColumn>
                             <DataGridTextColumn Header="nazwa" Binding="{Binding name}"></DataGridTextColumn>
                             <DataGridTextColumn Header="opis" Binding="{Binding description}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="materiaÅ‚" Binding="{Binding material}">
+                            <DataGridTextColumn Header="materia³" Binding="{Binding material}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Style.Triggers>
@@ -265,7 +265,7 @@
                             </DataGridTextColumn>
                             <DataGridTextColumn Header="masa" Binding="{Binding mass}"></DataGridTextColumn>
                             <DataGridTextColumn Header="powierzchnia dm2" Binding="{Binding area}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="iloÅ›Ä‡ farby" Binding="{Binding paintQty}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="iloœæ farby" Binding="{Binding paintQty}"></DataGridTextColumn>
                             <DataGridTextColumn Header="nr rysunku" Binding="{Binding drawingNum}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
@@ -371,7 +371,7 @@
                             </Style>
                         </Button.Resources>
                     </Button>
-                    <Button x:Name="btnProperties" Content="Dodaj wÅ‚aÅ›ciwoÅ›ci" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BtnProperties_Click"  Height="38" Width="108" Margin="289,277,0,0" >
+                    <Button x:Name="btnProperties" Content="Dodaj w³aœciwoœci" HorizontalAlignment="Left" VerticalAlignment="Top" Click="BtnProperties_Click"  Height="38" Width="108" Margin="289,277,0,0" >
                         <Button.Resources>
                             <Style TargetType="{x:Type Border}">
                                 <Setter Property="CornerRadius" Value="10"></Setter>
@@ -384,9 +384,9 @@
                               VerticalAlignment="Top" HorizontalAlignment="Left" Height="135" Width="251">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="WÅ‚aÅ›ciwoÅ›Ä‡" Width="175" Binding="{Binding name}" IsReadOnly="True">
+                            <DataGridTextColumn Header="W³aœciwoœæ" Width="175" Binding="{Binding name}" IsReadOnly="True">
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="WartoÅ›Ä‡" Width="*" Binding="{Binding value}">
+                            <DataGridTextColumn Header="Wartoœæ" Width="*" Binding="{Binding value}">
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
@@ -401,7 +401,7 @@
                     </Grid.ColumnDefinitions>
                     <DataGrid x:Name="dgConvert" Height="Auto" Width="Auto" AutoGenerateColumns="False" CanUserResizeColumns="True" IsReadOnly="True" Margin="10,0,10.2,48.4" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.ColumnSpan="2" MinColumnWidth="150">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Nazwa czÄ™Å›ci" Binding="{Binding name}">
+                            <DataGridTextColumn Header="Nazwa czêœci" Binding="{Binding name}">
 
                             </DataGridTextColumn>
                             <DataGridCheckBoxColumn Header="Czy wykonano?" Binding="{Binding isDone}">
@@ -424,19 +424,19 @@
                                         <Style.Triggers>
                                             <Trigger Property="Text" Value="konwersja udana">
                                                 <Setter Property="Background" Value="LightGreen"></Setter>
-                                                <Setter Property="ToolTip" Value="Elementy oznaczone tym kolorem zostaÅ‚y przekonwertowane, a ich objÄ™toÅ›Ä‡ przed konwersjÄ… i po jest taka sama"></Setter>
+                                                <Setter Property="ToolTip" Value="Elementy oznaczone tym kolorem zosta³y przekonwertowane, a ich objêtoœæ przed konwersj¹ i po jest taka sama"></Setter>
                                             </Trigger>
                                             <Trigger Property="Text" Value="konwersja nieudana">
                                                 <Setter Property="Background" Value="IndianRed"></Setter>
-                                                <Setter Property="ToolTip" Value="Elementy oznaczone tym kolorem nie zostaÅ‚y przekonwertowane, rÃ³Å¼nica objÄ™toÅ›ci przed konwersjÄ… i po jest znaczna lub detal nie jest arkuszem blachy"></Setter>
+                                                <Setter Property="ToolTip" Value="Elementy oznaczone tym kolorem nie zosta³y przekonwertowane, ró¿nica objêtoœci przed konwersj¹ i po jest znaczna lub detal nie jest arkuszem blachy"></Setter>
                                             </Trigger>
-                                            <Trigger Property="Text" Value="drobne rÃ³Å¼nice po konwersji">
+                                            <Trigger Property="Text" Value="drobne ró¿nice po konwersji">
                                                 <Setter Property="Background" Value="Yellow"></Setter>
-                                                <Setter Property="ToolTip" Value="Elementy oznaczone tym kolorem zostaÅ‚y przekonwertowane, a ich objÄ™toÅ›Ä‡ przed konwersjÄ… i po jest zbliÅ¼ona - prawdopodobnie trzeba poprawiÄ‡ sfazowania i/lub podciÄ™cia w naroÅ¼ach lub promieÅ„ giÄ™cia jest inny"></Setter>
+                                                <Setter Property="ToolTip" Value="Elementy oznaczone tym kolorem zosta³y przekonwertowane, a ich objêtoœæ przed konwersj¹ i po jest zbli¿ona - prawdopodobnie trzeba poprawiæ sfazowania i/lub podciêcia w naro¿ach lub promieñ giêcia jest inny"></Setter>
                                             </Trigger>
-                                            <Trigger Property="Text" Value="obiekt nie jest bryÅ‚Ä…">
+                                            <Trigger Property="Text" Value="obiekt nie jest bry³¹">
                                                 <Setter Property="Background" Value="IndianRed"></Setter>
-                                                <Setter Property="ToolTip" Value="Obiekt nie jest bryÅ‚Ä… w programie"></Setter>
+                                                <Setter Property="ToolTip" Value="Obiekt nie jest bry³¹ w programie"></Setter>
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>
@@ -445,7 +445,7 @@
                         </DataGrid.Columns>
                         <DataGrid.ContextMenu>
                             <ContextMenu>
-                                <MenuItem x:Name="miConvertOpen" Header="OtwÃ³rz" Click="MiConvertOpen_Click" IsEnabled="False"></MenuItem>
+                                <MenuItem x:Name="miConvertOpen" Header="Otwórz" Click="MiConvertOpen_Click" IsEnabled="False"></MenuItem>
                             </ContextMenu>
                         </DataGrid.ContextMenu>
 
@@ -463,7 +463,7 @@
                 </Grid>
 
             </TabItem>
-            <TabItem Header="DziaÅ‚ania na rysunkach">
+            <TabItem Header="Dzia³ania na rysunkach">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="45*"/>
@@ -475,7 +475,7 @@
                     </Button>
                 </Grid>
             </TabItem>
-            <TabItem Header="ModuÅ‚ wycen" MouseUp="TabItem_MouseUp">
+            <TabItem Header="Modu³ wycen" MouseUp="TabItem_MouseUp">
             </TabItem>
         </TabControl>
     </Grid>

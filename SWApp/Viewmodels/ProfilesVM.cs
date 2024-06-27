@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using SWApp.Models;
 
-namespace SWApp.VM
+namespace SWApp.Viewmodels
 {
     class ProfilesVM : INotifyPropertyChanged
     {

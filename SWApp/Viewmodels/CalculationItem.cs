@@ -1,5 +1,5 @@
 ﻿using SWApp.Models;
-using SWApp.VM;
+using SWApp.Viewmodels;
 using System.Collections.Generic;
 using System.Windows.Media.Media3D;
 

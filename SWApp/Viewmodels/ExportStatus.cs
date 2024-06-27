@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SWApp.Models;
 
-namespace SWApp.VM
+namespace SWApp.Viewmodels
 {
     public class ExportStatus : ConvertStatus
     {
