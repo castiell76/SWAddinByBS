@@ -7,18 +7,20 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
 using SWApp.Models;
 
-namespace SWApp.Viewmodels
+namespace SWApp.Viewmodels.Pages
 {
-    class ProfilesVM : INotifyPropertyChanged
+   public partial class CrossSectionsViewmodel : ObservableObject,INotifyPropertyChanged
     {
         private ProfileSW profileSW;
-        private ObservableCollection<ProfileSW> _profilesSW { get; set; }
-        public ObservableCollection<ProfileSW> ProfilesSWVM
+        [ObservableProperty]
+        private ObservableCollection<ProfileSW> _crossSections;
+        public ObservableCollection<ProfileSW> CrossSectionsList
         {
-            get { return _profilesSW; }
-            set { _profilesSW = value; }
+            get { return _crossSections; }
+            set { _crossSections = value; }
         }
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = "")
@@ -79,14 +81,14 @@ namespace SWApp.Viewmodels
 
             }
         }
-        public ProfilesVM()
+        public CrossSectionsViewmodel()
         {
-            ProfilesSWVM = new ObservableCollection<ProfileSW>();
+            CrossSectionsList = new ObservableCollection<ProfileSW>();
 
         }
         public void Add()
         {
-            ProfilesSWVM.Add(new ProfileSW() { Name = "", X = 0, Y = 0, Thickness = 0, DraftCount = 0, Type = "", });
+            CrossSectionsList.Add(new ProfileSW() { Name = "", X = 0, Y = 0, Thickness = 0, DraftCount = 0, Type = "", });
         }
         public void Delete(DataGrid dgprofiles)
         {
@@ -94,7 +96,7 @@ namespace SWApp.Viewmodels
             {
                 for (int i = 0; i < dgprofiles.SelectedItems.Count; i++)
                 {
-                    ProfilesSWVM.Remove((ProfileSW)dgprofiles.SelectedItems[i]);
+                    CrossSectionsList.Remove((ProfileSW)dgprofiles.SelectedItems[i]);
                 }
 
             }
@@ -102,7 +104,7 @@ namespace SWApp.Viewmodels
             {
                 var toDelete = dgprofiles.SelectedItem;
                 toDelete = new ProfileSW() { Name = "", X = 0, Y = 0, Thickness = 0, DraftCount = 0, Type = "" };
-                ProfilesSWVM.Remove((ProfileSW)toDelete);
+                CrossSectionsList.Remove((ProfileSW)toDelete);
             }
         }
         public List<ProfileSW> Copy(DataGrid dgprofiles)
@@ -133,7 +135,7 @@ namespace SWApp.Viewmodels
             List<ProfileSW> toPaste = Copy(dgprofiles);
             foreach (ProfileSW profile in toPaste)
             {
-                ProfilesSWVM.Add(profile);
+                CrossSectionsList.Add(profile);
             }
         }
 

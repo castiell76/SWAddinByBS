@@ -10,11 +10,10 @@ namespace SWApp.Viewmodels
 {
     public partial class MainWindowViewModel : ObservableObject
     {
-
         [ObservableProperty]
-        private ObservableCollection<object> _menuItems = new ObservableCollection<object>
+        private ObservableCollection<NavigationViewItem> _menuItems = new ObservableCollection<NavigationViewItem>
         {
-            new NavigationViewItem("Home",typeof(CrossSectionsPage))
+            new NavigationViewItem("Generator profili",typeof(CrossSectionsPage))
             
         };
 

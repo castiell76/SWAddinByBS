@@ -22,6 +22,8 @@ using SWApp.Models;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Markup;
 using SWApp.Viewmodels;
+using SWApp.Viewmodels.Pages;
+using SWApp.Views.Pages;
 
 namespace SWApp.Views
 {
@@ -32,7 +34,7 @@ namespace SWApp.Views
     public partial class MainWindow : UserControl
     {
         
-        private readonly ProfilesVM _viewModel = new ProfilesVM(); 
+        private readonly CrossSectionsViewmodel _viewModel = new CrossSectionsViewmodel(); 
         SWObject sWObject = new SWObject();
         ModelDoc2 swModel;
         FeatureManager swFeatMgr;
@@ -49,9 +51,9 @@ namespace SWApp.Views
             InitializeComponent();
             DataContext = new MainWindowViewModel();
 
-            _viewModel = new ProfilesVM();
+            
+
             //generate rows for datagrid profiles
-            //dataGridProfile.ItemsSource = _viewModel.ProfilesSWVM;
 
 
 
