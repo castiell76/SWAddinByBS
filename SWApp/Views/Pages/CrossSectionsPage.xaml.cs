@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Wpf.Ui.Controls;
-using Wpf.Ui.Controls;
+
 
 namespace SWApp.Views.Pages
 {
@@ -24,7 +24,7 @@ namespace SWApp.Views.Pages
     /// </summary>
     public partial class CrossSectionsPage : INavigableView<CrossSectionsViewmodel>
     {
-        private readonly CrossSectionsViewmodel ViewModel = new CrossSectionsViewmodel();
+        public CrossSectionsViewmodel ViewModel { get; }
         public CrossSectionsPage(CrossSectionsViewmodel viewModel)
         {
             InitializeComponent();
