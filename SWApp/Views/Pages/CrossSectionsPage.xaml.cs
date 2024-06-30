@@ -37,6 +37,51 @@ namespace SWApp.Views.Pages
             InitializeComponent();
             DataContext = ViewModel;
         }
+        private void miAdd_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.Add();
+        }
 
+        private void miDelete_Click(object sender, RoutedEventArgs e)
+        {
+
+            ViewModel.Delete(dataGridProfile);
+
+        }
+        private void MiCopy_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.Copy(dataGridProfile);
+        }
+
+        private void MiPaste_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.Paste(dataGridProfile);
+        }
+
+        private void DataGridProfile_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                ViewModel.Delete(dataGridProfile);
+            }
+            if (e.Key == Key.C && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                ViewModel.Copy(dataGridProfile);
+            }
+            if (e.Key == Key.V && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                ViewModel.Paste(dataGridProfile);
+            }
+            if (e.Key == Key.N && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                ViewModel.Add();
+            }
+        }
+
+        private void btnGenerateCrossSections_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.GenerateCrossSections();
+        }
     }
 }
+

@@ -515,80 +515,14 @@ namespace SWApp.Views
         //    cbCheckedBy.IsChecked = true;
         //}
 
-        //private void miAdd_Click(object sender, RoutedEventArgs e)
-        //{
-        //    _viewModel.Add();
-        //}
-
-        //private void miDelete_Click(object sender, RoutedEventArgs e)
-        //{
-
-        //    _viewModel.Delete(dataGridProfile);
-
-        //}
+      
 
         //private void Btn_Click(object sender, RoutedEventArgs e)
         //{
-        //    try
-        //    {
-        //        if (_viewModel.ProfilesSWVM.Any(x => x.Type == ("wprowadź dane profila")) || _viewModel.ProfilesSWVM.Any(x => x.Type == ("")))
-        //        {
-        //            MessageBox.Show("Wprowadź poprawne wartości liczbowe");
-        //        }
-        //        else
-        //        {
-        //            List<string> filepathWithName = sWObject.CreateAssembly();
-
-        //            string assemblyName = filepathWithName[1];
-        //            string filepathAsm = filepathWithName[0];
-        //            string filepathDir = filepathWithName[2];
-
-        //            foreach (ProfileSW profile in _viewModel.ProfilesSWVM)
-        //            {
-        //                switch (profile.Type)
-        //                {
-        //                    case "pręt okrągły":
-        //                        sWObject.CreateCircularRod(profile, $"{filepathDir}\\");
-        //                        sWObject.AddToAssembly($"{filepathDir}\\{profile.Name}.SLDPRT", assemblyName);
-        //                        sWObject.CloseDoc($"{profile.Name}.SLDPRT");
-        //                        break;
-        //                    case "pręt prostokątny":
-        //                        sWObject.CreateRectangleRod(profile, $"{filepathDir}\\");
-        //                        sWObject.AddToAssembly($"{filepathDir}\\{profile.Name}.SLDPRT", assemblyName);
-        //                        sWObject.CloseDoc($"{profile.Name}.SLDPRT");
-        //                        break;
-        //                    case "rura prostokątna":
-        //                        sWObject.CreateRectangleProfile(profile, $"{filepathDir}\\");
-        //                        sWObject.AddToAssembly($"{filepathDir}\\{profile.Name}.SLDPRT", assemblyName);
-        //                        sWObject.CloseDoc($"{profile.Name}.SLDPRT");
-        //                        break;
-        //                    case "rura okrągła":
-        //                        sWObject.CreateCircularProfile(profile, $"{filepathDir}\\");
-        //                        sWObject.AddToAssembly($"{filepathDir}\\{profile.Name}.SLDPRT", assemblyName);
-        //                        sWObject.CloseDoc($"{profile.Name}.SLDPRT");
-        //                        break;
-        //                }
-
-        //            }
-        //            MessageBox.Show($"Wykonane");
-        //        }
-        //    }
-        //    catch (System.InvalidCastException)
-        //    {
-        //        MessageBox.Show("Wprowadź poprawne wartości liczbowe");
-        //    }
-        //}
+        //   
 
 
-        //private void MiCopy_Click(object sender, RoutedEventArgs e)
-        //{
-        //    _viewModel.Copy(dataGridProfile);
-        //}
 
-        //private void MiPaste_Click(object sender, RoutedEventArgs e)
-        //{
-        //    _viewModel.Paste(dataGridProfile);
-        //}
 
         //private void BtnConvertToSheet_Click(object sender, RoutedEventArgs e)
         //{
@@ -659,25 +593,7 @@ namespace SWApp.Views
         //    swApp.ActivateDoc3(System.IO.Path.GetFileName(filepath), false, 0, 0);
         //}
 
-        //private void DataGridProfile_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //    if (e.Key == Key.Delete)
-        //    {
-        //        _viewModel.Delete(dataGridProfile);
-        //    }
-        //    if (e.Key == Key.C && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-        //    {
-        //        _viewModel.Copy(dataGridProfile);
-        //    }
-        //    if (e.Key == Key.V && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-        //    {
-        //        _viewModel.Paste(dataGridProfile);
-        //    }
-        //    if (e.Key == Key.N && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-        //    {
-        //        _viewModel.Add();
-        //    }
-        //}
+
 
 
         //private void CbGenerateDrawings_Checked(object sender, RoutedEventArgs e)

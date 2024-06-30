@@ -10,18 +10,30 @@
       Title="CrossSectionsPage">
     
     <StackPanel>
-        <ui:DataGrid x:Name="dataGridProfile" Height="Auto"  Width="Auto" CanUserReorderColumns="False" CanUserSortColumns="True" MinColumnWidth="60" 
-                              TabIndex="100" CanUserResizeColumns="True" AutoGenerateColumns="False"  FontSize="10" Margin="0,0,0,372" Grid.ColumnSpan="3" ItemsSource="{Binding CrossSections, UpdateSourceTrigger=PropertyChanged}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Nazwa" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
-                <DataGridTextColumn Header="X"  Binding="{Binding X, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Y" Binding="{Binding Y, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Grubość" Binding="{Binding Thickness, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Długość" Binding="{Binding Length, UpdateSourceTrigger=PropertyChanged}" ></DataGridTextColumn>
-                <DataGridTextColumn Header="Ilość zacięć" Binding="{Binding DraftCount, UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Typ" Binding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" Width="*"></DataGridTextColumn>
-            </DataGrid.Columns>
-        </ui:DataGrid>
+        <DataGrid x:Name="dataGridProfile"
+                     Height="Auto"
+                     Width="Auto" 
+                     CanUserReorderColumns="False"
+                     CanUserSortColumns="True"
+                     MinColumnWidth="60" 
+                     CanUserResizeColumns="True" 
+                     AutoGenerateColumns="True"  
+                     FontSize="10"
+                     ItemsSource="{Binding CrossSectionsList, UpdateSourceTrigger=PropertyChanged}"
+                  KeyDown="DataGridProfile_KeyDown"
+                     >
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <ui:MenuItem x:Name="miAdd" Header="Dodaj (Ctrl+N)" Click="miAdd_Click" >
+                    </ui:MenuItem>
+                    <ui:MenuItem x:Name="miDelete" Header="Usuń (Del)" Click="miDelete_Click"></ui:MenuItem>
+                    <ui:MenuItem x:Name="miCopy" Header="Kopiuj (Ctrl+C)" Click="MiCopy_Click"></ui:MenuItem>
+                    <ui:MenuItem x:Name="miPaste" Header="Wklej (Ctrl+V)" Click="MiPaste_Click"></ui:MenuItem>
+
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+        <ui:Button x:Name="btnGenerateCrossSections" Content="Wygeneruj profile" Click="btnGenerateCrossSections_Click"></ui:Button>
     </StackPanel>
     <Page.Resources>
         <ResourceDictionary>

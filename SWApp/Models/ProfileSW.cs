@@ -50,6 +50,16 @@ namespace SWApp.Models
                 OnPropertyChanged();
             }
         }
+        public double Thickness
+        {
+            get { return thickness; }
+            set
+            {
+                thickness = value;
+                UpdateType();
+                OnPropertyChanged();
+            }
+        }
         public double Length
         {
             get { return length; }
@@ -81,16 +91,7 @@ namespace SWApp.Models
 
 
         }
-        public double Thickness
-        {
-            get { return thickness; }
-            set
-            {
-                thickness = value;
-                UpdateType();
-                OnPropertyChanged();
-            }
-        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)

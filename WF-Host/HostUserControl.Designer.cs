@@ -39,7 +39,7 @@ namespace WF_Host
             ForeColor = SystemColors.Control;
             Margin = new Padding(4, 3, 4, 3);
             Name = "HostUserControl";
-            Size = new Size(646, 721);
+            Size = new Size(630, 800);
 
             ResumeLayout(false);
         }

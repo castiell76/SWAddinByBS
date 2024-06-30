@@ -61,7 +61,7 @@
                                 <Setter Property="Background" Value="Black"></Setter>
                             </Style>
                         </Button.Resources>
-                    </Button >
+                    </Button>
                     <Border  VerticalAlignment="Bottom" BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Right"  Height="166" Width="179" CornerRadius="10" Grid.Column="2" Margin="0,0,0.2,0.4"/>
                     <TextBlock Text="Sortowanie elementów drzewa" Margin="0,0,10.2,135.4" VerticalAlignment="Bottom"  FontSize="10" Foreground="Gray" HorizontalAlignment="Right" Width="147" Grid.Column="2"/>
                     <CheckBox x:Name="cboxSort" Margin="0,0,10.2,71.4" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="160" Grid.Column="2">

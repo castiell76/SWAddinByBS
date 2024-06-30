@@ -4,92 +4,89 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SWApp.Models;
 
 namespace SWApp.Viewmodels.Pages
 {
-   public partial class CrossSectionsViewmodel : ObservableObject,INotifyPropertyChanged
+    public partial class CrossSectionsViewmodel : ObservableObject, INotifyPropertyChanged
     {
-        private ProfileSW profileSW;
         [ObservableProperty]
-        private ObservableCollection<ProfileSW> _crossSections;
-        public ObservableCollection<ProfileSW> CrossSectionsList
-        {
-            get { return _crossSections; }
-            set { _crossSections = value; }
-        }
+        private ObservableCollection<ProfileSW> _crossSectionsList;
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected void OnPropertyChanged([CallerMemberName] string name = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-        public string Name
-        {
-            get { return profileSW.Name; }
-            set
-            {
-                profileSW.Name = value;
-            }
-        }
-        public int X
-        {
-            get { return profileSW.X; }
-            set
-            {
-                profileSW.X = value;
-            }
-        }
-        public int Y
-        {
-            get { return profileSW.Y; }
-            set
-            {
-                profileSW.Y = value;
-            }
-        }
-        public double Thickness
-        {
-            get { return profileSW.Thickness; }
-            set
-            {
-                profileSW.Thickness = value;
-            }
-        }
-        public double Length
-        {
-            get { return profileSW.Length; }
-            set
-            {
-                profileSW.Length = value;
-            }
-        }
-        public string Type
-        {
-            get { return profileSW.Type; }
-            set { Type = value; }
-        }
-        public int Draftcount
-        {
-            get { return profileSW.DraftCount; }
-            set
-            {
-                profileSW.DraftCount = value;
 
-            }
-        }
         public CrossSectionsViewmodel()
         {
             CrossSectionsList = new ObservableCollection<ProfileSW>();
-
         }
+
+        public void GenerateCrossSections()
+        {
+            SWObject sWObject = new SWObject();
+            try
+            {
+                if (CrossSectionsList.Any(x => x.Type == ("wprowadź dane profila")) || CrossSectionsList.Any(x => x.Type == ("")))
+                {
+                    MessageBox.Show("Wprowadź poprawne wartości liczbowe");
+                }
+                else
+                {
+                    List<string> filepathWithName = sWObject.CreateAssembly();
+
+                    string assemblyName = filepathWithName[1];
+                    string filepathAsm = filepathWithName[0];
+                    string filepathDir = filepathWithName[2];
+
+                    foreach (ProfileSW profile in CrossSectionsList)
+                    {
+                        switch (profile.Type)
+                        {
+                            case "pręt okrągły":
+                                sWObject.CreateCircularRod(profile, $"{filepathDir}\\");
+                                sWObject.AddToAssembly($"{filepathDir}\\{profile.Name}.SLDPRT", assemblyName);
+                                sWObject.CloseDoc($"{profile.Name}.SLDPRT");
+                                break;
+                            case "pręt prostokątny":
+                                sWObject.CreateRectangleRod(profile, $"{filepathDir}\\");
+                                sWObject.AddToAssembly($"{filepathDir}\\{profile.Name}.SLDPRT", assemblyName);
+                                sWObject.CloseDoc($"{profile.Name}.SLDPRT");
+                                break;
+                            case "rura prostokątna":
+                                sWObject.CreateRectangleProfile(profile, $"{filepathDir}\\");
+                                sWObject.AddToAssembly($"{filepathDir}\\{profile.Name}.SLDPRT", assemblyName);
+                                sWObject.CloseDoc($"{profile.Name}.SLDPRT");
+                                break;
+                            case "rura okrągła":
+                                sWObject.CreateCircularProfile(profile, $"{filepathDir}\\");
+                                sWObject.AddToAssembly($"{filepathDir}\\{profile.Name}.SLDPRT", assemblyName);
+                                sWObject.CloseDoc($"{profile.Name}.SLDPRT");
+                                break;
+                        }
+
+                    }
+                    MessageBox.Show($"Wykonane");
+                }
+            }
+            catch (System.InvalidCastException)
+            {
+                MessageBox.Show("Wprowadź poprawne wartości liczbowe");
+            }
+        }
+   
+
         public void Add()
         {
-            CrossSectionsList.Add(new ProfileSW() { Name = "", X = 0, Y = 0, Thickness = 0, DraftCount = 0, Type = "", });
+            CrossSectionsList.Add(new ProfileSW { Name = "", X = 0, Y = 0, Thickness = 0, Length = 0, DraftCount = 0, Type = "" });
         }
+
         public void Delete(DataGrid dgprofiles)
         {
             try
@@ -98,23 +95,22 @@ namespace SWApp.Viewmodels.Pages
                 {
                     CrossSectionsList.Remove((ProfileSW)dgprofiles.SelectedItems[i]);
                 }
-
             }
             catch (InvalidCastException)
             {
                 var toDelete = dgprofiles.SelectedItem;
-                toDelete = new ProfileSW() { Name = "", X = 0, Y = 0, Thickness = 0, DraftCount = 0, Type = "" };
+                toDelete = new ProfileSW { Name = "", X = 0, Y = 0, Thickness = 0, DraftCount = 0, Type = "" };
                 CrossSectionsList.Remove((ProfileSW)toDelete);
             }
         }
+
         public List<ProfileSW> Copy(DataGrid dgprofiles)
         {
             List<ProfileSW> toCopy = new List<ProfileSW>();
-
             for (int i = 0; i < dgprofiles.SelectedItems.Count; i++)
             {
                 ProfileSW toDuplicate = (ProfileSW)dgprofiles.SelectedItems[i];
-                ProfileSW toInsert = new ProfileSW()
+                ProfileSW toInsert = new ProfileSW
                 {
                     Name = toDuplicate.Name,
                     X = toDuplicate.X,
@@ -123,13 +119,12 @@ namespace SWApp.Viewmodels.Pages
                     Length = toDuplicate.Length,
                     Type = toDuplicate.Type,
                     DraftCount = toDuplicate.DraftCount
-
                 };
-
                 toCopy.Add(toInsert);
             }
             return toCopy;
         }
+
         public void Paste(DataGrid dgprofiles)
         {
             List<ProfileSW> toPaste = Copy(dgprofiles);
