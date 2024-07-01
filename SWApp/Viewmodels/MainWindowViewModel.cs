@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Wpf.Ui.Controls;
 using SWApp.Views.Pages;
+using System.ComponentModel;
 
 namespace SWApp.Viewmodels
 {
@@ -17,5 +18,14 @@ namespace SWApp.Viewmodels
             
         };
 
-    }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
+    
+
+}
 }

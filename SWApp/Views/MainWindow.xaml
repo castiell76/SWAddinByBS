@@ -20,6 +20,7 @@
     <Grid>
 
         <ui:NavigationView 
+            x:Name="NavigationViewMain"
             PaneDisplayMode="Left"
             IsBackButtonVisible="Visible" 
             BreadcrumbBar="{Binding ElementName=BreadcrumbBar}"
@@ -44,7 +45,7 @@
             </ui:NavigationView.AutoSuggestBox>
             <ui:NavigationView.ContentOverlay>
                 <Grid>
-                    <ui:SnackbarPresenter x:Name="SnackbarPresenter"></ui:SnackbarPresenter>
+                    <ui:SnackbarPresenter x:Name="SnackbarPresenterMain"></ui:SnackbarPresenter>
                 </Grid>
             </ui:NavigationView.ContentOverlay>
         </ui:NavigationView>
@@ -52,7 +53,9 @@
 
 
         </ContentPresenter>
-        
+        <Button Click="Button_Click">
+            
+        </Button>
     </Grid>
     <UserControl.Resources>
         <ResourceDictionary>

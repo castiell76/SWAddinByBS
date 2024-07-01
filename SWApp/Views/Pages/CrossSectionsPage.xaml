@@ -10,18 +10,27 @@
       Title="CrossSectionsPage">
     
     <StackPanel>
-        <DataGrid x:Name="dataGridProfile"
+        <ui:DataGrid x:Name="dataGridProfile"
                      Height="Auto"
                      Width="Auto" 
                      CanUserReorderColumns="False"
                      CanUserSortColumns="True"
                      MinColumnWidth="60" 
                      CanUserResizeColumns="True" 
-                     AutoGenerateColumns="True"  
+                     AutoGenerateColumns="False"  
                      FontSize="10"
                      ItemsSource="{Binding CrossSectionsList, UpdateSourceTrigger=PropertyChanged}"
-                  KeyDown="DataGridProfile_KeyDown"
+                     KeyDown="DataGridProfile_KeyDown"
                      >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="X" Binding="{Binding X, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Y" Binding="{Binding Y, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Length" Binding="{Binding Length, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Thickness" Binding="{Binding Thickness, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="DraftCount" Binding="{Binding DraftCount, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Type" Binding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+            </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <ui:MenuItem x:Name="miAdd" Header="Dodaj (Ctrl+N)" Click="miAdd_Click" >
@@ -32,8 +41,10 @@
 
                 </ContextMenu>
             </DataGrid.ContextMenu>
-        </DataGrid>
-        <ui:Button x:Name="btnGenerateCrossSections" Content="Wygeneruj profile" Click="btnGenerateCrossSections_Click"></ui:Button>
+        </ui:DataGrid>
+        <ui:Button x:Name="btnGenerateCrossSections" Content="Wygeneruj profile" Click="btnGenerateCrossSections_Click" HorizontalAlignment="Center"></ui:Button>
+        <ui:Button Command="{Binding ViewModel.OpenSnackbarCommand}" Click="Button_Click"
+            ></ui:Button>
     </StackPanel>
     <Page.Resources>
         <ResourceDictionary>

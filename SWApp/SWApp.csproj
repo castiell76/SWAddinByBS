@@ -126,6 +126,7 @@
     <PackageReference Include="Microsoft-Windows10-APICodePack-Core" Version="1.1.8" />
     <PackageReference Include="Microsoft-Windows10-APICodePack-Shell" Version="1.1.8" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
     <PackageReference Include="Microsoft.ML" Version="3.0.1" />
     <PackageReference Include="Microsoft.ML.FastTree" Version="3.0.1" />
@@ -155,7 +156,6 @@
     <PackageReference Include="WPF-UI" Version="3.0.4" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="App.xaml.cs" />
     <Compile Remove="FormTest.cs" />
     <Compile Remove="FormTest.Designer.cs" />
     <Compile Remove="NotifyPropertyChanged.cs" />
@@ -163,7 +163,6 @@
     <EmbeddedResource Remove="FormTest.resx" />
     <None Remove="App.config" />
     <None Remove="assets\logo.png" />
-    <Page Remove="App.xaml" />
   </ItemGroup>
   <ItemGroup Label="PriceForecastMLM">
     <None Include="PriceForecastMLM.mlnet">

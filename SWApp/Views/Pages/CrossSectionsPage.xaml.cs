@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui;
 using Wpf.Ui.Controls;
 
 
@@ -27,15 +28,16 @@ namespace SWApp.Views.Pages
         public CrossSectionsViewmodel ViewModel { get; }
         public CrossSectionsPage(CrossSectionsViewmodel viewModel)
         {
-            InitializeComponent();
+            
             ViewModel = viewModel;
             DataContext = ViewModel;
-            
+            InitializeComponent();
+
         }
         public CrossSectionsPage() : this(new CrossSectionsViewmodel())
         {
-            InitializeComponent();
             DataContext = ViewModel;
+            InitializeComponent();
         }
         private void miAdd_Click(object sender, RoutedEventArgs e)
         {
@@ -44,7 +46,6 @@ namespace SWApp.Views.Pages
 
         private void miDelete_Click(object sender, RoutedEventArgs e)
         {
-
             ViewModel.Delete(dataGridProfile);
 
         }
@@ -76,11 +77,20 @@ namespace SWApp.Views.Pages
             {
                 ViewModel.Add();
             }
+            if(e.Key == Key.Tab)
+            {
+                
+            }
         }
 
         private void btnGenerateCrossSections_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.GenerateCrossSections();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

@@ -6,26 +6,35 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using SWApp.Models;
+using Wpf.Ui;
+using Wpf.Ui.Controls;
 
 namespace SWApp.Viewmodels.Pages
 {
-    public partial class CrossSectionsViewmodel : ObservableObject, INotifyPropertyChanged
+    public partial class CrossSectionsViewmodel : ObservableObject
     {
         [ObservableProperty]
         private ObservableCollection<ProfileSW> _crossSectionsList;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string name = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-
+        private readonly ISnackbarService _snackbarService;
         public CrossSectionsViewmodel()
         {
             CrossSectionsList = new ObservableCollection<ProfileSW>();
+        }
+
+        [RelayCommand]
+        public void OnOpenSnackbar(object sender)
+        {
+            _snackbarService.Show(
+                "Don't Blame Yourself.",
+                "No Witcher's Ever Died In His Bed.",
+                ControlAppearance.Danger,
+                new SymbolIcon(SymbolRegular.Fluent24),
+                TimeSpan.FromSeconds(3000)
+            );
         }
 
         public void GenerateCrossSections()
@@ -35,7 +44,7 @@ namespace SWApp.Viewmodels.Pages
             {
                 if (CrossSectionsList.Any(x => x.Type == ("wprowadź dane profila")) || CrossSectionsList.Any(x => x.Type == ("")))
                 {
-                    MessageBox.Show("Wprowadź poprawne wartości liczbowe");
+                    //MessageBox.Show("Wprowadź poprawne wartości liczbowe");
                 }
                 else
                 {
@@ -72,22 +81,21 @@ namespace SWApp.Viewmodels.Pages
                         }
 
                     }
-                    MessageBox.Show($"Wykonane");
+                    //MessageBox.Show($"Wykonane");
                 }
             }
             catch (System.InvalidCastException)
             {
-                MessageBox.Show("Wprowadź poprawne wartości liczbowe");
+                //MessageBox.Show("Wprowadź poprawne wartości liczbowe");
             }
         }
-   
 
         public void Add()
         {
             CrossSectionsList.Add(new ProfileSW { Name = "", X = 0, Y = 0, Thickness = 0, Length = 0, DraftCount = 0, Type = "" });
         }
 
-        public void Delete(DataGrid dgprofiles)
+        public void Delete(Wpf.Ui.Controls.DataGrid dgprofiles)
         {
             try
             {
@@ -104,7 +112,7 @@ namespace SWApp.Viewmodels.Pages
             }
         }
 
-        public List<ProfileSW> Copy(DataGrid dgprofiles)
+        public List<ProfileSW> Copy(Wpf.Ui.Controls.DataGrid dgprofiles)
         {
             List<ProfileSW> toCopy = new List<ProfileSW>();
             for (int i = 0; i < dgprofiles.SelectedItems.Count; i++)
@@ -125,7 +133,7 @@ namespace SWApp.Viewmodels.Pages
             return toCopy;
         }
 
-        public void Paste(DataGrid dgprofiles)
+        public void Paste(Wpf.Ui.Controls.DataGrid dgprofiles)
         {
             List<ProfileSW> toPaste = Copy(dgprofiles);
             foreach (ProfileSW profile in toPaste)

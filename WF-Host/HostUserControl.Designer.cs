@@ -18,7 +18,7 @@ namespace WF_Host
         {
             components = new System.ComponentModel.Container();
             elementHost2 = new ElementHost();
-            mainWindow2 = new MainWindow();
+            mainWindow2 = new MainWindow(null,null,null,null,null);
 
             SuspendLayout();
 

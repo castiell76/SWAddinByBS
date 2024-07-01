@@ -24,6 +24,19 @@ using Wpf.Ui.Markup;
 using SWApp.Viewmodels;
 using SWApp.Viewmodels.Pages;
 using SWApp.Views.Pages;
+using Wpf.Ui.Controls;
+using Wpf.Ui;
+using System.Windows.Navigation;
+using System.Windows.Forms;
+using UserControl = System.Windows.Controls.UserControl;
+using Microsoft.ML.Runtime;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using SWApp.Services.Contracts;
+using System.Configuration;
+using SWApp.Services;
+using System.Windows.Threading;
 
 namespace SWApp.Views
 {
@@ -31,28 +44,84 @@ namespace SWApp.Views
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     [ComVisible(true)]
-    public partial class MainWindow : UserControl
+    public partial class MainWindow : UserControl, IWindow
     {
-        
-        private readonly CrossSectionsViewmodel _viewModel = new CrossSectionsViewmodel(); 
+
         SWObject sWObject = new SWObject();
         ModelDoc2 swModel;
         FeatureManager swFeatMgr;
         Component2 swComp;
-        Configuration swConfig;
-        ConfigurationManager swConfMgr;
+        //Configuration swConfig;
+        //ConfigurationManager swConfMgr;
         List<FileProperty> fileProperties = new List<FileProperty>();
         List<string> engineers = new List<string>();
         ExcelFile excelFile = new ExcelFile();
         ObservableCollection<ProfileSW> profilesSW = new ObservableCollection<ProfileSW>();
 
-        public MainWindow()
+        private readonly ISnackbarService _snackbarService;
+
+        private static readonly Microsoft.Extensions.Hosting.IHost _host = Host.CreateDefaultBuilder()
+            .ConfigureAppConfiguration(c =>
+            {
+                _ = c.SetBasePath(AppContext.BaseDirectory);
+            })
+            .ConfigureServices(
+                (_1, services) =>
+                {
+                    // App Host
+                    _ = services.AddHostedService<ApplicationHostService>();
+
+                    // Main window container with navigation
+                    _ = services.AddSingleton<IWindow, MainWindow>();
+                    _ = services.AddSingleton<MainWindowViewModel>();
+                    _ = services.AddSingleton<INavigationService, Wpf.Ui.NavigationService>();
+                    _ = services.AddSingleton<ISnackbarService, SnackbarService>();
+                    _ = services.AddSingleton<IContentDialogService, ContentDialogService>();
+                    _ = services.AddSingleton<WindowsProviderService>();
+
+
+                    // Top-level pages
+                    //_ = services.AddSingleton<DashboardPage>();
+                    //_ = services.AddSingleton<DashboardViewModel>();
+                    //_ = services.AddSingleton<AllControlsPage>();
+                    //_ = services.AddSingleton<AllControlsViewModel>();
+                    //_ = services.AddSingleton<SettingsPage>();
+                    //_ = services.AddSingleton<SettingsViewModel>();
+
+                    //// All other pages and view models
+                    //_ = services.AddTransientFromNamespace("Wpf.Ui.Gallery.Views", GalleryAssembly.Asssembly);
+                    //_ = services.AddTransientFromNamespace(
+                    //    "Wpf.Ui.Gallery.ViewModels",
+                    //    GalleryAssembly.Asssembly
+                    //);
+                }
+            )
+            .Build();
+
+        /// <summary>
+        /// Occurs when an exception is thrown by an application but not handled.
+        /// </summary>
+        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
+            // For more info see https://docs.microsoft.com/en-us/dotnet/api/system.windows.application.dispatcherunhandledexception?view=windowsdesktop-6.0
+        }
+        public MainWindow(MainWindowViewModel viewModel,
+        INavigationService navigationService,
+        IServiceProvider serviceProvider,
+        ISnackbarService snackbarService,
+        IContentDialogService contentDialogService)
+        {
+
+            //Wpf.Ui.Appearance.SystemThemeWatcher.Watch(this);
+            ViewModel = viewModel;
+
+            DataContext = this;
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
+            //snackbarService.Show("gu", "wno", ControlAppearance.Danger, null,TimeSpan.FromSeconds(10));
 
-            
-
+            //navigationService.SetNavigationControl(NavigationViewMain);
+            //contentDialogService.SetDialogHost(RootContentDialog);
+            //NavigationViewMain.SetServiceProvider(serviceProvider);
             //generate rows for datagrid profiles
 
 
@@ -81,6 +150,7 @@ namespace SWApp.Views
             engineers.Sort();
 
         }
+        public MainWindowViewModel ViewModel { get; }
         public event EventHandler<bool> ThemeChanged;
         public void OnThemeChanged(object sender, bool isDarkTheme)
         {
@@ -100,6 +170,18 @@ namespace SWApp.Views
                 ApplicationThemeManager.Apply(this);
             }
         }
+        
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+           
+        }
+
+        public void Show()
+        {
+            throw new NotImplementedException();
+        }
+
+
 
 
         //private void BtnGenDXF_Click(object sender, RoutedEventArgs e)
@@ -515,7 +597,7 @@ namespace SWApp.Views
         //    cbCheckedBy.IsChecked = true;
         //}
 
-      
+
 
         //private void Btn_Click(object sender, RoutedEventArgs e)
         //{
