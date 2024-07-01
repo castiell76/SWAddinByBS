@@ -20,22 +20,22 @@ namespace SWApp.Viewmodels.Pages
         [ObservableProperty]
         private ObservableCollection<ProfileSW> _crossSectionsList;
         private readonly ISnackbarService _snackbarService;
+        [ObservableProperty]
+        private bool _isFlyoutOpen = false;
+
+        [RelayCommand]
+        public void OnButtonClick(object sender)
+        {
+            if (!IsFlyoutOpen)
+            {
+                IsFlyoutOpen = true;
+            }
+        }
         public CrossSectionsViewmodel()
         {
             CrossSectionsList = new ObservableCollection<ProfileSW>();
         }
 
-        [RelayCommand]
-        public void OnOpenSnackbar(object sender)
-        {
-            _snackbarService.Show(
-                "Don't Blame Yourself.",
-                "No Witcher's Ever Died In His Bed.",
-                ControlAppearance.Danger,
-                new SymbolIcon(SymbolRegular.Fluent24),
-                TimeSpan.FromSeconds(3000)
-            );
-        }
 
         public void GenerateCrossSections()
         {
