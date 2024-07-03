@@ -13,11 +13,11 @@ using Microsoft.ML;
 
 namespace SWApp
 {
-    public partial class PriceForecastMLM
+    public partial class MLMForecasting
     {
-        public const string RetrainFilePath =  @"C:\Users\ebabs\OneDrive\Pulpit\dane okrojone.csv";
+        public const string RetrainFilePath =  @"C:\Users\ebabs\OneDrive\Pulpit\dane treningowe.csv";
         public const char RetrainSeparatorChar = ';';
-        public const bool RetrainHasHeader =  false;
+        public const bool RetrainHasHeader =  true;
         public const bool RetrainAllowQuoting =  false;
 
          /// <summary>
@@ -91,11 +91,10 @@ namespace SWApp
         public static IEstimator<ITransformer> BuildPipeline(MLContext mlContext)
         {
             // Data process configuration with pipeline data transformations
-            var pipeline = mlContext.Transforms.Categorical.OneHotEncoding(@"col3", @"col3", outputKind: OneHotEncodingEstimator.OutputKind.Indicator)      
-                                    .Append(mlContext.Transforms.ReplaceMissingValues(new []{new InputOutputColumnPair(@"col0", @"col0"),new InputOutputColumnPair(@"col4", @"col4"),new InputOutputColumnPair(@"col5", @"col5")}))      
-                                    .Append(mlContext.Transforms.Text.FeaturizeText(inputColumnName:@"col2",outputColumnName:@"col2"))      
-                                    .Append(mlContext.Transforms.Concatenate(@"Features", new []{@"col3",@"col0",@"col4",@"col5",@"col2"}))      
-                                    .Append(mlContext.Regression.Trainers.FastForest(new FastForestRegressionTrainer.Options(){NumberOfTrees=4,NumberOfLeaves=4,FeatureFraction=1F,LabelColumnName=@"col1",FeatureColumnName=@"Features"}));
+            var pipeline = mlContext.Transforms.Categorical.OneHotEncoding(new []{new InputOutputColumnPair(@"jakość danych", @"jakość danych"),new InputOutputColumnPair(@"grupa", @"grupa")}, outputKind: OneHotEncodingEstimator.OutputKind.Indicator)      
+                                    .Append(mlContext.Transforms.ReplaceMissingValues(new []{new InputOutputColumnPair(@"nakład", @"nakład"),new InputOutputColumnPair(@"ilość elementów", @"ilość elementów"),new InputOutputColumnPair(@"waga", @"waga"),new InputOutputColumnPair(@"inwersja nakładu", @"inwersja nakładu"),new InputOutputColumnPair(@"wskaznik cena-ilosc", @"wskaznik cena-ilosc"),new InputOutputColumnPair(@"wskaznik cena-waga", @"wskaznik cena-waga")}))      
+                                    .Append(mlContext.Transforms.Concatenate(@"Features", new []{@"jakość danych",@"grupa",@"nakład",@"ilość elementów",@"waga",@"inwersja nakładu",@"wskaznik cena-ilosc",@"wskaznik cena-waga"}))      
+                                    .Append(mlContext.Regression.Trainers.FastTree(new FastTreeRegressionTrainer.Options(){NumberOfLeaves=5,MinimumExampleCountPerLeaf=23,NumberOfTrees=72,MaximumBinCountPerFeature=174,FeatureFraction=0.915170040431926,LearningRate=0.999999776672986,LabelColumnName=@"koszt",FeatureColumnName=@"Features",DiskTranspose=false}));
 
             return pipeline;
         }

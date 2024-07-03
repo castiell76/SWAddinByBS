@@ -105,6 +105,8 @@ namespace SWApp.Views
         {
             // For more info see https://docs.microsoft.com/en-us/dotnet/api/system.windows.application.dispatcherunhandledexception?view=windowsdesktop-6.0
         }
+
+        
         public MainWindow(MainWindowViewModel viewModel,
         INavigationService navigationService,
         IServiceProvider serviceProvider,
@@ -150,6 +152,27 @@ namespace SWApp.Views
             engineers.Sort();
 
         }
+
+        private void Test()
+        {
+            var sampleData = new MLMForecasting.ModelInput()
+            {
+                Nakład = 50,
+                Ilość_elementów = 1,
+                Waga = 25F,
+                Jakość_danych = @"Model 3d w formacie ides/step/xt",
+                Grupa = @"Metal",
+                
+            };
+            //sampleData.Wskaznik_cena_ilosc = sampleData.Koszt * sampleData.Ilość_elementów;
+            sampleData.Inwersja_nakładu = 1 / sampleData.Nakład;
+            //sampleData.Wskaznik_cena_waga = sampleData.Koszt * sampleData.Waga;
+
+            //Load model and predict output
+            var result = MLMForecasting.Predict(sampleData);
+            System.Windows.MessageBox.Show(result.Koszt.ToString());
+
+        }
         public MainWindowViewModel ViewModel { get; }
         public event EventHandler<bool> ThemeChanged;
         public void OnThemeChanged(object sender, bool isDarkTheme)
@@ -171,14 +194,15 @@ namespace SWApp.Views
             }
         }
         
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-           
-        }
 
         public void Show()
         {
             throw new NotImplementedException();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Test();
         }
 
 

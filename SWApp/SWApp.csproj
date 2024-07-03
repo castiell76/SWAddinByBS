@@ -23,7 +23,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
-	  <ForceDesignerDPIUnaware>true</ForceDesignerDPIUnaware>
+    <ForceDesignerDPIUnaware>true</ForceDesignerDPIUnaware>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -130,6 +130,8 @@
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
     <PackageReference Include="Microsoft.ML" Version="3.0.1" />
     <PackageReference Include="Microsoft.ML.FastTree" Version="3.0.1" />
+    <PackageReference Include="Microsoft.ML.LightGbm" Version="3.0.1" />
+    <PackageReference Include="Microsoft.ML.TimeSeries" Version="3.0.1" />
     <PackageReference Include="Microsoft.VisualBasic" Version="10.4.0-preview.18571.3" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="9.0.0-preview.5.24306.8" />
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
@@ -164,15 +166,15 @@
     <None Remove="App.config" />
     <None Remove="assets\logo.png" />
   </ItemGroup>
-  <ItemGroup Label="PriceForecastMLM">
-    <None Include="PriceForecastMLM.mlnet">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup Label="MLMForecasting">
+    <None Include="MLMForecasting.mlnet">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <NeutralLanguage>aa</NeutralLanguage>
