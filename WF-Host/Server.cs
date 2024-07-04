@@ -48,6 +48,7 @@ namespace WF_Host
             bitmap[5] = "C:\\Users\\ebabs\\Downloads\\128x128.bmp";
             mTaskPaneView = swApp.CreateTaskpaneView3(bitmap, "SWAddin By BS");
             userControl = new HostUserControl();
+            
             mTaskPaneView.DisplayWindowFromHandlex64(userControl.Handle.ToInt64());
             userControl = (HostUserControl)mTaskPaneView.AddControl(SWTASKPANE_PROGID, string.Empty);
         }
@@ -86,7 +87,7 @@ namespace WF_Host
             addinkey.SetValue(null, 0);
 
             addinkey.SetValue("Title", "BS SWAddin");
-            addinkey.SetValue("Description", "Użytek tylko dla wybranych");
+            addinkey.SetValue("Description", "Opisówka");
 
             keyname = "Software\\SOLIDWORKS\\AddInsStartup\\{" + t.GUID.ToString() + "}";
             addinkey = hkcu.CreateSubKey(keyname);

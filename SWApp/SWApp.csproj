@@ -171,11 +171,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
-  <ItemGroup Label="MLMForecasting">
-    <None Include="MLMForecasting.mlnet">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
   <PropertyGroup>
     <NeutralLanguage>aa</NeutralLanguage>
     <PlatformTarget>AnyCPU</PlatformTarget>

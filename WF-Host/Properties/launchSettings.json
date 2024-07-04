@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "WF-Host": {
+      "commandName": "Project"
+    },
+    "Profile 1": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\SOLIDWORKS Corp\\SOLIDWORKS\\SLDWORKS.exe"
+    }
+  }
+}

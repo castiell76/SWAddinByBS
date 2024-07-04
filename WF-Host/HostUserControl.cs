@@ -17,6 +17,7 @@ namespace WF_Host
         public HostUserControl()
         {
             InitializeComponent();
+            //InjectDependencies();
         }
 
     }

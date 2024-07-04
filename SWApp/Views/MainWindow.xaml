@@ -53,7 +53,7 @@
 
 
         </ContentPresenter>
-        <Button Click="Button_Click_1">
+        <Button Content="COS nowego" Height="47" Width="152" Click="Button_Click">
             
         </Button>
     </Grid>

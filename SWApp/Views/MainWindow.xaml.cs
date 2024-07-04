@@ -14,7 +14,6 @@ using Microsoft.Win32;
 using SolidWorks.Interop.sldworks;
 using SolidWorks.Interop.swconst;
 using static SWApp.Models.NaturalSorting;
-//using MachinelearningwithFullPhotos;
 using Aspose.Pdf.Operators;
 using System.Windows.Shapes;
 using System.Windows.Media;
@@ -37,6 +36,7 @@ using SWApp.Services.Contracts;
 using System.Configuration;
 using SWApp.Services;
 using System.Windows.Threading;
+using System.Threading.Tasks;
 
 namespace SWApp.Views
 {
@@ -44,7 +44,7 @@ namespace SWApp.Views
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     [ComVisible(true)]
-    public partial class MainWindow : UserControl, IWindow
+    public partial class MainWindow : UserControl
     {
 
         SWObject sWObject = new SWObject();
@@ -58,67 +58,72 @@ namespace SWApp.Views
         ExcelFile excelFile = new ExcelFile();
         ObservableCollection<ProfileSW> profilesSW = new ObservableCollection<ProfileSW>();
 
-        private readonly ISnackbarService _snackbarService;
+        private static Microsoft.Extensions.Hosting.IHost _host;
+        private static INavigationService _navigationService;
+        private static IServiceProvider _serviceProvider;
+        private static ISnackbarService _snackbarService;
+        private static IContentDialogService _contentDialogService;
+        public event RoutedEventHandler Loaded;
+        private void COS()
+        {
+            _host = Host.CreateDefaultBuilder()
+                  //.ConfigureAppConfiguration(c =>
+                  //{
+                  //    _ = c.SetBasePath(AppContext.BaseDirectory);
+                  //})
+                  .ConfigureServices(
+                      (_1, services) =>
+                      {
+                          // App Host
+                          //_ = services.AddHostedService<ApplicationHostService>();
 
-        private static readonly Microsoft.Extensions.Hosting.IHost _host = Host.CreateDefaultBuilder()
-            .ConfigureAppConfiguration(c =>
-            {
-                _ = c.SetBasePath(AppContext.BaseDirectory);
-            })
-            .ConfigureServices(
-                (_1, services) =>
-                {
-                    // App Host
-                    _ = services.AddHostedService<ApplicationHostService>();
+                          //// Main window container with navigation
+                          ////_ = services.AddSingleton<IWindow, MainWindow>();
+                          _ = services.AddSingleton<MainWindowViewModel>();
+                          _ = services.AddSingleton<INavigationService, Wpf.Ui.NavigationService>();
+                          _ = services.AddSingleton<ISnackbarService, SnackbarService>();
+                          _ = services.AddSingleton<IContentDialogService, ContentDialogService>();
+                          _ = services.AddSingleton<WindowsProviderService>();
 
-                    // Main window container with navigation
-                    _ = services.AddSingleton<IWindow, MainWindow>();
-                    _ = services.AddSingleton<MainWindowViewModel>();
-                    _ = services.AddSingleton<INavigationService, Wpf.Ui.NavigationService>();
-                    _ = services.AddSingleton<ISnackbarService, SnackbarService>();
-                    _ = services.AddSingleton<IContentDialogService, ContentDialogService>();
-                    _ = services.AddSingleton<WindowsProviderService>();
+                      }
+                  )
+                  .Build();
 
+            _navigationService = _host.Services.GetRequiredService<INavigationService>();
+            _serviceProvider = _host.Services.GetRequiredService<IServiceProvider>();
+            _snackbarService = _host.Services.GetRequiredService<ISnackbarService>();
+            _contentDialogService = _host.Services.GetRequiredService<IContentDialogService>();
+        }
+        //private void InjectDependencies()
+        //{
+        //    _navigationService = GetRequiredService<INavigationService>();
+        //    _serviceProvider = GetRequiredService<IServiceProvider>();
+        //    _snackbarService = GetRequiredService<ISnackbarService>();
+        //    _contentDialogService = GetRequiredService<IContentDialogService>();
 
-                    // Top-level pages
-                    //_ = services.AddSingleton<DashboardPage>();
-                    //_ = services.AddSingleton<DashboardViewModel>();
-                    //_ = services.AddSingleton<AllControlsPage>();
-                    //_ = services.AddSingleton<AllControlsViewModel>();
-                    //_ = services.AddSingleton<SettingsPage>();
-                    //_ = services.AddSingleton<SettingsViewModel>();
-
-                    //// All other pages and view models
-                    //_ = services.AddTransientFromNamespace("Wpf.Ui.Gallery.Views", GalleryAssembly.Asssembly);
-                    //_ = services.AddTransientFromNamespace(
-                    //    "Wpf.Ui.Gallery.ViewModels",
-                    //    GalleryAssembly.Asssembly
-                    //);
-                }
-            )
-            .Build();
+        //    // Use injected dependencies
+        //    //ainWindow2.Initialize(_navigationService, _serviceProvider, _snackbarService, _contentDialogService);
+        //}
+        //public static T GetRequiredService<T>()
+        //where T : class
+        //{
+        //    return _host.Services.GetRequiredService<T>();
+        //}
 
         /// <summary>
-        /// Occurs when an exception is thrown by an application but not handled.
+        /// Occurs when the application is loading.
         /// </summary>
-        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
-        {
-            // For more info see https://docs.microsoft.com/en-us/dotnet/api/system.windows.application.dispatcherunhandledexception?view=windowsdesktop-6.0
-        }
 
-        
-        public MainWindow(MainWindowViewModel viewModel,
-        INavigationService navigationService,
-        IServiceProvider serviceProvider,
-        ISnackbarService snackbarService,
-        IContentDialogService contentDialogService)
-        {
 
+        public MainWindow()
+        {
             //Wpf.Ui.Appearance.SystemThemeWatcher.Watch(this);
-            ViewModel = viewModel;
+            //ViewModel = viewModel;
 
             DataContext = this;
             InitializeComponent();
+            COS();
+            //InjectDependencies();
             //snackbarService.Show("gu", "wno", ControlAppearance.Danger, null,TimeSpan.FromSeconds(10));
 
             //navigationService.SetNavigationControl(NavigationViewMain);
@@ -153,26 +158,6 @@ namespace SWApp.Views
 
         }
 
-        private void Test()
-        {
-            var sampleData = new MLMForecasting.ModelInput()
-            {
-                Nakład = 50,
-                Ilość_elementów = 1,
-                Waga = 25F,
-                Jakość_danych = @"Model 3d w formacie ides/step/xt",
-                Grupa = @"Metal",
-                
-            };
-            //sampleData.Wskaznik_cena_ilosc = sampleData.Koszt * sampleData.Ilość_elementów;
-            sampleData.Inwersja_nakładu = 1 / sampleData.Nakład;
-            //sampleData.Wskaznik_cena_waga = sampleData.Koszt * sampleData.Waga;
-
-            //Load model and predict output
-            var result = MLMForecasting.Predict(sampleData);
-            System.Windows.MessageBox.Show(result.Koszt.ToString());
-
-        }
         public MainWindowViewModel ViewModel { get; }
         public event EventHandler<bool> ThemeChanged;
         public void OnThemeChanged(object sender, bool isDarkTheme)
@@ -193,17 +178,20 @@ namespace SWApp.Views
                 ApplicationThemeManager.Apply(this);
             }
         }
-        
 
-        public void Show()
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            _snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
+            _snackbarService.Show("DZIAŁa", "KURWA", ControlAppearance.Info, null, TimeSpan.FromSeconds(3));
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            Test();
-        }
+
+        //public void Show()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+
 
 
 
