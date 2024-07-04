@@ -14,7 +14,8 @@ namespace SWApp.Viewmodels
         [ObservableProperty]
         private ObservableCollection<NavigationViewItem> _menuItems = new ObservableCollection<NavigationViewItem>
         {
-            new NavigationViewItem("Generator profili",typeof(CrossSectionsPage))
+            new NavigationViewItem("Generator profili",typeof(CrossSectionsPage)),
+            new NavigationViewItem("Ustawienia", typeof(SettingsPage)),
             
         };
 

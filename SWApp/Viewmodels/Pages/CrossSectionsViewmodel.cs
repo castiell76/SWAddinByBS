@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SWApp.Models;
+using SWApp.Services;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
 
@@ -19,7 +20,8 @@ namespace SWApp.Viewmodels.Pages
     {
         [ObservableProperty]
         private ObservableCollection<ProfileSW> _crossSectionsList;
-        private readonly ISnackbarService _snackbarService;
+        private HelpService _helpService = new HelpService();
+        private ISnackbarService _snackbarService;
         [ObservableProperty]
         private bool _isFlyoutOpen = false;
 
@@ -31,11 +33,25 @@ namespace SWApp.Viewmodels.Pages
                 IsFlyoutOpen = true;
             }
         }
-        public CrossSectionsViewmodel()
+
+        public CrossSectionsViewmodel(ISnackbarService snackbarService)
         {
+            _snackbarService= snackbarService;
             CrossSectionsList = new ObservableCollection<ProfileSW>();
         }
 
+        [RelayCommand]
+        public void OnOpenSnackbar(object sender)
+        {
+            _snackbarService = _helpService.SnackbarService;
+            _snackbarService.Show(
+                "Don't Blame Yourself.",
+                "No Witcher's Ever Died In His Bed.",
+                ControlAppearance.Info,
+                new SymbolIcon(SymbolRegular.Fluent24),
+                TimeSpan.FromSeconds(3)
+            );
+        }
 
         public void GenerateCrossSections()
         {

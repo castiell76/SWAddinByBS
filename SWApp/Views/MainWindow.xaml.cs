@@ -44,7 +44,7 @@ namespace SWApp.Views
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     [ComVisible(true)]
-    public partial class MainWindow : UserControl
+    public partial class MainWindow : UserControl, IWindow
     {
 
         SWObject sWObject = new SWObject();
@@ -63,53 +63,9 @@ namespace SWApp.Views
         private static IServiceProvider _serviceProvider;
         private static ISnackbarService _snackbarService;
         private static IContentDialogService _contentDialogService;
+        private static HelpService _helpService;
         public event RoutedEventHandler Loaded;
-        private void COS()
-        {
-            _host = Host.CreateDefaultBuilder()
-                  //.ConfigureAppConfiguration(c =>
-                  //{
-                  //    _ = c.SetBasePath(AppContext.BaseDirectory);
-                  //})
-                  .ConfigureServices(
-                      (_1, services) =>
-                      {
-                          // App Host
-                          //_ = services.AddHostedService<ApplicationHostService>();
-
-                          //// Main window container with navigation
-                          ////_ = services.AddSingleton<IWindow, MainWindow>();
-                          _ = services.AddSingleton<MainWindowViewModel>();
-                          _ = services.AddSingleton<INavigationService, Wpf.Ui.NavigationService>();
-                          _ = services.AddSingleton<ISnackbarService, SnackbarService>();
-                          _ = services.AddSingleton<IContentDialogService, ContentDialogService>();
-                          _ = services.AddSingleton<WindowsProviderService>();
-
-                      }
-                  )
-                  .Build();
-
-            _navigationService = _host.Services.GetRequiredService<INavigationService>();
-            _serviceProvider = _host.Services.GetRequiredService<IServiceProvider>();
-            _snackbarService = _host.Services.GetRequiredService<ISnackbarService>();
-            _contentDialogService = _host.Services.GetRequiredService<IContentDialogService>();
-        }
-        //private void InjectDependencies()
-        //{
-        //    _navigationService = GetRequiredService<INavigationService>();
-        //    _serviceProvider = GetRequiredService<IServiceProvider>();
-        //    _snackbarService = GetRequiredService<ISnackbarService>();
-        //    _contentDialogService = GetRequiredService<IContentDialogService>();
-
-        //    // Use injected dependencies
-        //    //ainWindow2.Initialize(_navigationService, _serviceProvider, _snackbarService, _contentDialogService);
-        //}
-        //public static T GetRequiredService<T>()
-        //where T : class
-        //{
-        //    return _host.Services.GetRequiredService<T>();
-        //}
-
+      
         /// <summary>
         /// Occurs when the application is loading.
         /// </summary>
@@ -122,9 +78,16 @@ namespace SWApp.Views
 
             DataContext = this;
             InitializeComponent();
-            COS();
+            _helpService = new HelpService();
+            _helpService.GetServices();
+            _navigationService = _helpService.NavigationService;
+            _serviceProvider = _helpService.ServiceProvider;
+            _snackbarService = _helpService.SnackbarService;
+            _contentDialogService = _helpService.ContentDialogService;
+            //ApplicationThemeManager.Apply(this);
+            _snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
             //InjectDependencies();
-            //snackbarService.Show("gu", "wno", ControlAppearance.Danger, null,TimeSpan.FromSeconds(10));
+            _snackbarService.Show("gu", "wno", ControlAppearance.Danger, null,TimeSpan.FromSeconds(10));
 
             //navigationService.SetNavigationControl(NavigationViewMain);
             //contentDialogService.SetDialogHost(RootContentDialog);
@@ -181,8 +144,13 @@ namespace SWApp.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            _snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
-            _snackbarService.Show("DZIAŁa", "KURWA", ControlAppearance.Info, null, TimeSpan.FromSeconds(3));
+            
+            _snackbarService.Show("DZIAŁa", "KURWAaaaaa", ControlAppearance.Info, null, TimeSpan.FromSeconds(3));
+        }
+
+        public void Show()
+        {
+            throw new NotImplementedException();
         }
 
 

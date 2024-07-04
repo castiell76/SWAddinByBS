@@ -1,4 +1,6 @@
-﻿using SWApp.Viewmodels;
+﻿using NPOI.SS.Formula.Functions;
+using SWApp.Services;
+using SWApp.Viewmodels;
 using SWApp.Viewmodels.Pages;
 using System;
 using System.Collections.Generic;
@@ -26,7 +28,7 @@ namespace SWApp.Views.Pages
     public partial class CrossSectionsPage : INavigableView<CrossSectionsViewmodel>
     {
         public CrossSectionsViewmodel ViewModel { get; }
-        public CrossSectionsPage(CrossSectionsViewmodel viewModel)
+        public CrossSectionsPage(CrossSectionsViewmodel viewModel) 
         {
             
             ViewModel = viewModel;
@@ -34,7 +36,7 @@ namespace SWApp.Views.Pages
             InitializeComponent();
 
         }
-        public CrossSectionsPage() : this(new CrossSectionsViewmodel())
+        public CrossSectionsPage() : this(HelpService.GetRequiredService<CrossSectionsViewmodel>())
         {
             DataContext = ViewModel;
             InitializeComponent();
@@ -91,7 +93,13 @@ namespace SWApp.Views.Pages
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            ViewModel.OnButtonClick(sender);
+            //ViewModel.OnButtonClick(sender);
+            
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.OnOpenSnackbar(sender);
         }
     }
 }

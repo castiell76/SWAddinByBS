@@ -58,16 +58,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Controls\**" />
-    <Compile Remove="Helpers\**" />
     <Compile Remove="SWApp\**" />
     <EmbeddedResource Remove="Controls\**" />
-    <EmbeddedResource Remove="Helpers\**" />
     <EmbeddedResource Remove="SWApp\**" />
     <None Remove="Controls\**" />
-    <None Remove="Helpers\**" />
     <None Remove="SWApp\**" />
     <Page Remove="Controls\**" />
-    <Page Remove="Helpers\**" />
     <Page Remove="SWApp\**" />
   </ItemGroup>
   <ItemGroup>

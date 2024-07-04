@@ -57,6 +57,8 @@
             </StackPanel>
         </ui:Flyout>
         <Button Click="Button_Click_1" Height="47" Width="67"></Button>
+        <Button Click="Button_Click"
+                ></Button>
     </StackPanel>
     <Page.Resources>
         <ResourceDictionary>
