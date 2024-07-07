@@ -25,33 +25,26 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
-    <StackPanel>
-        <ui:CardControl Margin="0,0,0,12" Icon="{ui:SymbolIcon Color24}">
-            <ui:CardControl.Header>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <ui:TextBlock
-                        Grid.Row="0"
-                        FontTypography="Body"
-                        Text="App theme" />
-                    <ui:TextBlock
-                        Grid.Row="1"
-                        Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
-                        Text="Select which app theme to display" />
-                </Grid>
-            </ui:CardControl.Header>
-            <ComboBox
-                Grid.Column="1"
-                MinWidth="200"
-                SelectedIndex="{Binding ViewModel.CurrentApplicationTheme, Mode=TwoWay, Converter={StaticResource ThemeToIndexConverter}}">
-                <ComboBoxItem Content="Light" />
-                <ComboBoxItem Content="Dark" />
-                <ComboBoxItem Content="High Contrast" />
-            </ComboBox>
-
-        </ui:CardControl>
+    <StackPanel Margin="42">
+        <TextBlock
+            FontSize="20"
+            FontWeight="Medium"
+            Text="Personalization" />
+        <TextBlock Margin="0,12,0,0" Text="Theme" />
+        <RadioButton
+            Margin="0,12,0,0"
+            Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}"
+            CommandParameter="theme_light"
+            Content="Light"
+            GroupName="themeSelect"
+            IsChecked="{Binding ViewModel.CurrentApplicationTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Light, Mode=OneWay}" />
+        <RadioButton
+            Margin="0,8,0,0"
+            Command="{Binding ViewModel.ChangeThemeCommand, Mode=OneWay}"
+            CommandParameter="theme_dark"
+            Content="Dark"
+            GroupName="themeSelect"
+            IsChecked="{Binding ViewModel.CurrentApplicationTheme, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter=Dark, Mode=OneWay}" />
+        <Button Click="Button_Click"></Button>
     </StackPanel>
 </Page>

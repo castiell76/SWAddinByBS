@@ -43,22 +43,6 @@
             </DataGrid.ContextMenu>
         </ui:DataGrid>
         <ui:Button x:Name="btnGenerateCrossSections" Content="Wygeneruj profile" Click="btnGenerateCrossSections_Click" HorizontalAlignment="Center"></ui:Button>
-        <ui:Flyout
-                    Grid.Row="0"
-                    IsOpen="{Binding ViewModel.IsFlyoutOpen, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:CrossSectionsPage}, Mode=TwoWay}"
-                    Placement="Top">
-            <StackPanel>
-                <TextBlock
-                            Width="280"
-                            HorizontalAlignment="Left"
-                            Text="Replicants like any other machine are either a benefit or a hazard. If they're a benefit it's not my problem."
-                            TextWrapping="WrapWithOverflow" />
-                <Button Margin="0,8,0,0" Content="The cake is a lie!" />
-            </StackPanel>
-        </ui:Flyout>
-        <Button Click="Button_Click_1" Height="47" Width="67"></Button>
-        <Button Click="Button_Click"
-                ></Button>
     </StackPanel>
     <Page.Resources>
         <ResourceDictionary>

@@ -37,6 +37,7 @@ using System.Configuration;
 using SWApp.Services;
 using System.Windows.Threading;
 using System.Threading.Tasks;
+using Microsoft.VisualStudio.OLE.Interop;
 
 namespace SWApp.Views
 {
@@ -58,12 +59,12 @@ namespace SWApp.Views
         ExcelFile excelFile = new ExcelFile();
         ObservableCollection<ProfileSW> profilesSW = new ObservableCollection<ProfileSW>();
 
-        private static Microsoft.Extensions.Hosting.IHost _host;
-        private static INavigationService _navigationService;
-        private static IServiceProvider _serviceProvider;
-        private static ISnackbarService _snackbarService;
-        private static IContentDialogService _contentDialogService;
-        private static HelpService _helpService;
+        private  Microsoft.Extensions.Hosting.IHost _host;
+        private  INavigationService _navigationService;
+        private  System.IServiceProvider _serviceProvider;
+        private  ISnackbarService _snackbarService;
+        private  IContentDialogService _contentDialogService;
+        private  HelpService _helpService;
         public event RoutedEventHandler Loaded;
       
         /// <summary>
@@ -77,6 +78,7 @@ namespace SWApp.Views
             //ViewModel = viewModel;
 
             DataContext = this;
+            
             InitializeComponent();
             _helpService = new HelpService();
             _helpService.GetServices();
@@ -84,16 +86,12 @@ namespace SWApp.Views
             _serviceProvider = _helpService.ServiceProvider;
             _snackbarService = _helpService.SnackbarService;
             _contentDialogService = _helpService.ContentDialogService;
-            //ApplicationThemeManager.Apply(this);
-            _snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
-            //InjectDependencies();
-            _snackbarService.Show("gu", "wno", ControlAppearance.Danger, null,TimeSpan.FromSeconds(10));
+            //_snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
+            //_navigationService.SetNavigationControl(NavigationView);
+            //_contentDialogService.SetDialogHost(RootContentDialog);
 
-            //navigationService.SetNavigationControl(NavigationViewMain);
-            //contentDialogService.SetDialogHost(RootContentDialog);
-            //NavigationViewMain.SetServiceProvider(serviceProvider);
+            NavigationView.SetServiceProvider(_serviceProvider);
             //generate rows for datagrid profiles
-
 
 
             //comboDevelopedBy.ItemsSource = engineers;
@@ -120,32 +118,76 @@ namespace SWApp.Views
             engineers.Sort();
 
         }
-
-        public MainWindowViewModel ViewModel { get; }
-        public event EventHandler<bool> ThemeChanged;
-        public void OnThemeChanged(object sender, bool isDarkTheme)
+        private void NavigationView_OnPaneOpened(NavigationView sender, RoutedEventArgs args)
         {
-            isDarkTheme = ApplicationThemeManager.GetAppTheme() == ApplicationTheme.Dark;
-            ThemeChanged?.Invoke(this, isDarkTheme);
-            if (isDarkTheme)
+            if (_isPaneOpenedOrClosedFromCode)
             {
-                ApplicationThemeManager.Apply(ApplicationTheme.Light);
-                this.Background = new SolidColorBrush(Color.FromRgb(240, 240, 240));
-                ApplicationThemeManager.Apply(this);
+                return;
             }
-            else
-            {
-                ApplicationThemeManager.Apply(ApplicationTheme.Dark);
-                this.Background = new SolidColorBrush(Color.FromRgb(33, 37, 41));
-                
-                ApplicationThemeManager.Apply(this);
-            }
+
+            _isUserClosedPane = false;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void NavigationView_OnPaneClosed(NavigationView sender, RoutedEventArgs args)
         {
-            
-            _snackbarService.Show("DZIAŁa", "KURWAaaaaa", ControlAppearance.Info, null, TimeSpan.FromSeconds(3));
+            if (_isPaneOpenedOrClosedFromCode)
+            {
+                return;
+            }
+
+            _isUserClosedPane = true;
+        }
+
+        public MainWindowViewModel ViewModel { get; }
+        private bool _isUserClosedPane;
+
+        private bool _isPaneOpenedOrClosedFromCode;
+
+        //private void OnNavigationSelectionChanged(object sender, RoutedEventArgs e)
+        //{
+        //    if (sender is not Wpf.Ui.Controls.NavigationView navigationView)
+        //    {
+        //        return;
+        //    }
+
+        //    NavigationView.SetCurrentValue(
+        //        NavigationView.HeaderVisibilityProperty,
+        //        navigationView.SelectedItem?.TargetPageType != typeof(DashboardPage)
+        //            ? Visibility.Visible
+        //            : Visibility.Collapsed
+        //    );
+        //}
+
+        //private void MainWindow_OnSizeChanged(object sender, SizeChangedEventArgs e)
+        //{
+        //    if (_isUserClosedPane)
+        //    {
+        //        return;
+        //    }
+
+        //    _isPaneOpenedOrClosedFromCode = true;
+        //    NavigationView.SetCurrentValue(NavigationView.IsPaneOpenProperty, e.NewSize.Width > 1200);
+        //    _isPaneOpenedOrClosedFromCode = false;
+        //}
+
+        private void NavigationView_OnPaneOpened(NavigationView sender, RoutedEventArgs args)
+        {
+            if (_isPaneOpenedOrClosedFromCode)
+            {
+                return;
+            }
+
+            _isUserClosedPane = false;
+        }
+
+        private void NavigationView_OnPaneClosed(NavigationView sender, RoutedEventArgs args)
+        {
+            if (_isPaneOpenedOrClosedFromCode)
+            {
+                return;
+            }
+
+            _isUserClosedPane = true;
         }
 
         public void Show()

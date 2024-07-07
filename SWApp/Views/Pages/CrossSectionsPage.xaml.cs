@@ -90,17 +90,6 @@ namespace SWApp.Views.Pages
             ViewModel.GenerateCrossSections();
         }
 
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            //ViewModel.OnButtonClick(sender);
-            
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            ViewModel.OnOpenSnackbar(sender);
-        }
     }
 }
 

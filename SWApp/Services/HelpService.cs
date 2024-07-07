@@ -50,12 +50,17 @@ namespace SWApp.Services
                           //// Main window container with navigation
                           _ = services.AddSingleton<IWindow, MainWindow>();
                           _ = services.AddSingleton<MainWindowViewModel>();
+
                           _ = services.AddSingleton<INavigationService, Wpf.Ui.NavigationService>();
+                          _ = services.AddSingleton<IThemeService, ThemeService>();
                           _ = services.AddSingleton<ISnackbarService, SnackbarService>();
                           _ = services.AddSingleton<IContentDialogService, ContentDialogService>();
                           _ = services.AddSingleton<WindowsProviderService>();
 
-                          services.AddTransient<SettingsViewModel>();
+                         // _ = services.AddSingleton<INavigationWindow, Views.MainWindow>();
+                          _ = services.AddSingleton<Views.Pages.SettingsPage>();
+                          _ = services.AddSingleton<Views.Pages.CrossSectionsPage>();
+                          services.AddTransient<SettingsViewModel>();   
                           services.AddTransient<CrossSectionsViewmodel>();
                       }
                   )

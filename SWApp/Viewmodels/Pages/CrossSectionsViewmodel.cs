@@ -22,17 +22,17 @@ namespace SWApp.Viewmodels.Pages
         private ObservableCollection<ProfileSW> _crossSectionsList;
         private HelpService _helpService = new HelpService();
         private ISnackbarService _snackbarService;
-        [ObservableProperty]
-        private bool _isFlyoutOpen = false;
+        //[ObservableProperty]
+        //private bool _isFlyoutOpen = false;
 
-        [RelayCommand]
-        public void OnButtonClick(object sender)
-        {
-            if (!IsFlyoutOpen)
-            {
-                IsFlyoutOpen = true;
-            }
-        }
+        //[RelayCommand]
+        //public void OnButtonClick(object sender)
+        //{
+        //    if (!IsFlyoutOpen)
+        //    {
+        //        IsFlyoutOpen = true;
+        //    }
+        //}
 
         public CrossSectionsViewmodel(ISnackbarService snackbarService)
         {
@@ -40,14 +40,14 @@ namespace SWApp.Viewmodels.Pages
             CrossSectionsList = new ObservableCollection<ProfileSW>();
         }
 
-        [RelayCommand]
-        public void OnOpenSnackbar(object sender)
+        //[RelayCommand]
+        public void OnOpenSnackbar(string title, string message, ControlAppearance appearance)
         {
             _snackbarService = _helpService.SnackbarService;
             _snackbarService.Show(
-                "Don't Blame Yourself.",
-                "No Witcher's Ever Died In His Bed.",
-                ControlAppearance.Info,
+                title,
+                message,
+                appearance,
                 new SymbolIcon(SymbolRegular.Fluent24),
                 TimeSpan.FromSeconds(3)
             );
@@ -58,9 +58,9 @@ namespace SWApp.Viewmodels.Pages
             SWObject sWObject = new SWObject();
             try
             {
-                if (CrossSectionsList.Any(x => x.Type == ("wprowadź dane profila")) || CrossSectionsList.Any(x => x.Type == ("")))
+                if (CrossSectionsList.Any(x => x.Type == ("wprowadź dane profila")) || CrossSectionsList.Any(x => x.Type == ("")) || CrossSectionsList.Count == 0 || CrossSectionsList.Any(x=> x.Type == string.Empty))
                 {
-                    //MessageBox.Show("Wprowadź poprawne wartości liczbowe");
+                    OnOpenSnackbar("Uwaga!","Wprowadź poprawne dane profila", ControlAppearance.Caution);
                 }
                 else
                 {
@@ -97,12 +97,12 @@ namespace SWApp.Viewmodels.Pages
                         }
 
                     }
-                    //MessageBox.Show($"Wykonane");
+                    OnOpenSnackbar("Uwaga!", "Generowanie zakończone", ControlAppearance.Success);
                 }
             }
             catch (System.InvalidCastException)
             {
-                //MessageBox.Show("Wprowadź poprawne wartości liczbowe");
+                OnOpenSnackbar("Uwaga!", "Wprowadź poprawne dane profila", ControlAppearance.Caution);
             }
         }
 
