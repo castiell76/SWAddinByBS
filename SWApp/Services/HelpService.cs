@@ -21,11 +21,13 @@ namespace SWApp.Services
         private static IServiceProvider _serviceProvider;
         private static ISnackbarService _snackbarService;
         private static IContentDialogService _contentDialogService;
+        private static IThemeService _themeService;
 
         public INavigationService NavigationService { get { return _navigationService; } }
         public IServiceProvider ServiceProvider { get { return _serviceProvider; } }
         public ISnackbarService SnackbarService { get { return _snackbarService; } }
         public IContentDialogService ContentDialogService {  get { return _contentDialogService; } }
+        public IThemeService ThemeService { get { return _themeService; } }
 
         public event RoutedEventHandler Loaded;
 
@@ -70,6 +72,7 @@ namespace SWApp.Services
             _serviceProvider = _host.Services.GetRequiredService<IServiceProvider>();
             _snackbarService = _host.Services.GetRequiredService<ISnackbarService>();
             _contentDialogService = _host.Services.GetRequiredService<IContentDialogService>();
+            _themeService = _host.Services.GetService<IThemeService>();
         }
         //private void InjectDependencies()
         //{

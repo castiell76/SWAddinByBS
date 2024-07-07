@@ -63,6 +63,7 @@ namespace SWApp.Views
         private  INavigationService _navigationService;
         private  System.IServiceProvider _serviceProvider;
         private  ISnackbarService _snackbarService;
+        private static IThemeService _themeService;
         private  IContentDialogService _contentDialogService;
         private  HelpService _helpService;
         public event RoutedEventHandler Loaded;
@@ -78,22 +79,23 @@ namespace SWApp.Views
             //ViewModel = viewModel;
 
             DataContext = this;
-            
+         
             InitializeComponent();
+
             _helpService = new HelpService();
             _helpService.GetServices();
             _navigationService = _helpService.NavigationService;
+
             _serviceProvider = _helpService.ServiceProvider;
             _snackbarService = _helpService.SnackbarService;
             _contentDialogService = _helpService.ContentDialogService;
+            _themeService = _helpService.ThemeService;
             //_snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
             //_navigationService.SetNavigationControl(NavigationView);
             //_contentDialogService.SetDialogHost(RootContentDialog);
 
-            NavigationView.SetServiceProvider(_serviceProvider);
+            // NavigationView.SetServiceProvider(_serviceProvider);
             //generate rows for datagrid profiles
-
-
             //comboDevelopedBy.ItemsSource = engineers;
             //comboCheckedBy.ItemsSource = engineers;
 
@@ -169,30 +171,32 @@ namespace SWApp.Views
         //    NavigationView.SetCurrentValue(NavigationView.IsPaneOpenProperty, e.NewSize.Width > 1200);
         //    _isPaneOpenedOrClosedFromCode = false;
         //}
-
-        private void NavigationView_OnPaneOpened(NavigationView sender, RoutedEventArgs args)
+        public event EventHandler<bool> ThemeChanged;
+        public void ChangeTheme()
         {
-            if (_isPaneOpenedOrClosedFromCode)
+            bool isDarkTheme = true; // or false, depending on the desired theme
+            
+
+            if (isDarkTheme)
             {
-                return;
+                ApplicationThemeManager.Apply(ApplicationTheme.Dark);
+               //_themeService.SetTheme(ApplicationTheme.Dark);  
             }
-
-            _isUserClosedPane = false;
-        }
-
-        private void NavigationView_OnPaneClosed(NavigationView sender, RoutedEventArgs args)
-        {
-            if (_isPaneOpenedOrClosedFromCode)
+            else
             {
-                return;
+                this.Background = new SolidColorBrush(Colors.White);
             }
-
-            _isUserClosedPane = true;
+            ThemeChanged?.Invoke(this, isDarkTheme);
         }
 
         public void Show()
         {
             throw new NotImplementedException();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeTheme();
         }
 
 

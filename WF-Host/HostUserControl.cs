@@ -17,7 +17,7 @@ namespace WF_Host
         public HostUserControl()
         {
             InitializeComponent();
-            //InjectDependencies();
+            mainWindow2.ThemeChanged += OnThemeChanged;
         }
 
     }

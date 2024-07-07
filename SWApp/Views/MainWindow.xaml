@@ -11,7 +11,6 @@
              Width="Auto"
              MinHeight="479"
              MinWidth="271"
-             Background="White"
              VerticalAlignment="Stretch" HorizontalAlignment="Stretch" d:DesignHeight="630" d:DesignWidth="800">
     <UserControl.DataContext>
         <viewmodels:MainWindowViewModel></viewmodels:MainWindowViewModel>
@@ -53,6 +52,9 @@
 
 
         </ContentPresenter>
+        <Button Click="Button_Click">
+            
+        </Button>
     </Grid>
     <UserControl.Resources>
         <ResourceDictionary>
