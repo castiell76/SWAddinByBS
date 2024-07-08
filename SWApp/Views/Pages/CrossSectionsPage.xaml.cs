@@ -48,32 +48,32 @@ namespace SWApp.Views.Pages
 
         private void miDelete_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.Delete(dataGridProfile);
+           // ViewModel.Delete(dataGridProfile);
 
         }
         private void MiCopy_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.Copy(dataGridProfile);
+            //ViewModel.Copy(dataGridProfile);
         }
 
         private void MiPaste_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.Paste(dataGridProfile);
+            //ViewModel.Paste(dataGridProfile);
         }
 
         private void DataGridProfile_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Delete)
             {
-                ViewModel.Delete(dataGridProfile);
+               // ViewModel.Delete(dataGridProfile);
             }
             if (e.Key == Key.C && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
-                ViewModel.Copy(dataGridProfile);
+               // ViewModel.Copy(dataGridProfile);
             }
             if (e.Key == Key.V && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
-                ViewModel.Paste(dataGridProfile);
+               // ViewModel.Paste(dataGridProfile);
             }
             if (e.Key == Key.N && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
@@ -81,7 +81,7 @@ namespace SWApp.Views.Pages
             }
             if(e.Key == Key.Tab)
             {
-                
+                System.Windows.MessageBox.Show("grid");
             }
         }
 
@@ -90,6 +90,13 @@ namespace SWApp.Views.Pages
             ViewModel.GenerateCrossSections();
         }
 
+        private void StackPanel_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab)
+            {
+                System.Windows.MessageBox.Show("stackpanel");
+            }
+        }
     }
 }
 

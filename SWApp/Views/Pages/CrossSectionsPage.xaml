@@ -7,11 +7,69 @@
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="CrossSectionsPage">
-    
-    <StackPanel>
-        <ui:DataGrid x:Name="dataGridProfile"
+      Title="CrossSectionsPage"
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemesDictionary Theme="Light" />
+                <!--<ui:ControlsDictionary />-->
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="DataGrid">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                <Setter Property="RowBackground" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+                <Setter Property="AlternatingRowBackground" Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
+                <Setter Property="HorizontalGridLinesBrush" Value="#D3D3D3" />
+                <Setter Property="VerticalGridLinesBrush" Value="#D3D3D3" />
+                <Setter Property="GridLinesVisibility" Value="All" />
+                <Setter Property="BorderBrush" Value="#D3D3D3" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CellStyle">
+                    <Setter.Value>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Padding" Value="4,2,4,2" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="MinHeight" Value="40" />
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridCell">
+                                        <Grid Background="{TemplateBinding Background}">
+                                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left" />
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="LightBlue" />
+                                                <Setter Property="Foreground" Value="White" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="ColumnHeaderStyle">
+                    <Setter.Value>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="Gray" />
+                            <Setter Property="Foreground" Value="White" />
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="Padding" Value="4,2,4,2" />
+                            <Setter Property="MinHeight" Value="40" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+    <StackPanel KeyDown="StackPanel_KeyDown">
+        <DataGrid  x:Name="dataGridProfile"
                      Height="Auto"
+                   
                      Width="Auto" 
                      CanUserReorderColumns="False"
                      CanUserSortColumns="True"
@@ -22,8 +80,8 @@
                      ItemsSource="{Binding CrossSectionsList, UpdateSourceTrigger=PropertyChanged}"
                      KeyDown="DataGridProfile_KeyDown"
                      >
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+            <DataGrid.Columns >
+                <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"  />
                 <DataGridTextColumn Header="X" Binding="{Binding X, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Y" Binding="{Binding Y, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Length" Binding="{Binding Length, UpdateSourceTrigger=PropertyChanged}" />
@@ -38,18 +96,11 @@
                     <ui:MenuItem x:Name="miDelete" Header="Usuń (Del)" Click="miDelete_Click"></ui:MenuItem>
                     <ui:MenuItem x:Name="miCopy" Header="Kopiuj (Ctrl+C)" Click="MiCopy_Click"></ui:MenuItem>
                     <ui:MenuItem x:Name="miPaste" Header="Wklej (Ctrl+V)" Click="MiPaste_Click"></ui:MenuItem>
-
                 </ContextMenu>
             </DataGrid.ContextMenu>
-        </ui:DataGrid>
+        </DataGrid>
         <ui:Button x:Name="btnGenerateCrossSections" Content="Wygeneruj profile" Click="btnGenerateCrossSections_Click" HorizontalAlignment="Center"></ui:Button>
+        
     </StackPanel>
-    <Page.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ui:ThemesDictionary Theme="Light" />
-                <ui:ControlsDictionary />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Page.Resources>
+
 </Page>

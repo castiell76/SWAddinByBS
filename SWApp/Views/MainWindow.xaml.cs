@@ -90,7 +90,7 @@ namespace SWApp.Views
             _snackbarService = _helpService.SnackbarService;
             _contentDialogService = _helpService.ContentDialogService;
             _themeService = _helpService.ThemeService;
-            //_snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
+            _snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
             //_navigationService.SetNavigationControl(NavigationView);
             //_contentDialogService.SetDialogHost(RootContentDialog);
 

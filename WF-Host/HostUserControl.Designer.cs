@@ -46,8 +46,8 @@ namespace WF_Host
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = System.Drawing.SystemColors.Control;
             Controls.Add(elementHost2);
-            ForeColor = System.Drawing.SystemColors.Control;
-            BackColor = System.Drawing.SystemColors.Window;
+            ForeColor = Color.Transparent;
+            BackColor = Color.Transparent;
             Margin = new Padding(4, 3, 4, 3);
             Name = "HostUserControl";
             Size = new System.Drawing.Size(630, 800);

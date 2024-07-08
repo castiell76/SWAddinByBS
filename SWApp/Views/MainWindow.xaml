@@ -15,7 +15,16 @@
     <UserControl.DataContext>
         <viewmodels:MainWindowViewModel></viewmodels:MainWindowViewModel>
     </UserControl.DataContext>
-
+    <UserControl.Resources>
+        <ResourceDictionary>
+            
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemesDictionary Theme="Light" />
+                <ui:ControlsDictionary />
+            </ResourceDictionary.MergedDictionaries>
+            
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
 
         <ui:NavigationView 
@@ -28,11 +37,11 @@
             Transition="FadeInWithSlide"
             MenuItemsSource="{Binding MenuItems, Mode=OneWay}"
             >
-            <ui:NavigationView.Header>
+            <!--<ui:NavigationView.Header>
                 <StackPanel>
                     <ui:BreadcrumbBar x:Name="BreadcrumBar"></ui:BreadcrumbBar>
                 </StackPanel>
-            </ui:NavigationView.Header>
+            </ui:NavigationView.Header>-->
             <ui:NavigationView.AutoSuggestBox>
                 <ui:AutoSuggestBox x:Name="AutoSuggestBox" PlaceholderText="Szukaj">
                     <ui:AutoSuggestBox.Icon>
@@ -52,16 +61,9 @@
 
 
         </ContentPresenter>
-        <Button Click="Button_Click">
+        <Button Click="Button_Click" Content="Widzisz mnie?">
             
         </Button>
     </Grid>
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ui:ThemesDictionary Theme="Light" />
-                <ui:ControlsDictionary />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
+
 </UserControl>
