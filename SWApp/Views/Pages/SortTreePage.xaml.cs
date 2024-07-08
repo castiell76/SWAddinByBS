@@ -27,7 +27,7 @@ namespace SWApp.Views.Pages
         {
             InitializeComponent();
             _items = new ObservableCollection<string> { "Elementy blaszane (AB/PB)", "Elementy z profili (AR/PR)", "Tworzywa Sztuczne (AT/PT)", "Elementy z drewna(AP/PP)", "Mieszane elementy AX/PX" };
-             //sortTreeListBox.ItemsSource = _items;
+             sortTreeListBox.ItemsSource = _items;
         }
         private void ListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

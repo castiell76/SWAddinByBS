@@ -5,7 +5,6 @@
     xmlns:helpers="clr-namespace:SWApp.Helpers"
     xmlns:syntax="http://schemas.lepo.co/wpfui/2022/xaml/syntax"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
-
     <!--<helpers:NullToVisibilityConverter x:Name="NullToVisibilityConverter"></helpers:NullToVisibilityConverter>-->
     <Style TargetType="{x:Type controls:ControlExample}">
         <Setter Property="Focusable" Value="False"></Setter>

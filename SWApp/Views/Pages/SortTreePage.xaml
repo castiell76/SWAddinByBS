@@ -24,55 +24,33 @@
 
         </ResourceDictionary>
     </Page.Resources>
-    <StackPanel Margin="0,0,0,24">
-        <controls:ControlExample Margin="0" HeaderText="ListBox with items defined inline.">
-            <controls:ControlExample.XamlCode>
-                &lt;ListBox&gt;\n
-                \t&lt;ListBoxItem Content=&quot;Blue&quot;/&gt;\n
-                \t&lt;ListBoxItem Content=&quot;Green&quot;/&gt;\n
-                &lt;/ListBox&gt;
-            </controls:ControlExample.XamlCode>
-            <ListBox SelectedIndex="0" x:Name="sortTreeListBox">
-                <ListBoxItem>Blue</ListBoxItem>
-                <ListBoxItem>Green</ListBoxItem>
-                <ListBoxItem>Red</ListBoxItem>
-                <ListBoxItem>Yellow</ListBoxItem>
-            </ListBox>
-        </controls:ControlExample>
+    <Border
+    Grid.Row="1"
+    Padding="16"
+    Background="{ui:ThemeResource CardBackgroundFillColorDefaultBrush}"
+    BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}"
+    BorderThickness="1,1,1,0"
+    CornerRadius="8,8,0,0">
 
-        <controls:ControlExample
-            Margin="0,36,0,0"
-            HeaderText="A ListBox with its ItemsSource and Height set."
-            XamlCode="&lt;ListBox Height=&quot;100&quot; ItemsSource=&quot;{Binding ViewModel.MyItems}&quot; /&gt;">
+        <StackPanel>
             <ListBox
-                Height="164"
-                ItemsSource="{Binding ViewModel.ListBoxItems, Mode=TwoWay}"
-                SelectedIndex="2" />
-        </controls:ControlExample>
-    </StackPanel>
-    <!--<StackPanel>
-        <controls:ControlExample Margin="0" HeaderText="ListBox with items defined inline.">
-            <controls:ControlExample.XamlCode>
-                &lt;ListBox&gt;\n
-                \t&lt;ListBoxItem Content=&quot;Blue&quot;/&gt;\n
-                \t&lt;ListBoxItem Content=&quot;Green&quot;/&gt;\n
-                &lt;/ListBox&gt;
-            </controls:ControlExample.XamlCode>
-        </controls:ControlExample>
-        <ListBox
-            Name="sortTreeListBox"
-                  PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown"
-                  PreviewMouseMove="ListBox_PreviewMouseMove"
-                  AllowDrop="True"
-                  Drop="ListBox_Drop"
-            HorizontalAlignment="Center"
-            FontSize="15">
-        </ListBox>
-        <ui:ToggleSwitch Content="Uwzględnij również elementy w podzłożeniach" HorizontalAlignment="Left">
-            
-        </ui:ToggleSwitch>
-        <ui:Button Content="Wykonaj" HorizontalAlignment="Center">
-            
-        </ui:Button>
-    </StackPanel>-->
+    Name="sortTreeListBox"
+          PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown"
+          PreviewMouseMove="ListBox_PreviewMouseMove"
+          AllowDrop="True"
+          Drop="ListBox_Drop"
+    HorizontalAlignment="Center"
+    FontSize="15">
+            </ListBox>
+            <ui:ToggleSwitch Content="Uwzględnij również elementy w podzłożeniach" HorizontalAlignment="Left">
+
+            </ui:ToggleSwitch>
+            <ui:Button Content="Wykonaj" HorizontalAlignment="Center">
+
+            </ui:Button>
+
+        </StackPanel>
+
+    </Border>
+    
 </Page>
