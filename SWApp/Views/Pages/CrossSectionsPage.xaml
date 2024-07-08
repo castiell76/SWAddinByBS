@@ -7,87 +7,106 @@
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="CrossSectionsPage"
-    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
+      Title="CrossSectionsPage">
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemesDictionary Theme="Light" />
-                <!--<ui:ControlsDictionary />-->
+                <ui:ControlsDictionary />
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="DataGrid">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
-                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
-                <Setter Property="RowBackground" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
-                <Setter Property="AlternatingRowBackground" Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
-                <Setter Property="HorizontalGridLinesBrush" Value="#D3D3D3" />
-                <Setter Property="VerticalGridLinesBrush" Value="#D3D3D3" />
-                <Setter Property="GridLinesVisibility" Value="All" />
-                <Setter Property="BorderBrush" Value="#D3D3D3" />
-                <Setter Property="BorderThickness" Value="1" />
-                <Setter Property="CellStyle">
-                    <Setter.Value>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="Padding" Value="4,2,4,2" />
-                            <Setter Property="BorderBrush" Value="Transparent" />
-                            <Setter Property="BorderThickness" Value="0" />
-                            <Setter Property="MinHeight" Value="40" />
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="DataGridCell">
-                                        <Grid Background="{TemplateBinding Background}">
-                                            <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left" />
-                                        </Grid>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter Property="Background" Value="LightBlue" />
-                                                <Setter Property="Foreground" Value="White" />
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="ColumnHeaderStyle">
-                    <Setter.Value>
-                        <Style TargetType="DataGridColumnHeader">
-                            <Setter Property="Background" Value="Gray" />
-                            <Setter Property="Foreground" Value="White" />
-                            <Setter Property="FontWeight" Value="Bold" />
-                            <Setter Property="Padding" Value="4,2,4,2" />
-                            <Setter Property="MinHeight" Value="40" />
-                            <Setter Property="HorizontalContentAlignment" Value="Center" />
-                        </Style>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+
         </ResourceDictionary>
     </Page.Resources>
-    <StackPanel KeyDown="StackPanel_KeyDown">
+    <StackPanel>
         <DataGrid  x:Name="dataGridProfile"
                      Height="Auto"
-                   
                      Width="Auto" 
                      CanUserReorderColumns="False"
                      CanUserSortColumns="True"
                      MinColumnWidth="60" 
-                     CanUserResizeColumns="True" 
+                     CanUserResizeColumns="False" 
+                     HorizontalAlignment="Stretch"
                      AutoGenerateColumns="False"  
                      FontSize="10"
                      ItemsSource="{Binding CrossSectionsList, UpdateSourceTrigger=PropertyChanged}"
                      KeyDown="DataGridProfile_KeyDown"
                      >
+            <DataGrid.Resources>
+                <ResourceDictionary>
+                    <ResourceDictionary.MergedDictionaries>
+                        
+                    </ResourceDictionary.MergedDictionaries>
+                    <Style TargetType="DataGrid">
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                        <Setter Property="RowBackground" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+                        <Setter Property="AlternatingRowBackground" Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}" />
+                        <Setter Property="HorizontalGridLinesBrush" Value="#D3D3D3" />
+                        <Setter Property="VerticalGridLinesBrush" Value="#D3D3D3" />
+                        <Setter Property="GridLinesVisibility" Value="All" />
+                        <Setter Property="BorderBrush" Value="#D3D3D3" />
+                        <Setter Property="BorderThickness" Value="1" />
+                        <Setter Property="CellStyle">
+                            <Setter.Value>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="Padding" Value="4,2,4,2" />
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                    <Setter Property="BorderThickness" Value="0" />
+                                    <Setter Property="MinHeight" Value="40" />
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="FontSize" Value="15" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="DataGridCell">
+                                                <Grid Background="{TemplateBinding Background}">
+                                                    <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left" />
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsSelected" Value="True">
+                                                        <Setter Property="Background" Value="#74c7ea" />
+                                                        <Setter Property="Foreground" Value="White" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsEditing" Value="True">
+                                                        <Setter Property="Background" Value="#74c7ea" />
+
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="ColumnHeaderStyle">
+                            <Setter.Value>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background" Value="DarkGray" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="Padding" Value="4,2,4,2" />
+                                    <Setter Property="MinHeight" Value="40" />
+                                    <Setter Property="FontSize" Value="15" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                </Style>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    <Style x:Key="EditingTextBoxStyle" TargetType="TextBox">
+                        <Setter Property="Background" Value="#74c7ea"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                </ResourceDictionary>
+            </DataGrid.Resources>
             <DataGrid.Columns >
-                <DataGridTextColumn Header="Name" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"  />
-                <DataGridTextColumn Header="X" Binding="{Binding X, UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Y" Binding="{Binding Y, UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Length" Binding="{Binding Length, UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Thickness" Binding="{Binding Thickness, UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="DraftCount" Binding="{Binding DraftCount, UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Type" Binding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+
+                <DataGridTextColumn Header="Nazwa" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource EditingTextBoxStyle}"  MinWidth="200"></DataGridTextColumn>
+                <DataGridTextColumn Header="X" Binding="{Binding X, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" MinWidth="100"/>
+                <DataGridTextColumn Header="Y" Binding="{Binding Y, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" MinWidth="100"/>
+                <DataGridTextColumn Header="Długość" Binding="{Binding Length, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" MinWidth="100"/>
+                <DataGridTextColumn Header="Grubość" Binding="{Binding Thickness, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" MinWidth="100"/>
+                <DataGridTextColumn Header="Ilość zacięć" Binding="{Binding DraftCount, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" MinWidth="100"/>
+                <DataGridTextColumn Header="Typ" Binding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" IsReadOnly="True" Width="*"/>
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>

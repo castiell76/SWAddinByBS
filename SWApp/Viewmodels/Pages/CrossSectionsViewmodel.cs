@@ -111,7 +111,7 @@ namespace SWApp.Viewmodels.Pages
             CrossSectionsList.Add(new ProfileSW { Name = "", X = 0, Y = 0, Thickness = 0, Length = 0, DraftCount = 0, Type = "" });
         }
 
-        public void Delete(Wpf.Ui.Controls.DataGrid dgprofiles)
+        public void Delete(System.Windows.Controls.DataGrid dgprofiles)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace SWApp.Viewmodels.Pages
             }
         }
 
-        public List<ProfileSW> Copy(Wpf.Ui.Controls.DataGrid dgprofiles)
+        public List<ProfileSW> Copy(System.Windows.Controls.DataGrid dgprofiles)
         {
             List<ProfileSW> toCopy = new List<ProfileSW>();
             for (int i = 0; i < dgprofiles.SelectedItems.Count; i++)
@@ -149,7 +149,7 @@ namespace SWApp.Viewmodels.Pages
             return toCopy;
         }
 
-        public void Paste(Wpf.Ui.Controls.DataGrid dgprofiles)
+        public void Paste(System.Windows.Controls.DataGrid dgprofiles)
         {
             List<ProfileSW> toPaste = Copy(dgprofiles);
             foreach (ProfileSW profile in toPaste)
