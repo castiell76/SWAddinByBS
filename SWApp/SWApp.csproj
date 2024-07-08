@@ -57,13 +57,9 @@
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Controls\**" />
     <Compile Remove="SWApp\**" />
-    <EmbeddedResource Remove="Controls\**" />
     <EmbeddedResource Remove="SWApp\**" />
-    <None Remove="Controls\**" />
     <None Remove="SWApp\**" />
-    <Page Remove="Controls\**" />
     <Page Remove="SWApp\**" />
   </ItemGroup>
   <ItemGroup>

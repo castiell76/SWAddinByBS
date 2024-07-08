@@ -5,7 +5,7 @@
     <Thickness x:Key="CodeBlockPadding">11,5,11,6</Thickness>
     <Thickness x:Key="CodeBlockBorderThemeThickness">1</Thickness>
 
-    <Style TargetType="{x:Type controls:CodeBlock1}">
+    <Style TargetType="{x:Type controls:CodeBlock}">
         <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
         <Setter Property="Padding" Value="{StaticResource CodeBlockPadding}" />
@@ -23,7 +23,7 @@
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type controls:CodeBlock1}">
+                <ControlTemplate TargetType="{x:Type controls:CodeBlock}">
                     <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                         <Border
                             x:Name="ContentBorder"

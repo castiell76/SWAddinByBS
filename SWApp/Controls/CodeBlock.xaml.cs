@@ -16,7 +16,7 @@ namespace SWApp.Controls
     /// <summary>
     /// Interaction logic for CodeBlock.xaml
     /// </summary>
-    public class CodeBlock1 : ContentControl
+    public class CodeBlock : ContentControl
     {
         private string _sourceCode = string.Empty;
 
@@ -26,7 +26,7 @@ namespace SWApp.Controls
         public static readonly DependencyProperty SyntaxContentProperty = DependencyProperty.Register(
             nameof(SyntaxContent),
             typeof(object),
-            typeof(CodeBlock1),
+            typeof(CodeBlock),
             new PropertyMetadata(null)
         );
 
@@ -36,7 +36,7 @@ namespace SWApp.Controls
         public static readonly DependencyProperty ButtonCommandProperty = DependencyProperty.Register(
             nameof(ButtonCommand),
             typeof(IRelayCommand),
-            typeof(CodeBlock1)
+            typeof(CodeBlock)
         );
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace SWApp.Controls
         /// <summary>
         /// Creates new instance and assigns <see cref="ButtonCommand"/> default action.
         /// </summary>
-        public CodeBlock1()
+        public CodeBlock()
         {
             SetValue(ButtonCommandProperty, new RelayCommand<string>(OnTemplateButtonClick));
 

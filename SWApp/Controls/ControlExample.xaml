@@ -6,7 +6,7 @@
     xmlns:syntax="http://schemas.lepo.co/wpfui/2022/xaml/syntax"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
 
-    <helpers:NullToVisibilityConverter x:Name="NullToVisibilityConverter"></helpers:NullToVisibilityConverter>
+    <!--<helpers:NullToVisibilityConverter x:Name="NullToVisibilityConverter"></helpers:NullToVisibilityConverter>-->
     <Style TargetType="{x:Type controls:ControlExample}">
         <Setter Property="Focusable" Value="False"></Setter>
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -50,12 +50,12 @@
                                         Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                         Text="XAML" />
 
-                                    <controls:CodeBlock1
+                                    <controls:CodeBlock
                                         Padding="0"
                                         Background="Transparent"
                                         BorderBrush="Transparent"
                                         BorderThickness="0"
-                                        Content="{TemplateBinding XamlCode}"></controls:CodeBlock1>
+                                        Content="{TemplateBinding XamlCode}"></controls:CodeBlock>
                                 </StackPanel>
 
                                 <Border
@@ -70,12 +70,12 @@
                                         FontTypography="BodyStrong"
                                         Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                                         Text="C#" />
-                                    <controls:CodeBlock1
+                                    <controls:CodeBlock
                                         Padding="0"
                                         Background="Transparent"
                                         BorderBrush="Transparent"
                                         BorderThickness="0"
-                                        Content="{TemplateBinding CsharpCode}"></controls:CodeBlock1>
+                                        Content="{TemplateBinding CsharpCode}"></controls:CodeBlock>
                                 </StackPanel>
                                 </StackPanel>
                         </ui:CardExpander>
