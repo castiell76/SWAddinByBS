@@ -4,35 +4,35 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:controls="clr-namespace:SWApp.Controls"
+      xmlns:syntax="http://schemas.lepo.co/wpfui/2022/xaml/syntax"
+      xmlns:helpers="clr-namespace:SWApp.Helpers"
       xmlns:local="clr-namespace:SWApp.Views.Pages"
+      
       mc:Ignorable="d" 
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SortTreePage"
-          d:DataContext="{d:DesignInstance local:ListBoxPage,
+          d:DataContext="{d:DesignInstance local:SortTreePage,
                                      IsDesignTimeCreatable=False}"
       ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
       ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       Foreground="{DynamicResource TextFillColorPrimaryBrush}">
-    
+
+
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemesDictionary Theme="Light" />
                 <ui:ControlsDictionary />
+                <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/ControlExample.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
-
+            <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+            <helpers:ThemeToIndexConverter x:Key="ThemeToIndexConverter" />
         </ResourceDictionary>
     </Page.Resources>
-    <Border
-    Grid.Row="1"
-    Padding="16"
-    Background="{ui:ThemeResource CardBackgroundFillColorDefaultBrush}"
-    BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}"
-    BorderThickness="1,1,1,0"
-    CornerRadius="8,8,0,0">
+    <StackPanel>
+        <controls:ControlExample HeaderText="Wskaż kolejność sortowania" Margin="30" >
 
-        <StackPanel>
             <ListBox
     Name="sortTreeListBox"
           PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown"
@@ -40,17 +40,18 @@
           AllowDrop="True"
           Drop="ListBox_Drop"
     HorizontalAlignment="Center"
+                        Width="Auto"
     FontSize="15">
             </ListBox>
-            <ui:ToggleSwitch Content="Uwzględnij również elementy w podzłożeniach" HorizontalAlignment="Left">
+        </controls:ControlExample>
+        <ui:ToggleSwitch Content="Uwzględnij również elementy w podzłożeniach" HorizontalAlignment="Center"></ui:ToggleSwitch>
+        <ui:Button Content="Wykonaj" HorizontalAlignment="Center"></ui:Button>
 
-            </ui:ToggleSwitch>
-            <ui:Button Content="Wykonaj" HorizontalAlignment="Center">
 
-            </ui:Button>
 
-        </StackPanel>
 
-    </Border>
+    </StackPanel>
+
+   
     
 </Page>

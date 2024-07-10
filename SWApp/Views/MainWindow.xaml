@@ -21,6 +21,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemesDictionary Theme="Light" />
                 <ui:ControlsDictionary />
+                <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/ControlExample.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
             
         </ResourceDictionary>
@@ -61,9 +62,6 @@
 
 
         </ContentPresenter>
-        <Button Click="Button_Click" Content="Widzisz mnie?">
-            
-        </Button>
     </Grid>
 
 </UserControl>

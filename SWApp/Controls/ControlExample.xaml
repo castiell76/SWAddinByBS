@@ -5,7 +5,9 @@
     xmlns:helpers="clr-namespace:SWApp.Helpers"
     xmlns:syntax="http://schemas.lepo.co/wpfui/2022/xaml/syntax"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
-    <!--<helpers:NullToVisibilityConverter x:Name="NullToVisibilityConverter"></helpers:NullToVisibilityConverter>-->
+    
+    <helpers:NullToVisibilityConverter x:Key="NullToVisibilityConverter"></helpers:NullToVisibilityConverter>
+    
     <Style TargetType="{x:Type controls:ControlExample}">
         <Setter Property="Focusable" Value="False"></Setter>
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -35,9 +37,9 @@
                             BorderBrush="{ui:ThemeResource CardStrokeColorDefaultBrush}"
                             BorderThickness="1,1,1,0"
                             CornerRadius="8,8,0,0">
-                            <ContentPresenter Content="{TemplateBinding ExampleContent}" />
+                            <ContentPresenter Content="{TemplateBinding ExampleContent}"/>
                         </Border>
-                        <ui:CardExpander
+                        <!--<ui:CardExpander
                             Grid.Row="2"
                             CornerRadius="0,0,8,8"
                             Header="Source code">
@@ -77,9 +79,9 @@
                                         Content="{TemplateBinding CsharpCode}"></controls:CodeBlock>
                                 </StackPanel>
                                 </StackPanel>
-                        </ui:CardExpander>
+                        </ui:CardExpander>-->
                     </Grid>
-                    <ControlTemplate.Triggers>
+                    <!--<ControlTemplate.Triggers>
                         <Trigger Property="XamlCode" Value="{x:Null}">
                             <Setter TargetName="XamlCodeBlock" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="Border" Property="Visibility" Value="Collapsed" />
@@ -89,7 +91,7 @@
                             <Setter TargetName="CsharpCodeBlock" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="Border" Property="Visibility" Value="Collapsed" />
                         </Trigger>
-                    </ControlTemplate.Triggers>
+                    </ControlTemplate.Triggers>-->
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

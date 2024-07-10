@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace SWApp.Helpers
 {
-    internal sealed class NullToVisibilityConverter : IValueConverter
+    public class NullToVisibilityConverter : IValueConverter
     {
         public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {

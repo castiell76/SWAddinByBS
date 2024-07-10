@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using Wpf.Ui;
 
 namespace SWApp.Services
@@ -62,6 +63,8 @@ namespace SWApp.Services
                          // _ = services.AddSingleton<INavigationWindow, Views.MainWindow>();
                           _ = services.AddSingleton<Views.Pages.SettingsPage>();
                           _ = services.AddSingleton<Views.Pages.CrossSectionsPage>();
+                          _ = services.AddSingleton<Views.Pages.SortTreePage>();
+
                           services.AddTransient<SettingsViewModel>();   
                           services.AddTransient<CrossSectionsViewmodel>();
                       }
