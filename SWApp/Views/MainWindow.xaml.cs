@@ -367,21 +367,7 @@ namespace SWApp.Views
         //}
 
 
-        //private void CbAllDXF_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    cbPBSheet.IsEnabled = false;
-        //    cbPTSheet.IsEnabled = false;
-        //    cbPBSheet.IsChecked = true;
-        //    cbPTSheet.IsChecked = true;
-        //}
 
-        //private void CbAllDXF_Unchecked(object sender, RoutedEventArgs e)
-        //{
-        //    cbPBSheet.IsEnabled = true;
-        //    cbPTSheet.IsEnabled = true;
-        //    cbPBSheet.IsChecked = false;
-        //    cbPTSheet.IsChecked = false;
-        //}
 
         //private void BtnSort_Click(object sender, RoutedEventArgs e)
         //{
@@ -759,10 +745,7 @@ namespace SWApp.Views
         //}
 
 
-        //private void CbCreateDXFForSigma_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    cbCreateDXF.IsChecked = true;
-        //}
+
 
         //private void comboDevelopedBy_SelectionChanged_1(object sender, RoutedEventArgs e)
         //{

@@ -22,6 +22,8 @@ namespace SWApp.Viewmodels.Pages
 
         [ObservableProperty]
         private string _appVersion = string.Empty;
+        [ObservableProperty]
+        private IThemeService _themeService;
 
         [ObservableProperty]
         private Wpf.Ui.Appearance.ApplicationTheme _currentApplicationTheme = Wpf.Ui
@@ -35,6 +37,10 @@ namespace SWApp.Viewmodels.Pages
             {
                 InitializeViewModel();
             }
+        }
+        public SettingsViewModel(IThemeService themeService)
+        {
+            _themeService = themeService;
         }
 
         public void OnNavigatedFrom() { }
@@ -52,10 +58,10 @@ namespace SWApp.Viewmodels.Pages
             return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString()
                 ?? string.Empty;
         }
-
         [RelayCommand]
         public void OnChangeTheme(string parameter)
         {
+            _themeService.SetTheme(ApplicationTheme.Dark);
             switch (parameter)
             {
                 case "theme_light":

@@ -3,6 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:helpers="clr-namespace:SWApp.Helpers"
+
         xmlns:local="clr-namespace:SWApp"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         xmlns:viewmodels="clr-namespace:SWApp.Viewmodels"
@@ -17,13 +19,16 @@
     </UserControl.DataContext>
     <UserControl.Resources>
         <ResourceDictionary>
-            
+
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemesDictionary Theme="Light" />
                 <ui:ControlsDictionary />
+
                 <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/ControlExample.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
-            
+            <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+            <helpers:ThemeToIndexConverter x:Key="ThemeToIndexConverter" />
+            <helpers:PaneDisplayModeToIndexConverter x:Key="PaneDisplayModeToIndexConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>

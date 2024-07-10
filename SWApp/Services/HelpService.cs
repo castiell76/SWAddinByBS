@@ -75,7 +75,7 @@ namespace SWApp.Services
             _serviceProvider = _host.Services.GetRequiredService<IServiceProvider>();
             _snackbarService = _host.Services.GetRequiredService<ISnackbarService>();
             _contentDialogService = _host.Services.GetRequiredService<IContentDialogService>();
-            _themeService = _host.Services.GetService<IThemeService>();
+            _themeService = _host.Services.GetRequiredService<IThemeService>();
         }
         //private void InjectDependencies()
         //{

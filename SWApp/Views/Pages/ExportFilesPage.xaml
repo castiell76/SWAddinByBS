@@ -1,0 +1,62 @@
+﻿<Page x:Class="SWApp.Views.Pages.ExportFilesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:controls="clr-namespace:SWApp.Controls"
+      xmlns:helpers="clr-namespace:SWApp.Helpers"
+      xmlns:local="clr-namespace:SWApp.Views.Pages"
+      
+      mc:Ignorable="d" 
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ExportFilesPage"
+          d:DataContext="{d:DesignInstance local:SortTreePage,
+                                     IsDesignTimeCreatable=False}"
+      ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+      ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemesDictionary Theme="Light" />
+                <ui:ControlsDictionary />
+                <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/ControlExample.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+            <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+            <helpers:ThemeToIndexConverter x:Key="ThemeToIndexConverter" />
+        </ResourceDictionary>
+    </Page.Resources>
+    <DockPanel>
+        <controls:ControlExample HeaderText="Wskaż odpowiednie opcje eksportu" Margin="30">
+            <StackPanel x:Name="spCheckboxes" >
+                <CheckBox x:Name="cbCreateDXF" Content="Generuj pliki DXF"/>
+                <CheckBox x:Name="cbCreateSTEP" Content="Generuj pliki STEP"/>
+                <CheckBox x:Name="cbPBSheet" Content="Wygeneruj arkusze blachy (PB)"/>
+                <CheckBox x:Name="cbPTSheet" Content="Wygeneruj tworzywa (PT)"/>
+                <CheckBox x:Name="cbDXFFromDrawing" Content="Uwzględnij DXF z arkuszy rysunków"/>
+                <CheckBox x:Name="cbAllDXF" Checked="CbAllDXF_Checked" Unchecked="CbAllDXF_Unchecked">
+                    <TextBlock Text="Wygeneruj z niestandardowych nazw części" TextWrapping="Wrap"></TextBlock>
+                </CheckBox>
+                <StackPanel>
+                    <CheckBox x:Name="cbCreateDXFForSigma" Checked="CbCreateDXFForSigma_Checked" Unchecked="cbCreateDXFForSigma_Unchecked" Content="Stwórz do Sigmy"></CheckBox>
+                    <ui:TextBox x:Name="txtSigmaQuantity" PlaceholderText="Wprowadź nakład do sigmy" Visibility="Collapsed"></ui:TextBox>
+                </StackPanel>
+                
+            </StackPanel>
+        </controls:ControlExample>
+        <controls:ControlExample HeaderText="Opcjonalne opcje dla części" Margin="30">
+            <StackPanel>
+                
+                <CheckBox x:Name="cbSketchInclude" Content="Uwzględnij szkice"></CheckBox>
+                <CheckBox x:Name="cbFormingToolsInclude">
+                    <TextBlock Text="Uwzględnij narzędzia formowania" TextWrapping="Wrap"></TextBlock>
+                </CheckBox>
+            </StackPanel>
+        </controls:ControlExample>
+
+    </DockPanel>
+
+</Page>

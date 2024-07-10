@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
@@ -35,13 +36,13 @@ namespace SWApp.Views.Pages
         }
         public SettingsPage() : this(HelpService.GetRequiredService<SettingsViewModel>())
         {
-            DataContext = new SettingsViewModel();
+            DataContext = new SettingsViewModel(HelpService.GetRequiredService<IThemeService>());
             InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.OnChangeTheme("theme_dark");
+            ViewModel.OnChangeTheme("theme_light");
         }
     }
 }
