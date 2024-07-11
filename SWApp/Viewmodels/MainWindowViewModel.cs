@@ -17,7 +17,7 @@ namespace SWApp.Viewmodels
             new NavigationViewItem("Generator profili", SymbolRegular.Cube32,typeof(CrossSectionsPage)),
             new NavigationViewItem("Sortowanie drzewa", SymbolRegular.ArrowSort24,typeof(SortTreePage)),
             new NavigationViewItem("Eksport plików",SymbolRegular.SaveArrowRight24, typeof(ExportFilesPage)),
-            new NavigationViewItem("Właściwości plików",SymbolRegular.SaveArrowRight24, typeof(FilesPropertiesPage)),
+            new NavigationViewItem("Właściwości plików",SymbolRegular.DocumentBulletList24, typeof(FilesPropertiesPage)),
             new NavigationViewItem("Ustawienia",SymbolRegular.Settings48, typeof(SettingsPage)),
             
         };
