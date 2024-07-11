@@ -39,49 +39,49 @@ namespace SWApp.Controls
             new PropertyMetadata(null)
         );
 
-        /// <summary>Identifies the <see cref="XamlCode"/> dependency property.</summary>
-        public static readonly DependencyProperty XamlCodeProperty = DependencyProperty.Register(
-            nameof(XamlCode),
-            typeof(string),
-            typeof(ControlExample),
-            new PropertyMetadata(null)
-        );
+        ///// <summary>Identifies the <see cref="XamlCode"/> dependency property.</summary>
+        //public static readonly DependencyProperty XamlCodeProperty = DependencyProperty.Register(
+        //    nameof(XamlCode),
+        //    typeof(string),
+        //    typeof(ControlExample),
+        //    new PropertyMetadata(null)
+        //);
 
-        /// <summary>Identifies the <see cref="XamlCodeSource"/> dependency property.</summary>
-        public static readonly DependencyProperty XamlCodeSourceProperty = DependencyProperty.Register(
-            nameof(XamlCodeSource),
-            typeof(Uri),
-            typeof(ControlExample),
-            new PropertyMetadata(
-                null,
-                static (o, args) =>
-                {
-                    ((ControlExample)o).OnXamlCodeSourceChanged((Uri?)args.NewValue);
-                }
-            )
-        );
+        ///// <summary>Identifies the <see cref="XamlCodeSource"/> dependency property.</summary>
+        //public static readonly DependencyProperty XamlCodeSourceProperty = DependencyProperty.Register(
+        //    nameof(XamlCodeSource),
+        //    typeof(Uri),
+        //    typeof(ControlExample),
+        //    new PropertyMetadata(
+        //        null,
+        //        static (o, args) =>
+        //        {
+        //            ((ControlExample)o).OnXamlCodeSourceChanged((Uri?)args.NewValue);
+        //        }
+        //    )
+        //);
 
-        /// <summary>Identifies the <see cref="CsharpCode"/> dependency property.</summary>
-        public static readonly DependencyProperty CsharpCodeProperty = DependencyProperty.Register(
-            nameof(CsharpCode),
-            typeof(string),
-            typeof(ControlExample),
-            new PropertyMetadata(null)
-        );
+        ///// <summary>Identifies the <see cref="CsharpCode"/> dependency property.</summary>
+        //public static readonly DependencyProperty CsharpCodeProperty = DependencyProperty.Register(
+        //    nameof(CsharpCode),
+        //    typeof(string),
+        //    typeof(ControlExample),
+        //    new PropertyMetadata(null)
+        //);
 
-        /// <summary>Identifies the <see cref="CsharpCodeSource"/> dependency property.</summary>
-        public static readonly DependencyProperty CsharpCodeSourceProperty = DependencyProperty.Register(
-            nameof(CsharpCodeSource),
-            typeof(Uri),
-            typeof(ControlExample),
-            new PropertyMetadata(
-                null,
-                static (o, args) =>
-                {
-                    ((ControlExample)o).OnCsharpCodeSourceChanged((Uri?)args.NewValue);
-                }
-            )
-        );
+        ///// <summary>Identifies the <see cref="CsharpCodeSource"/> dependency property.</summary>
+        //public static readonly DependencyProperty CsharpCodeSourceProperty = DependencyProperty.Register(
+        //    nameof(CsharpCodeSource),
+        //    typeof(Uri),
+        //    typeof(ControlExample),
+        //    new PropertyMetadata(
+        //        null,
+        //        static (o, args) =>
+        //        {
+        //            ((ControlExample)o).OnCsharpCodeSourceChanged((Uri?)args.NewValue);
+        //        }
+        //    )
+        //);
 
         public string? HeaderText
         {
@@ -95,39 +95,39 @@ namespace SWApp.Controls
             set => SetValue(ExampleContentProperty, value);
         }
 
-        public string? XamlCode
-        {
-            get => (string?)GetValue(XamlCodeProperty);
-            set => SetValue(XamlCodeProperty, value);
-        }
+        //public string? XamlCode
+        //{
+        //    get => (string?)GetValue(XamlCodeProperty);
+        //    set => SetValue(XamlCodeProperty, value);
+        //}
 
-        public Uri? XamlCodeSource
-        {
-            get => (Uri?)GetValue(XamlCodeSourceProperty);
-            set => SetValue(XamlCodeSourceProperty, value);
-        }
+        //public Uri? XamlCodeSource
+        //{
+        //    get => (Uri?)GetValue(XamlCodeSourceProperty);
+        //    set => SetValue(XamlCodeSourceProperty, value);
+        //}
 
-        public string? CsharpCode
-        {
-            get => (string?)GetValue(CsharpCodeProperty);
-            set => SetValue(CsharpCodeProperty, value);
-        }
+        //public string? CsharpCode
+        //{
+        //    get => (string?)GetValue(CsharpCodeProperty);
+        //    set => SetValue(CsharpCodeProperty, value);
+        //}
 
-        public Uri? CsharpCodeSource
-        {
-            get => (Uri?)GetValue(CsharpCodeSourceProperty);
-            set => SetValue(CsharpCodeSourceProperty, value);
-        }
+        //public Uri? CsharpCodeSource
+        //{
+        //    get => (Uri?)GetValue(CsharpCodeSourceProperty);
+        //    set => SetValue(CsharpCodeSourceProperty, value);
+        //}
 
-        private void OnXamlCodeSourceChanged(Uri? uri)
-        {
-            SetCurrentValue(XamlCodeProperty, LoadResource(uri));
-        }
+        //private void OnXamlCodeSourceChanged(Uri? uri)
+        //{
+        //    SetCurrentValue(XamlCodeProperty, LoadResource(uri));
+        //}
 
-        private void OnCsharpCodeSourceChanged(Uri? uri)
-        {
-            SetCurrentValue(CsharpCodeProperty, LoadResource(uri));
-        }
+        //private void OnCsharpCodeSourceChanged(Uri? uri)
+        //{
+        //    SetCurrentValue(CsharpCodeProperty, LoadResource(uri));
+        //}
 
         private static string LoadResource(Uri? uri)
         {

@@ -64,6 +64,8 @@ namespace SWApp.Services
                           _ = services.AddSingleton<Views.Pages.SettingsPage>();
                           _ = services.AddSingleton<Views.Pages.CrossSectionsPage>();
                           _ = services.AddSingleton<Views.Pages.SortTreePage>();
+                          _ = services.AddSingleton<Views.Pages.FilesPropertiesPage>();
+                          _ = services.AddSingleton<Views.Pages.ExportFilesPage>();
 
                           services.AddTransient<SettingsViewModel>();   
                           services.AddTransient<CrossSectionsViewmodel>();

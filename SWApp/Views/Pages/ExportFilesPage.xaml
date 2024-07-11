@@ -24,39 +24,111 @@
                 <ui:ThemesDictionary Theme="Light" />
                 <ui:ControlsDictionary />
                 <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/ControlExample.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/DatagridResource.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
             <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
             <helpers:ThemeToIndexConverter x:Key="ThemeToIndexConverter" />
         </ResourceDictionary>
     </Page.Resources>
-    <DockPanel>
-        <controls:ControlExample HeaderText="Wskaż odpowiednie opcje eksportu" Margin="30">
-            <StackPanel x:Name="spCheckboxes" >
-                <CheckBox x:Name="cbCreateDXF" Content="Generuj pliki DXF"/>
-                <CheckBox x:Name="cbCreateSTEP" Content="Generuj pliki STEP"/>
-                <CheckBox x:Name="cbPBSheet" Content="Wygeneruj arkusze blachy (PB)"/>
-                <CheckBox x:Name="cbPTSheet" Content="Wygeneruj tworzywa (PT)"/>
-                <CheckBox x:Name="cbDXFFromDrawing" Content="Uwzględnij DXF z arkuszy rysunków"/>
-                <CheckBox x:Name="cbAllDXF" Checked="CbAllDXF_Checked" Unchecked="CbAllDXF_Unchecked">
-                    <TextBlock Text="Wygeneruj z niestandardowych nazw części" TextWrapping="Wrap"></TextBlock>
-                </CheckBox>
-                <StackPanel>
-                    <CheckBox x:Name="cbCreateDXFForSigma" Checked="CbCreateDXFForSigma_Checked" Unchecked="cbCreateDXFForSigma_Unchecked" Content="Stwórz do Sigmy"></CheckBox>
-                    <ui:TextBox x:Name="txtSigmaQuantity" PlaceholderText="Wprowadź nakład do sigmy" Visibility="Collapsed"></ui:TextBox>
+    <StackPanel>
+        <DockPanel>
+            <controls:ControlExample HeaderText="Wskaż odpowiednie opcje eksportu" Margin="15">
+                <StackPanel x:Name="spCheckboxes">
+                    <CheckBox x:Name="cbCreateDXF" Content="Generuj pliki DXF"/>
+                    <CheckBox x:Name="cbCreateSTEP" Content="Generuj pliki STEP"/>
+                    <CheckBox x:Name="cbPBSheet" Content="Wygeneruj arkusze blachy (PB)"/>
+                    <CheckBox x:Name="cbPTSheet" Content="Wygeneruj tworzywa (PT)"/>
+                    <CheckBox x:Name="cbDXFFromDrawing" Content="Uwzględnij DXF z arkuszy rysunków"/>
+                    <CheckBox x:Name="cbAllDXF" Checked="CbAllDXF_Checked" Unchecked="CbAllDXF_Unchecked">
+                        <TextBlock TextWrapping="Wrap">Wygeneruj z niestandardowych <LineBreak/>nazw części"</TextBlock>
+                    </CheckBox>
+                    <StackPanel>
+                        <CheckBox x:Name="cbCreateDXFForSigma" Checked="CbCreateDXFForSigma_Checked" Unchecked="cbCreateDXFForSigma_Unchecked" Content="Stwórz do Sigmy"></CheckBox>
+                        <ui:TextBox x:Name="txtSigmaQuantity" PlaceholderText="Wprowadź nakład do sigmy" Visibility="Collapsed"></ui:TextBox>
+                    </StackPanel>
                 </StackPanel>
-                
+            </controls:ControlExample>
+            <StackPanel Margin="15">
+                <controls:ControlExample HeaderText="Opcjonalnie dla części">
+                    <StackPanel>
+                        <CheckBox x:Name="cbSketchInclude" Content="Uwzględnij szkice"></CheckBox>
+                        <CheckBox x:Name="cbFormingToolsInclude">
+                            <TextBlock Text="Uwzględnij narzędzia formowania" TextWrapping="Wrap"></TextBlock>
+                        </CheckBox>
+                    </StackPanel>
+                </controls:ControlExample>
+                <controls:ControlExample Margin="0,20,0,0">
+                    <DockPanel>
+                        <ui:TextBox x:Name="txtPathDir" HorizontalAlignment="Left" PlaceholderText="Wprowadź ścieżkę zapisu"></ui:TextBox>
+                        <ui:Button x:Name="btnChooseDir" Content="Wyszukaj folder" Margin="50,0,0,0"></ui:Button>
+                    </DockPanel>
+                </controls:ControlExample>
+                <ui:Button HorizontalAlignment="Center" Content="Eksportuj" Margin="0,30,0,0"></ui:Button>
             </StackPanel>
-        </controls:ControlExample>
-        <controls:ControlExample HeaderText="Opcjonalne opcje dla części" Margin="30">
+        </DockPanel>
+        <controls:ControlExample Margin="15">
             <StackPanel>
-                
-                <CheckBox x:Name="cbSketchInclude" Content="Uwzględnij szkice"></CheckBox>
-                <CheckBox x:Name="cbFormingToolsInclude">
-                    <TextBlock Text="Uwzględnij narzędzia formowania" TextWrapping="Wrap"></TextBlock>
-                </CheckBox>
+                <ToggleButton Content="Rozwiń tabelę" x:Name="btnShowTable" Click="btnShowTable_Click"></ToggleButton>
+                <DataGrid x:Name="dgExport"
+      Height="Auto"
+      Width="Auto" 
+      CanUserReorderColumns="False"
+      CanUserSortColumns="True"
+      MinColumnWidth="60" 
+      CanUserResizeColumns="True" 
+      HorizontalAlignment="Stretch"
+      AutoGenerateColumns="False"  
+      FontSize="10"
+    IsReadOnly="True"
+    Style="{StaticResource datagridStyle}"
+       Visibility="Collapsed">
+                    <DataGrid.Resources>
+                        <ResourceDictionary>
+                            <ResourceDictionary.MergedDictionaries>
+                                <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/DatagridResource.xaml"></ResourceDictionary>
+                            </ResourceDictionary.MergedDictionaries>
+                        </ResourceDictionary>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Nazwa części" Binding="{Binding name}" Width="*"></DataGridTextColumn>
+                        <DataGridCheckBoxColumn Header="DXF"  Binding="{Binding dxfCreated}">
+                            <DataGridCheckBoxColumn.ElementStyle>
+                                <Style TargetType="{x:Type CheckBox}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Background" Value="LightGreen"></Setter>
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="False">
+                                            <Setter Property="Background" Value="IndianRed"></Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridCheckBoxColumn.ElementStyle>
+                        </DataGridCheckBoxColumn>
+                        <DataGridCheckBoxColumn Header="Step" Binding="{Binding stepCreated}">
+                            <DataGridCheckBoxColumn.ElementStyle>
+                                <Style TargetType="{x:Type CheckBox}">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsChecked" Value="True">
+                                            <Setter Property="Background" Value="LightGreen"></Setter>
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="False">
+                                            <Setter Property="Background" Value="IndianRed"></Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridCheckBoxColumn.ElementStyle>
+                        </DataGridCheckBoxColumn>
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem x:Name="miExportOpen" Header="Otwórz" IsEnabled="False" Click="miExportOpen_Click"></MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
             </StackPanel>
+
         </controls:ControlExample>
 
-    </DockPanel>
-
+    </StackPanel>
 </Page>

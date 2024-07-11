@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SWApp.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,9 +22,11 @@ namespace SWApp.Views.Pages
     /// </summary>
     public partial class ExportFilesPage : Page
     {
+        private ViewControl _viewControl;
         public ExportFilesPage()
         {
             InitializeComponent();
+            _viewControl = new ViewControl();
         }
 
         private void CbAllDXF_Checked(object sender, RoutedEventArgs e)
@@ -44,89 +47,36 @@ namespace SWApp.Views.Pages
         private void CbCreateDXFForSigma_Checked(object sender, RoutedEventArgs e)
         {
             cbCreateDXF.IsChecked = true;
-            ShowTextBoxWithTransition();
+            _viewControl.ShowWithTransition(txtSigmaQuantity);
         }
 
 
 
         private void cbCreateDXFForSigma_Unchecked(object sender, RoutedEventArgs e)
         {
-            HideTextBoxWithTransition();
+            _viewControl.HideWithTransition(txtSigmaQuantity);
         }
-        private void ShowTextBoxWithTransition()
+
+        private void miExportOpen_Click(object sender, RoutedEventArgs e)
         {
-            // Ustaw Visibility na Visible
-            txtSigmaQuantity.Visibility = Visibility.Visible;
-
-            // Tworzenie animacji FadeIn
-            DoubleAnimation fadeInAnimation = new DoubleAnimation
-            {
-                From = 0,
-                To = 1,
-                Duration = new Duration(TimeSpan.FromSeconds(0.5))
-            };
-
-            // Tworzenie animacji SlideInFromRight
-            ThicknessAnimation slideInAnimation = new ThicknessAnimation
-            {
-                From = new Thickness(100, 0, 0, 0),
-                To = new Thickness(0),
-                Duration = new Duration(TimeSpan.FromSeconds(0.5))
-            };
-
-            // Tworzenie storyboardu i dodanie animacji
-            Storyboard storyboard = new Storyboard();
-            storyboard.Children.Add(fadeInAnimation);
-            storyboard.Children.Add(slideInAnimation);
-
-            // Ustawienie celów animacji
-            Storyboard.SetTarget(fadeInAnimation, txtSigmaQuantity);
-            Storyboard.SetTargetProperty(fadeInAnimation, new PropertyPath("Opacity"));
-
-            Storyboard.SetTarget(slideInAnimation, txtSigmaQuantity);
-            Storyboard.SetTargetProperty(slideInAnimation, new PropertyPath("Margin"));
-
-            // Uruchomienie animacji
-            storyboard.Begin();
+            //SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
+            //ExportStatus exportToOpen = (ExportStatus)dgExport.SelectedItem;
+            //string filepath = exportToOpen.filepath;
+            //swApp.OpenDoc6(filepath, (int)swDocumentTypes_e.swDocPART, 0, "", 0, 0);
+            //swApp.ActivateDoc3(System.IO.Path.GetFileName(filepath), false, 0, 0);
         }
-        private void HideTextBoxWithTransition()
+
+
+        private void btnShowTable_Click(object sender, RoutedEventArgs e)
         {
-            // Tworzenie animacji FadeOut
-            DoubleAnimation fadeOutAnimation = new DoubleAnimation
+            if(dgExport.Visibility == Visibility.Hidden || dgExport.Visibility == Visibility.Collapsed)
             {
-                From = 1,
-                To = 0,
-                Duration = new Duration(TimeSpan.FromSeconds(0.5))
-            };
-
-            // Tworzenie animacji SlideOutToRight
-            ThicknessAnimation slideOutAnimation = new ThicknessAnimation
+                _viewControl.ShowWithTransition(dgExport);
+            }
+            else
             {
-                From = new Thickness(0),
-                To = new Thickness(100, 0, 0, 0),
-                Duration = new Duration(TimeSpan.FromSeconds(0.5))
-            };
-
-            // Tworzenie storyboardu i dodanie animacji
-            Storyboard storyboard = new Storyboard();
-            storyboard.Children.Add(fadeOutAnimation);
-            storyboard.Children.Add(slideOutAnimation);
-
-            // Ustawienie celów animacji
-            Storyboard.SetTarget(fadeOutAnimation, txtSigmaQuantity);
-            Storyboard.SetTargetProperty(fadeOutAnimation, new PropertyPath("Opacity"));
-
-            Storyboard.SetTarget(slideOutAnimation, txtSigmaQuantity);
-            Storyboard.SetTargetProperty(slideOutAnimation, new PropertyPath("Margin"));
-
-            // Ustawienie zdarzenia Completed dla storyboardu
-            storyboard.Completed += (s, e) =>
-            {
-                txtSigmaQuantity.Visibility = Visibility.Collapsed;
-            };
-
-            // Uruchomienie animacji
-            storyboard.Begin();
+                _viewControl.HideWithTransition(dgExport);
+            }
         }
     }
 }

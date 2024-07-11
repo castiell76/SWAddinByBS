@@ -151,6 +151,7 @@
     <PackageReference Include="WPF-UI" Version="3.0.4" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Controls\DatagridResources.xaml.cs" />
     <Compile Remove="FormTest.cs" />
     <Compile Remove="FormTest.Designer.cs" />
     <Compile Remove="NotifyPropertyChanged.cs" />

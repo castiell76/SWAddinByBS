@@ -678,14 +678,6 @@ namespace SWApp.Views
         //    swApp.ActivateDoc3(System.IO.Path.GetFileName(filepath), false, 0, 0);
         //}
 
-        //private void miExportOpen_Click(object sender, RoutedEventArgs e)
-        //{
-        //    SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-        //    ExportStatus exportToOpen = (ExportStatus)dgExport.SelectedItem;
-        //    string filepath = exportToOpen.filepath;
-        //    swApp.OpenDoc6(filepath, (int)swDocumentTypes_e.swDocPART, 0, "", 0, 0);
-        //    swApp.ActivateDoc3(System.IO.Path.GetFileName(filepath), false, 0, 0);
-        //}
 
 
 

@@ -34,7 +34,7 @@
         <controls:ControlExample HeaderText="Wskaż kolejność sortowania" Margin="30" >
 
             <ListBox
-    Name="sortTreeListBox"
+         Name="sortTreeListBox"
           PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown"
           PreviewMouseMove="ListBox_PreviewMouseMove"
           AllowDrop="True"
@@ -46,10 +46,6 @@
         </controls:ControlExample>
         <ui:ToggleSwitch Content="Uwzględnij również elementy w podzłożeniach" HorizontalAlignment="Center"></ui:ToggleSwitch>
         <ui:Button Content="Wykonaj" HorizontalAlignment="Center"></ui:Button>
-
-
-
-
     </StackPanel>
 
    
