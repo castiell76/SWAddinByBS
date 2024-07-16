@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -103,7 +104,9 @@ namespace SWApp.Views.Pages
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.SortItems((bool)switchAllLevels.IsChecked);
+            List<string> orderToSort = sortTreeListBox.Items.Cast<string>().ToList();
+            bool allLevels = switchAllLevels.IsChecked ?? false;
+            ViewModel.SortItems(allLevels, orderToSort);
         }
     }
 }

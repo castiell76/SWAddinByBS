@@ -48,6 +48,7 @@ namespace SWApp.Viewmodels.Pages
             SWObject sWObject = new SWObject();
             try
             {
+                
                 if (CrossSectionsList.Any(x => x.Type == ("wprowadź dane profila")) || CrossSectionsList.Any(x => x.Type == ("")) || CrossSectionsList.Count == 0 || CrossSectionsList.Any(x=> x.Type == string.Empty))
                 {
                     OnOpenSnackbar("Uwaga!","Wprowadź poprawne dane profila", ControlAppearance.Caution);
@@ -92,6 +93,10 @@ namespace SWApp.Viewmodels.Pages
             catch (System.InvalidCastException)
             {
                 OnOpenSnackbar("Uwaga!", "Wprowadź poprawne dane profila", ControlAppearance.Caution);
+            }
+            catch (System.NullReferenceException)
+            {
+                OnOpenSnackbar("Uwaga!REF", "Wprowadź poprawne dane profila", ControlAppearance.Caution);
             }
         }
 
