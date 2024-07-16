@@ -63,10 +63,10 @@
                         <ui:Button x:Name="btnChooseDir" Content="Wyszukaj folder" Margin="50,0,0,0"></ui:Button>
                     </DockPanel>
                 </controls:ControlExample>
-                <ui:Button HorizontalAlignment="Center" Content="Eksportuj" Margin="0,30,0,0"></ui:Button>
+                <ui:Button HorizontalAlignment="Center" Content="Eksportuj" Margin="0,30,0,0" Click="Button_Click"></ui:Button>
             </StackPanel>
         </DockPanel>
-        <controls:ControlExample Margin="15">
+        <controls:ControlExample Margin="15" HeaderText="Tabela wygenerowanych plików">
             <StackPanel>
                 <ToggleButton Content="Rozwiń tabelę" x:Name="btnShowTable" Click="btnShowTable_Click"></ToggleButton>
                 <DataGrid x:Name="dgExport"

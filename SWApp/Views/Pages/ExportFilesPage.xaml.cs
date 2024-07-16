@@ -1,4 +1,6 @@
 ﻿using SWApp.Controls;
+using SWApp.Services;
+using SWApp.Viewmodels.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,19 +16,24 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Controls;
 
 namespace SWApp.Views.Pages
 {
     /// <summary>
     /// Interaction logic for ExportFilesPage.xaml
     /// </summary>
-    public partial class ExportFilesPage : Page
+    public partial class ExportFilesPage : INavigableView<ExportFilesViewModel>
     {
-        private ViewControl _viewControl;
-        public ExportFilesPage()
+
+        public ExportFilesViewModel ViewModel { get; }
+        private HelpService _helpSerivce;
+
+        public ExportFilesPage() 
         {
             InitializeComponent();
-            _viewControl = new ViewControl();
+            ViewModel = new ExportFilesViewModel();
+            _helpSerivce = new HelpService();
         }
 
         private void CbAllDXF_Checked(object sender, RoutedEventArgs e)
@@ -47,14 +54,14 @@ namespace SWApp.Views.Pages
         private void CbCreateDXFForSigma_Checked(object sender, RoutedEventArgs e)
         {
             cbCreateDXF.IsChecked = true;
-            _viewControl.ShowWithTransition(txtSigmaQuantity);
+           // _viewControl.ShowWithTransition(txtSigmaQuantity);
         }
 
 
 
         private void cbCreateDXFForSigma_Unchecked(object sender, RoutedEventArgs e)
         {
-            _viewControl.HideWithTransition(txtSigmaQuantity);
+           // _viewControl.HideWithTransition(txtSigmaQuantity);
         }
 
         private void miExportOpen_Click(object sender, RoutedEventArgs e)
@@ -71,12 +78,26 @@ namespace SWApp.Views.Pages
         {
             if(dgExport.Visibility == Visibility.Hidden || dgExport.Visibility == Visibility.Collapsed)
             {
-                _viewControl.ShowWithTransition(dgExport);
+               // _viewControl.ShowWithTransition(dgExport);
             }
             else
             {
-                _viewControl.HideWithTransition(dgExport);
+                //_viewControl.HideWithTransition(dgExport);
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if(cbCreateDXF.IsChecked == false || cbCreateSTEP.IsChecked == false)
+            {
+                _helpSerivce.SnackbarService.Show("Uwaga!", "Wybierz opcję eksportu DXF lub STEP", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Fluent24),
+                TimeSpan.FromSeconds(3));
+            }
+            else
+            {
+                
+            }
+
         }
     }
 }

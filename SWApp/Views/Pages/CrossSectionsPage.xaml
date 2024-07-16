@@ -19,7 +19,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
-    <controls:ControlExample Margin="20">
+    <controls:ControlExample Margin="20" HeaderText="Generator kształtowników i prętów">
         <StackPanel>
             <DataGrid  x:Name="dataGridProfile"
                  Height="Auto"
