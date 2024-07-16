@@ -44,12 +44,12 @@
                 </DataGrid.Resources>
                 <DataGrid.Columns >
                     <DataGridTextColumn Header="Nazwa" Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource EditingTextBoxStyle}"  MinWidth="200"></DataGridTextColumn>
-                    <DataGridTextColumn Header="X" Binding="{Binding X, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" MinWidth="100"/>
-                    <DataGridTextColumn Header="Y" Binding="{Binding Y, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" MinWidth="100"/>
-                    <DataGridTextColumn Header="Długość" Binding="{Binding Length, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" MinWidth="100"/>
-                    <DataGridTextColumn Header="Grubość" Binding="{Binding Thickness, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" MinWidth="100"/>
-                    <DataGridTextColumn Header="Ilość zacięć" Binding="{Binding DraftCount, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" MinWidth="100"/>
-                    <DataGridTextColumn Header="Typ" Binding="{Binding Type, UpdateSourceTrigger=PropertyChanged}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" IsReadOnly="True" Width="*"/>
+                    <DataGridTextColumn Header="X" Binding="{Binding X, UpdateSourceTrigger=LostFocus}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" MinWidth="100"/>
+                    <DataGridTextColumn Header="Y" Binding="{Binding Y, UpdateSourceTrigger=LostFocus}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" MinWidth="100"/>
+                    <DataGridTextColumn Header="Długość" Binding="{Binding Length, UpdateSourceTrigger=LostFocus}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" MinWidth="100"/>
+                    <DataGridTextColumn Header="Grubość" Binding="{Binding Thickness, UpdateSourceTrigger=LostFocus}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" MinWidth="100"/>
+                    <DataGridTextColumn Header="Ilość zacięć" Binding="{Binding DraftCount, UpdateSourceTrigger=LostFocus}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" MinWidth="100"/>
+                    <DataGridTextColumn Header="Typ" Binding="{Binding Type, UpdateSourceTrigger=LostFocus}" EditingElementStyle="{StaticResource EditingTextBoxStyle}" IsReadOnly="True" Width="*"/>
                 </DataGrid.Columns>
                 <DataGrid.ContextMenu>
                     <ContextMenu>

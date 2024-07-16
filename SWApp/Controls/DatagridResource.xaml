@@ -41,7 +41,7 @@
                         </Setter.Value>
                     </Setter>
                 </Style>
-
+                
             </Setter.Value>
         </Setter>
         <Setter Property="ColumnHeaderStyle">
@@ -57,10 +57,23 @@
                 </Style>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.(CheckBox.IsChecked)}" Value="True">
+                <Setter Property="Background" Value="LightGreen" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.(CheckBox.IsChecked)}" Value="False">
+                <Setter Property="Background" Value="IndianRed" />
+            </DataTrigger>
+        </Style.Triggers>
+
+
     </Style>
     <Style x:Key="EditingTextBoxStyle" TargetType="TextBox">
         <Setter Property="Background" Value="#74c7ea"/>
         <Setter Property="BorderThickness" Value="0"/>
     </Style>
+
+
+
 
 </ResourceDictionary>

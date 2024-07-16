@@ -219,16 +219,7 @@
                             </TransformGroup>
                         </TextBlock.RenderTransform>
                     </TextBlock>
-                    <StackPanel Margin="280,168,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Height="97" Width="142">
-             !!!           <CheckBox x:Name="cbGenerateDrawings" Content="Stwórz rysunki" Height="22" Margin="0,0,0.4,0" Checked="CbGenerateDrawings_Checked" Unchecked="CbGenerateDrawings_Unchecked"/>
-                        <StackPanel Margin="0,0,0.4,0" Height="81">
-            Nowy page na to               <RadioButton x:Name="rbDrawingsTogether" Margin="0,0,0.4,10" IsEnabled="False">
-           !!                     <TextBlock Text="Rysunki w jednym pliku" TextWrapping="Wrap"/>
-              !!!              </RadioButton>
-                            <RadioButton x:Name="rbDrawingsSplitted" Margin="0,0,0.4,23" Height="30" IsEnabled="false">
-                                <TextBlock Text="Rysunki w osobnych plikach" TextWrapping="Wrap"/>
-                            </RadioButton>
-                        </StackPanel>
+                
 
                     </StackPanel>
                     <TextBlock x:Name="tbIndex"  FontSize="20"  Margin="147,569,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="159" Height="23" FontWeight="Bold"/>

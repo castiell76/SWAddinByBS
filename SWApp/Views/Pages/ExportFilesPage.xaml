@@ -77,7 +77,7 @@
       MinColumnWidth="60" 
       CanUserResizeColumns="True" 
       HorizontalAlignment="Stretch"
-      AutoGenerateColumns="False"  
+      AutoGenerateColumns="True"  
       FontSize="10"
     IsReadOnly="True"
     Style="{StaticResource datagridStyle}"
@@ -89,37 +89,6 @@
                             </ResourceDictionary.MergedDictionaries>
                         </ResourceDictionary>
                     </DataGrid.Resources>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Nazwa części" Binding="{Binding name}" Width="*"></DataGridTextColumn>
-                        <DataGridCheckBoxColumn Header="DXF"  Binding="{Binding dxfCreated}">
-                            <DataGridCheckBoxColumn.ElementStyle>
-                                <Style TargetType="{x:Type CheckBox}">
-                                    <Style.Triggers>
-                                        <Trigger Property="IsChecked" Value="True">
-                                            <Setter Property="Background" Value="LightGreen"></Setter>
-                                        </Trigger>
-                                        <Trigger Property="IsChecked" Value="False">
-                                            <Setter Property="Background" Value="IndianRed"></Setter>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGridCheckBoxColumn.ElementStyle>
-                        </DataGridCheckBoxColumn>
-                        <DataGridCheckBoxColumn Header="Step" Binding="{Binding stepCreated}">
-                            <DataGridCheckBoxColumn.ElementStyle>
-                                <Style TargetType="{x:Type CheckBox}">
-                                    <Style.Triggers>
-                                        <Trigger Property="IsChecked" Value="True">
-                                            <Setter Property="Background" Value="LightGreen"></Setter>
-                                        </Trigger>
-                                        <Trigger Property="IsChecked" Value="False">
-                                            <Setter Property="Background" Value="IndianRed"></Setter>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGridCheckBoxColumn.ElementStyle>
-                        </DataGridCheckBoxColumn>
-                    </DataGrid.Columns>
                     <DataGrid.ContextMenu>
                         <ContextMenu>
                             <MenuItem x:Name="miExportOpen" Header="Otwórz" IsEnabled="False" Click="miExportOpen_Click"></MenuItem>

@@ -50,22 +50,37 @@
                         <CheckBox x:Name="cbCheckedBy"  Content="Dodaj sprawdzającego projekt" Checked="cbCheckedBy_Checked" Unchecked="cbCheckedBy_Unchecked"/>
                         <ComboBox x:Name="comboCheckedBy" Visibility="Collapsed" IsEditable="True"/>
                     </StackPanel>
-                   
+
                     <StackPanel>
                         <CheckBox x:Name="cbSetIndex" Content="Ustaw indeks wyrobu" Checked="cbSetIndex_Checked" Unchecked="cbSetIndex_Unchecked"></CheckBox>
                         <ui:TextBox x:Name="tbIndex" PlaceholderText="Wprowadź indeks wyrobu" Visibility="Collapsed"></ui:TextBox>
+                        <DockPanel>
+                            <ui:Button x:Name="btnRevision" Content="Podnieś rewizję"></ui:Button>
+                            <ui:TextBlock x:Name="tbRevision"></ui:TextBlock>
+                        </DockPanel>
                     </StackPanel>
-                    
                 </StackPanel>
             </DockPanel>
         </controls:ControlExample>
-        <controls:ControlExample Margin="15">
-            <DockPanel>
-                <ui:Button x:Name="btnRevision" Content="Podnieś rewizję"></ui:Button>
-                <ui:TextBox x:Name="tbRevision"></ui:TextBox>
-                <ui:TextBox x:Name="tbassFilepath"></ui:TextBox>
+        <ui:Button x:Name="btnSetProperties" Content="Dodaj właściwości" HorizontalAlignment="Center"></ui:Button>
+        <DockPanel>
+            <ui:TextBox x:Name="tbassFilepath" Visibility="Hidden"></ui:TextBox>
                 <ui:TextBox x:Name="tbassConfig" Visibility="Hidden"></ui:TextBox>
             </DockPanel>
+
+        <controls:ControlExample>
+            <DataGrid x:Name="dgAllProperties"  
+                      ItemsSource="{Binding list}" 
+                      AutoGenerateColumns="False"
+                      Style="{StaticResource datagridStyle}">
+                <DataGrid.Resources>
+                    <ResourceDictionary>
+                        <ResourceDictionary.MergedDictionaries>
+                            <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/DatagridResource.xaml"></ResourceDictionary>
+                        </ResourceDictionary.MergedDictionaries>
+                    </ResourceDictionary>
+                </DataGrid.Resources>
+            </DataGrid >
         </controls:ControlExample>
     </StackPanel>
 

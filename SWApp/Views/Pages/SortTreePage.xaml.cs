@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SWApp.Services;
+using SWApp.Viewmodels.Pages;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -13,21 +15,27 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Controls;
 
 namespace SWApp.Views.Pages
 {
     /// <summary>
     /// Interaction logic for SortTreePage.xaml
     /// </summary>
-    public partial class SortTreePage : Page
+    public partial class SortTreePage : INavigableView<SortTreeViewModel>
     {
         private Point _startPoint;
         private ObservableCollection<string> _items;
+
+        public SortTreeViewModel ViewModel  {get;}
+
         public SortTreePage()
         {
+            ViewModel = new SortTreeViewModel();
             InitializeComponent();
-            _items = new ObservableCollection<string> { "Elementy blaszane (AB/PB)", "Elementy z profili (AR/PR)", "Tworzywa Sztuczne (AT/PT)", "Elementy z drewna(AP/PP)", "Mieszane elementy AX/PX" };
-             sortTreeListBox.ItemsSource = _items;
+            DataContext = ViewModel;
+            _items = ViewModel.Items;
+            sortTreeListBox.ItemsSource = _items;
         }
         private void ListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -91,6 +99,11 @@ namespace SWApp.Views.Pages
                 current = VisualTreeHelper.GetParent(current);
             }
             return null;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.SortItems((bool)switchAllLevels.IsChecked);
         }
     }
 }

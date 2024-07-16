@@ -22,17 +22,6 @@ namespace SWApp.Viewmodels.Pages
         private ObservableCollection<ProfileSW> _crossSectionsList;
         private HelpService _helpService = new HelpService();
         private ISnackbarService _snackbarService;
-        //[ObservableProperty]
-        //private bool _isFlyoutOpen = false;
-
-        //[RelayCommand]
-        //public void OnButtonClick(object sender)
-        //{
-        //    if (!IsFlyoutOpen)
-        //    {
-        //        IsFlyoutOpen = true;
-        //    }
-        //}
 
         public CrossSectionsViewmodel(ISnackbarService snackbarService)
         {
@@ -40,7 +29,6 @@ namespace SWApp.Viewmodels.Pages
             CrossSectionsList = new ObservableCollection<ProfileSW>();
         }
 
-        //[RelayCommand]
         public void OnOpenSnackbar(string title, string message, ControlAppearance appearance)
         {
             _snackbarService = _helpService.SnackbarService;
@@ -55,6 +43,8 @@ namespace SWApp.Viewmodels.Pages
 
         public void GenerateCrossSections()
         {
+            string assemblyFilepath;
+            string filePathDir;
             SWObject sWObject = new SWObject();
             try
             {
@@ -64,40 +54,39 @@ namespace SWApp.Viewmodels.Pages
                 }
                 else
                 {
-                    List<string> filepathWithName = sWObject.CreateAssembly();
+                    assemblyFilepath = sWObject.CreateAssembly();
+                    filePathDir = System.IO.Path.GetDirectoryName(assemblyFilepath);
+                    sWObject.CloseDoc(assemblyFilepath);
 
-                    string assemblyName = filepathWithName[1];
-                    string filepathAsm = filepathWithName[0];
-                    string filepathDir = filepathWithName[2];
 
                     foreach (ProfileSW profile in CrossSectionsList)
                     {
                         switch (profile.Type)
                         {
                             case "pręt okrągły":
-                                sWObject.CreateCircularRod(profile, $"{filepathDir}\\");
-                                sWObject.AddToAssembly($"{filepathDir}\\{profile.Name}.SLDPRT", assemblyName);
+                                sWObject.CreateCircularRod(profile, $"{filePathDir}\\");
+                                sWObject.AddToAssembly($"{filePathDir}\\{profile.Name}.SLDPRT", assemblyFilepath);
                                 sWObject.CloseDoc($"{profile.Name}.SLDPRT");
                                 break;
                             case "pręt prostokątny":
-                                sWObject.CreateRectangleRod(profile, $"{filepathDir}\\");
-                                sWObject.AddToAssembly($"{filepathDir}\\{profile.Name}.SLDPRT", assemblyName);
+                                sWObject.CreateRectangleRod(profile, $"{filePathDir}\\");
+                                sWObject.AddToAssembly($"{filePathDir}\\{profile.Name}.SLDPRT", assemblyFilepath);
                                 sWObject.CloseDoc($"{profile.Name}.SLDPRT");
                                 break;
                             case "rura prostokątna":
-                                sWObject.CreateRectangleProfile(profile, $"{filepathDir}\\");
-                                sWObject.AddToAssembly($"{filepathDir}\\{profile.Name}.SLDPRT", assemblyName);
+                                sWObject.CreateRectangleProfile(profile, $"{filePathDir}\\");
+                                sWObject.AddToAssembly($"{filePathDir}\\{profile.Name}.SLDPRT", assemblyFilepath);
                                 sWObject.CloseDoc($"{profile.Name}.SLDPRT");
                                 break;
                             case "rura okrągła":
-                                sWObject.CreateCircularProfile(profile, $"{filepathDir}\\");
-                                sWObject.AddToAssembly($"{filepathDir}\\{profile.Name}.SLDPRT", assemblyName);
+                                sWObject.CreateCircularProfile(profile, $"{filePathDir}\\");
+                                sWObject.AddToAssembly($"{filePathDir}\\{profile.Name}.SLDPRT", assemblyFilepath);
                                 sWObject.CloseDoc($"{profile.Name}.SLDPRT");
                                 break;
                         }
 
                     }
-                    OnOpenSnackbar("Uwaga!", "Generowanie zakończone", ControlAppearance.Success);
+                    OnOpenSnackbar("Sukces!", "Generowanie zakończone", ControlAppearance.Success);
                 }
             }
             catch (System.InvalidCastException)
