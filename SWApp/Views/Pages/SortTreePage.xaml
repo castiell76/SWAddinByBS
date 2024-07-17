@@ -44,6 +44,7 @@
     FontSize="15">
             </ListBox>
         </controls:ControlExample>
+        <ui:ToggleSwitch x:Name="groupCompononents" Content="Grupuj jednakowe części" HorizontalAlignment="Center"></ui:ToggleSwitch>
         <ui:ToggleSwitch x:Name="switchAllLevels" Content="Uwzględnij również elementy w podzłożeniach" HorizontalAlignment="Center"></ui:ToggleSwitch>
         <ui:Button Content="Wykonaj" HorizontalAlignment="Center" Click="Button_Click"></ui:Button>
     </StackPanel>

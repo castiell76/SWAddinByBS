@@ -83,7 +83,7 @@ namespace SWApp
             {"SKALA","SCALE" },
             {"MONTAŻ","INSTALLATION" }
         };
-        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
+        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
 
         public SWObject()
         {
@@ -528,7 +528,7 @@ namespace SWApp
             while(swFeature != null)
             {
                 featureType = swFeature.GetTypeName2().ToString();
-                //Debug.Print(swFeature.GetTypeName2().ToString() + " "+swFeature.Name);
+                Debug.Print(swFeature.GetTypeName2().ToString() + " "+swFeature.Name);
                 if(swFeature.GetTypeName2() == "Reference")
                 {
                     swComp = (Component2)swFeature.GetSpecificFeature2();
@@ -548,7 +548,7 @@ namespace SWApp
             }
         }
 
-        public void SortTree(bool allLevels, List<string>orderToSort)
+        public void SortTree(bool allLevels, List<string>orderToSort, bool groupComponents)
         {
             swModel = (ModelDoc2)_swApp.ActiveDoc;
             try
@@ -559,11 +559,13 @@ namespace SWApp
                 }
                 if (allLevels)
                 {
-                    SortTreeAll(swModel,orderToSort);
+                    SortTreeAll(swModel,orderToSort, groupComponents);
+                    ShowHelpService("Sukces!", "Elementy zostały posortowane", Wpf.Ui.Controls.ControlAppearance.Success, new SymbolIcon(SymbolRegular.Fluent24), TimeSpan.FromSeconds(3));
                 }
                 else
                 {
-                    SortTreeSingle(swModel,orderToSort);
+                    SortTreeSingle(swModel,orderToSort, groupComponents);
+                    ShowHelpService("Sukces!", "Elementy posortowane", Wpf.Ui.Controls.ControlAppearance.Success, new SymbolIcon(SymbolRegular.Fluent24), TimeSpan.FromSeconds(3));
                 }
             }
             catch (NullReferenceException ex)
@@ -576,39 +578,45 @@ namespace SWApp
         {
             _helpService.SnackbarService.Show(title,message,appearance,icon,time);
         }
-        private void SortTreeAll(ModelDoc2 swModel, List<string> orderToSort)
+        private void SortTreeAll(ModelDoc2 swModel, List<string> orderToSort, bool groupComponents)
         {
             ModelDoc2 modelChild;
             int modelChildType;
             swAss = (AssemblyDoc)swModel;
+            List<string> doneComps = new List<string>();
             object[] childComps = (object[])swAss.GetComponents(true);
 
-            SortTreeSingle(swModel, orderToSort);
+            SortTreeSingle(swModel, orderToSort, groupComponents);
             foreach (Component2 childComp in childComps)
             {
                 modelChild = (ModelDoc2)childComp.GetModelDoc2();
-                modelChildType = modelChild.GetType();
-                string filepath = modelChild.GetPathName();
-                if (modelChildType == 2)
+                if(!doneComps.Contains(modelChild.GetPathName()))
                 {
-                    _swApp.OpenDoc6(filepath, (int)swDocumentTypes_e.swDocASSEMBLY, (int)swOpenDocOptions_e.swOpenDocOptions_ViewOnly, "", 0, 0);
-                    _swApp.ActivateDoc3(System.IO.Path.GetFileNameWithoutExtension(filepath), true, 0, 0);
-                    SortTreeSingle(modelChild, orderToSort);
-                    _swApp.CloseDoc(System.IO.Path.GetFileName(modelChild.GetPathName()));
+                    modelChildType = modelChild.GetType();
+                    string filepath = modelChild.GetPathName();
+                    if (modelChildType == 2)
+                    {
+                        _swApp.OpenDoc6(filepath, (int)swDocumentTypes_e.swDocASSEMBLY, (int)swOpenDocOptions_e.swOpenDocOptions_ViewOnly, "", 0, 0);
+                        _swApp.ActivateDoc3(System.IO.Path.GetFileNameWithoutExtension(filepath), true, 0, 0);
+                        SortTreeSingle(modelChild, orderToSort, groupComponents);
+                        _swApp.CloseDoc(System.IO.Path.GetFileName(modelChild.GetPathName()));
+                        doneComps.Add(modelChild.GetPathName());
+                    }
                 }
             }
         }
 
-        private void SortTreeSingle(ModelDoc2 swModel, List<string>orderToSort)
+        private void SortTreeSingle(ModelDoc2 swModel, List<string>orderToSort, bool groupComponents)
         {
             Feature folderNormalia;
+            Feature swFeat;
             string targetToMove = "Normalia";
+            string compName;
             swAss = (AssemblyDoc)swModel;
             swModelExt = swModel.Extension;
             swFeatMgr = swModel.FeatureManager;
 
-            swFeatMgr.GroupComponentInstances = false;
-            
+            swFeatMgr.GroupComponentInstances = groupComponents;
             
             folderNormalia = (Feature)swAss.FeatureByName("Normalia");
             object[] swComps = (object[])swAss.GetComponents(true); //true for top level componenets only
@@ -617,8 +625,20 @@ namespace SWApp
             //Creating new folder Normalia if it does not exist 
             if (folderNormalia == null)
             {
-                swModelExt.SelectByID2("", "COMPONENT", 0, 0, 0, false, 0, null, 0); // need to select component
-                folderNormalia = swFeatMgr.InsertFeatureTreeFolder2((int)swFeatureTreeFolderType_e.swFeatureTreeFolder_EmptyBefore);
+
+                //traversing till find origin
+                swFeat = swModel.FirstFeature() as Feature;
+                while(swFeat.GetTypeName2() != "OriginProfileFeature")
+                {
+                        swFeat = swFeat.GetNextFeature() as Feature;
+                }
+
+                //getting the first part in assembly
+                swFeat = swFeat.GetNextFeature() as Feature;
+                compName = swFeat.Name;
+
+                swModelExt.SelectByID2(compName, "COMPONENT", 0, 0, 0, false, 0, null, 0); // need to select component
+                var cos = folderNormalia = swFeatMgr.InsertFeatureTreeFolder2((int)swFeatureTreeFolderType_e.swFeatureTreeFolder_EmptyBefore);
                 folderNormalia.Name = "Normalia";
                 swModelExt.ReorderFeature("Normalia", "Początek układu współrzędnych", (int)swMoveLocation_e.swMoveAfter);
             }
@@ -641,12 +661,12 @@ namespace SWApp
             //ordering items the way they should appear in the tree
             var sortedComps = CompsToSort.OrderBy(o => o.Name2.StartsWith(orderToSort[0])).ThenBy(o => o.Name2.StartsWith(orderToSort[1])).ThenBy(o => o.Name2.StartsWith(orderToSort[2])).ThenBy(o => o.Name2.StartsWith(orderToSort[3])).
             ThenBy(o => o.Name2.StartsWith(orderToSort[4])).ThenBy(o => o.Name2.StartsWith(orderToSort[5])).ThenBy(o => o.Name2.StartsWith(orderToSort[6])).ThenBy(o => o.Name2.StartsWith(orderToSort[7])).
-            ThenBy(o => o.Name2.StartsWith(orderToSort[8])).ThenBy(o => o.Name2.StartsWith(orderToSort[9]));
+            ThenBy(o => o.Name2.StartsWith(orderToSort[8])).ThenBy(o => o.Name2.StartsWith(orderToSort[9])).ThenBy(o => o.Name2.StartsWith(orderToSort[10])).ThenBy(o => o.Name2.StartsWith(orderToSort[11])).ThenBy(o=>o.Name2);
             foreach (Component2 comp in sortedComps)
             {
                 swModelExt.ReorderFeature(comp.Name2, targetToMove, (int)swMoveLocation_e.swMoveAfter);
             }
-            swFeatMgr.GroupComponentInstances = true;
+            swFeatMgr.GroupComponentInstances = groupComponents;
         }
 
         public void AddToAssembly(string filepath,string assemblyFilepath)

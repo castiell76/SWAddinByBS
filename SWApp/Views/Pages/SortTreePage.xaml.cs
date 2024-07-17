@@ -106,7 +106,8 @@ namespace SWApp.Views.Pages
         {
             List<string> orderToSort = sortTreeListBox.Items.Cast<string>().ToList();
             bool allLevels = switchAllLevels.IsChecked ?? false;
-            ViewModel.SortItems(allLevels, orderToSort);
+            bool groupComponents = groupCompononents.IsChecked ?? false;
+            ViewModel.SortItems(allLevels, orderToSort, groupComponents);
         }
     }
 }

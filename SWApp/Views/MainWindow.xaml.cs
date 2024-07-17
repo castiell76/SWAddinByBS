@@ -180,7 +180,6 @@ namespace SWApp.Views
             if (isDarkTheme)
             {
                 ApplicationThemeManager.Apply(ApplicationTheme.Dark);
-               //_themeService.SetTheme(ApplicationTheme.Dark);  
             }
             else
             {
@@ -786,6 +785,13 @@ namespace SWApp.Views
         //    calculationModule.ShowDialog();
         //}
 
-
+        private void TestTraverseTree()
+        {
+            SWObject sWObject = new SWObject();
+            SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
+            ModelDoc2 swModel = swApp.ActiveDoc as ModelDoc2;
+            Feature swFeat = swModel.FirstFeature() as Feature;
+            sWObject.TraverseFeatureFeatures_Test(swFeat);
+        }
     }
 }

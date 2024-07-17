@@ -27,6 +27,7 @@ namespace SWApp.Views.Pages
     {
 
         public ExportFilesViewModel ViewModel { get; }
+        public ViewControl _viewControl;
         private HelpService _helpSerivce;
 
         public ExportFilesPage() 
@@ -34,6 +35,7 @@ namespace SWApp.Views.Pages
             InitializeComponent();
             ViewModel = new ExportFilesViewModel();
             _helpSerivce = new HelpService();
+            _viewControl= new ViewControl();
         }
 
         private void CbAllDXF_Checked(object sender, RoutedEventArgs e)
@@ -54,14 +56,14 @@ namespace SWApp.Views.Pages
         private void CbCreateDXFForSigma_Checked(object sender, RoutedEventArgs e)
         {
             cbCreateDXF.IsChecked = true;
-           // _viewControl.ShowWithTransition(txtSigmaQuantity);
+            _viewControl.ShowWithTransition(txtSigmaQuantity);
         }
 
 
 
         private void cbCreateDXFForSigma_Unchecked(object sender, RoutedEventArgs e)
         {
-           // _viewControl.HideWithTransition(txtSigmaQuantity);
+            _viewControl.HideWithTransition(txtSigmaQuantity);
         }
 
         private void miExportOpen_Click(object sender, RoutedEventArgs e)
@@ -78,11 +80,11 @@ namespace SWApp.Views.Pages
         {
             if(dgExport.Visibility == Visibility.Hidden || dgExport.Visibility == Visibility.Collapsed)
             {
-               // _viewControl.ShowWithTransition(dgExport);
+                _viewControl.ShowWithTransition(dgExport);
             }
             else
             {
-                //_viewControl.HideWithTransition(dgExport);
+                _viewControl.HideWithTransition(dgExport);
             }
         }
 
@@ -95,7 +97,7 @@ namespace SWApp.Views.Pages
             }
             else
             {
-                
+                ViewModel.ExportFiles();
             }
 
         }

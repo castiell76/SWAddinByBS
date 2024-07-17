@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using SolidWorks.Interop.sldworks;
+using SWApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,25 +26,37 @@ namespace SWApp.Viewmodels.Pages
         private SWObject _swObject = new SWObject();
         public SortTreeViewModel() 
         {
-            _items = new ObservableCollection<string> { "Elementy blaszane (AB/PB)", "Elementy z profili (AR/PR)", "Tworzywa Sztuczne (AT/PT)", "Elementy z drewna(AP/PP)", "Elementy z drutu (AD/PD)", "Mieszane elementy (AX/PX)" };
+            _items = new ObservableCollection<string> {
+                "Złożenia mieszane (AX)",
+                "Złożenia blaszane (AB)",
+                "Złożenia profilowe (AR)",
+                "Złożenia druciane (AD)",
+                "Złożenia drewniane (AP)",
+                "Złożenia tworzywowe (AT)",
+                "Elementy z blachy (PB)",
+                "Elementy z profili (PR)",
+                "Elementy z drutu (PD)",
+                "Elementy z drewna(PP)",
+                "Tworzywa Sztuczne (PT)",
+                "Mieszane elementy (PX)"};
         }
 
-        public void SortItems(bool allLevels, List<string>input)
+        public void SortItems(bool allLevels, List<string>input, bool groupComponents)
         {
             var orderToSort = ExtractParts(input);
-            _swObject.SortTree(allLevels, orderToSort);
+            _swObject.SortTree(allLevels, orderToSort, groupComponents);
+
         }
         private List<string> ExtractParts(List<string> input)
         {
             List<string> output = new List<string>();
-            string pattern = @"\(([A-Z]{1,2})/([A-Z]{1,2})\)";
+            string pattern = @"\((.{2})\)";
             foreach (string text in input)
             {
                 Match match = Regex.Match(text, pattern);
                 string part1 = match.Groups[1].Value;
-                string part2 = match.Groups[2].Value;
                 output.Add(part1);
-                output.Add(part2);
+
             }
             return output;
         }
