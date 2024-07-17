@@ -1,5 +1,5 @@
 dodawanie viewmodeli i podpinanie funkcji pod nowe kontrolki
-
+ public List<ExportStatus> ExportFromAssembly() swobject linia 700
 
 
 t³umaczenie dokumentacji z chatgpt

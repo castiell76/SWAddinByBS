@@ -681,7 +681,7 @@ namespace SWApp
             swModel.Save3((int)swSaveAsOptions_e.swSaveAsOptions_Silent, 0, 0);    
         }
 
-        public string GetDirDXF()
+        private string GetDirDXF()
         {
             try
             {
@@ -698,28 +698,45 @@ namespace SWApp
                 return "";
             }
         }
-        public void saveDXFFromDrawing(string filedir, bool isDefaultDir)
+        public List<ExportStatus> ExportFromAssembly()
         {
-            SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-            ModelDoc2 swModel;
-            swModel = (ModelDoc2)swApp.ActiveDoc;
-            swModelExt = swModel.Extension;
-            string assemblyTitle = swModel.GetTitle();
-            string assemblyFilepath = swModel.GetPathName();
-            string assemblyDrawingFilepath = assemblyFilepath.Remove(assemblyFilepath.Length - 6,6) + "SLDDRW";
-
-            if (filedir == "" || isDefaultDir == true)
+            List<ExportStatus> exportStatuses = new List<ExportStatus>();
+            List<string> doneComponents = new List<string>();
+            List<string> CountedParts = 
+            ModelDoc2 swModel = _swApp.ActiveDoc as ModelDoc2;
+            ModelDoc2 swModelChild;
+            AssemblyDoc swAssemblyDoc = swModel as AssemblyDoc;
+            object[] swComps = swAssemblyDoc.GetComponents(false) as object[];
+            string filedir;
+            foreach (Component2 swComp in swComps)
             {
-                int signs = assemblyTitle.Count() + 7;
-                filedir = swModel.GetPathName();
-                filedir = filedir.Remove(filedir.Length - signs, signs);
+                swModelChild = swComp.GetModelDoc2() as ModelDoc2;
+                if (doneComponents.Contains(swModelChild.GetPathName()))
+                {
+                    filedir = Path.GetDirectoryName(swModelChild.GetPathName());
+                    ExportSingleFile(swComp,filedir,options,)
+                    doneComponents.Add(swModelChild.GetPathName());
+                }
             }
 
-            swModel = swApp.OpenDoc6(assemblyDrawingFilepath, 3, 2, "", 0, 0);
+            return exportStatuses;
+        }
+        private void ExportToDXFFromDrawing(string filedir, bool isDefaultDir)
+        {
+            ModelDoc2 swModel;
+            swModel = (ModelDoc2)_swApp.ActiveDoc;
+            swModelExt = swModel.Extension;
+            
+            string assemblyFilepath = swModel.GetPathName();
+            string assemblyName = Path.GetFileNameWithoutExtension(assemblyFilepath);
+            string assemblyDrawingFilepath = Path.ChangeExtension(assemblyFilepath, "SLDDRW");
+            
+
+            swModel = _swApp.OpenDoc6(assemblyDrawingFilepath, 3, 2, "", 0, 0);
             drawingDoc = (DrawingDoc)swModel;
             if(drawingDoc != null)
             {
-                swModel = (ModelDoc2)swApp.ActiveDoc;
+                swModel = (ModelDoc2)_swApp.ActiveDoc;
                 swModelExt = swModel.Extension;
                 string[] sheetNames = (string[])drawingDoc.GetSheetNames();
 
@@ -737,13 +754,13 @@ namespace SWApp
                     }
                     drawingDoc.SheetNext();
                 }
-                swApp.CloseDoc(assemblyDrawingFilepath);
+                _swApp.CloseDoc(assemblyDrawingFilepath);
             }
             
         }
-        public (bool,string,string) SaveDXF (string modelFilepath, string filename, string filedir, List<string> totalParts, int options,List<string>swTreeFilenames, int quantity)
+        private ExportedDXF ExportToDXF(string modelFilepath, string filename, string filedir, List<string> totalParts, int options,List<string>swTreeFilenames, int quantity)
         {
-            SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
+            ExportedDXF outputDXF = new ExportedDXF();
             bool boolstatus = false;
             string sigmaNote;
             string dxfFilepath;
@@ -753,9 +770,9 @@ namespace SWApp
             ModelDoc2 swModel;
             try
             {
-                swModel = swApp.OpenDoc6(modelFilepath, 1, 2, "", 0, 0);
-                swApp.ActivateDoc3(filename, true, 2, 0);
-                swModel = (ModelDoc2)swApp.ActiveDoc;
+                swModel = _swApp.OpenDoc6(modelFilepath, 1, 2, "", 0, 0);
+                _swApp.ActivateDoc3(filename, true, 2, 0);
+                swModel = (ModelDoc2)_swApp.ActiveDoc;
                 
                 swPart = (PartDoc)swModel;
                 swModelExt = swModel.Extension;
@@ -770,10 +787,7 @@ namespace SWApp
                      thickness = 0;
                 }
 
-                   var quantityPerPiece = totalParts.Where(x => x == modelFilepath).Count();
-
-                
-
+                var quantityPerPiece = totalParts.Where(x => x == modelFilepath).Count();
                 var material = swPart.MaterialIdName;
                 if(material == "" || material == null)
                 {
@@ -791,7 +805,11 @@ namespace SWApp
                 sigmaNote = $"Name:{filename}\n" +
                             $"Material:{material}\n" +
                             $"Thickness:{thicknessStr}\n" +
-                            $"Quantity:{totalQuantity}";   
+                            $"Quantity:{totalQuantity}";
+
+                outputDXF.Status = boolstatus;
+                outputDXF.SigmaNote = sigmaNote;
+                outputDXF.DXFFilepath = dxfFilepath;
             }
             catch (InvalidCastException)
             {
@@ -806,51 +824,41 @@ namespace SWApp
                 swTreeFilenames.Add(filename);
                 
             }
-            return (boolstatus,sigmaNote,dxfFilepath);
+            return outputDXF;
         }
-        public bool ExportToSTEP(string modelFilepath, string filedir, string filename, List<string> totalParts)
+        private bool ExportToSTEP(string modelFilepath, string filedir, string filename, List<string> totalParts)
         {
-            SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
             ModelDoc2 swModel;
-            swModel = swApp.OpenDoc6(modelFilepath, 1, 2, "", 0, 0);
-            swApp.ActivateDoc3(filename, true, 2, 0);
-            swModel = (ModelDoc2)swApp.ActiveDoc;
+            swModel = _swApp.OpenDoc6(modelFilepath, 1, 2, "", 0, 0);
+            _swApp.ActivateDoc3(filename, true, 2, 0);
+            swModel = (ModelDoc2)_swApp.ActiveDoc;
 
             swModelExt = swModel.Extension;
             var quantity = totalParts.Where(x => x == modelFilepath).Count(); 
 
             return swModelExt.SaveAs($"{filedir}\\{filename}_{quantity}-szt.STEP", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_SaveReferenced, null, 0, 0); ;
         }
-        public ExportStatus ExportFile(Component2 swComp,string filedir, bool isDefaultDir, int options, List<string> totalParts,bool exportToDXF, bool exportToSTEP, List<string>swTreeFilenames, int quantity)
+        private ExportStatus ExportSingleFile(Component2 swComp,string filedir, int options, List<string> totalParts,bool exportToDXF, bool exportToSTEP, List<string>swTreeFilenames, int quantity)
         {
-            SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
             ModelDoc2 swModel;
             ExportStatus exportStatus = new ExportStatus();
-            object[] swChildComps;
             string modelFilepath;
             string filename;
-            string assemblyTitle;
-            string note;
+            string filepath;
 
-            swModel = (ModelDoc2)swApp.ActiveDoc;
-            assemblyTitle = swModel.GetTitle(); //title is name display in a upper sldwrks bar
+            swModel = (ModelDoc2)_swApp.ActiveDoc;
+            filepath = swModel.GetPathName(); //title is name display in a upper sldwrks bar
 
-            if (filedir == "" || isDefaultDir == true)
-            {
-                int signs = assemblyTitle.Count() + 7; //7 bcs .sldasm
-                filedir = swModel.GetPathName();
-                filedir = filedir.Remove(filedir.Length - signs , signs);
-            }
 
             swModel = (ModelDoc2)swComp.GetModelDoc2();
             if(swModel != null)
             {
                 modelFilepath = swModel.GetPathName(); //pathname inc. filename with extension
-                filename = swModel.GetTitle();
-                exportStatus.name = System.IO.Path.GetFileNameWithoutExtension(swModel.GetPathName());
+                filename = System.IO.Path.GetFileNameWithoutExtension(filepath);
+                exportStatus.name = filename;
                 exportStatus.stepCreated = false;
                 exportStatus.dxfCreated = false;
-                exportStatus.filepath = swModel.GetPathName();
+                exportStatus.filepath = filepath;
 
                 if (swModel.GetType() == 1)
                 {
@@ -863,13 +871,12 @@ namespace SWApp
                         }
                         if (exportToDXF)
                         {
-                            (exportStatus.dxfCreated, exportStatus.sigmaNote, exportStatus.dxfFilepath) = SaveDXF(modelFilepath, filename, filedir, totalParts, options, swTreeFilenames, quantity);
+                            (exportStatus.dxfCreated, exportStatus.sigmaNote, exportStatus.dxfFilepath) = ExportToDXF(modelFilepath, filename, filedir, totalParts, options, swTreeFilenames, quantity);
                         }
                     }
 
-                    swApp.CloseDoc(filename);
+                    _swApp.CloseDoc(filename);
                 }
-            
         }
             return exportStatus;
         }
