@@ -13,9 +13,9 @@ namespace SWApp.Viewmodels.Pages
         {
             _swObject = new SWObject();
         }
-        public void ExportFiles() 
+        public void ExportFiles(bool[] options, int quantitySigma) 
         {
-            _swObject.ExportFile();
+            _swObject.ExportFromAssembly(options, quantitySigma);
         }
     }
 }

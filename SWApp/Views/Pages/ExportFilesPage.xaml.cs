@@ -90,6 +90,9 @@ namespace SWApp.Views.Pages
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            bool[] options = default;
+            int quantitySigma = default;
+
             if(cbCreateDXF.IsChecked == false || cbCreateSTEP.IsChecked == false)
             {
                 _helpSerivce.SnackbarService.Show("Uwaga!", "Wybierz opcję eksportu DXF lub STEP", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Fluent24),
@@ -97,7 +100,7 @@ namespace SWApp.Views.Pages
             }
             else
             {
-                ViewModel.ExportFiles();
+                ViewModel.ExportFiles(options, quantitySigma);
             }
 
         }
