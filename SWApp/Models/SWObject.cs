@@ -83,7 +83,7 @@ namespace SWApp
             {"SKALA","SCALE" },
             {"MONTAŻ","INSTALLATION" }
         };
-        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
+        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
 
         public SWObject()
         {
@@ -681,31 +681,16 @@ namespace SWApp
             swModel.Save3((int)swSaveAsOptions_e.swSaveAsOptions_Silent, 0, 0);    
         }
 
-        private string GetDirDXF()
-        {
-            try
-            {
-                var dialog = new CommonOpenFileDialog();
-                dialog.IsFolderPicker = true;
-                CommonFileDialogResult result = dialog.ShowDialog();
-                string filepath = dialog.FileName;
-                return filepath;
-            }
 
-            catch (System.InvalidOperationException)
-            {
-                //MessageBox.Show("Błąd");
-                return "";
-            }
-        }
-        public List<ExportStatus> ExportFromAssembly()
+        public List<ExportStatus> ExportFromAssembly(bool exportToDXF, bool exportToSTEP, int sigmaQuantity)
         {
             List<ExportStatus> exportStatuses = new List<ExportStatus>();
             List<string> doneComponents = new List<string>();
-            List<string> CountedParts = 
+            List<string> countedParts = new List<string>();
             ModelDoc2 swModel = _swApp.ActiveDoc as ModelDoc2;
             ModelDoc2 swModelChild;
             AssemblyDoc swAssemblyDoc = swModel as AssemblyDoc;
+            countedParts = CountParts(swAssemblyDoc);
             object[] swComps = swAssemblyDoc.GetComponents(false) as object[];
             string filedir;
             foreach (Component2 swComp in swComps)
@@ -714,7 +699,7 @@ namespace SWApp
                 if (doneComponents.Contains(swModelChild.GetPathName()))
                 {
                     filedir = Path.GetDirectoryName(swModelChild.GetPathName());
-                    ExportSingleFile(swComp,filedir,options,)
+                    ExportSingleFile(swComp, filedir, 0, countedParts, exportToDXF, exportToSTEP, null, sigmaQuantity);
                     doneComponents.Add(swModelChild.GetPathName());
                 }
             }
@@ -758,7 +743,7 @@ namespace SWApp
             }
             
         }
-        private ExportedDXF ExportToDXF(string modelFilepath, string filename, string filedir, List<string> totalParts, int options,List<string>swTreeFilenames, int quantity)
+        private ExportedDXF ExportToDXF(string modelFilepath, string filedir, Dictionary<string, int> totalParts, int options,List<string>swTreeFilenames, int quantity)
         {
             ExportedDXF outputDXF = new ExportedDXF();
             bool boolstatus = false;
@@ -767,6 +752,7 @@ namespace SWApp
             int totalQuantity;
             decimal thickness;
             string thicknessStr;
+            string filename = Path.GetFileName(modelFilepath);
             ModelDoc2 swModel;
             try
             {
@@ -871,7 +857,7 @@ namespace SWApp
                         }
                         if (exportToDXF)
                         {
-                            (exportStatus.dxfCreated, exportStatus.sigmaNote, exportStatus.dxfFilepath) = ExportToDXF(modelFilepath, filename, filedir, totalParts, options, swTreeFilenames, quantity);
+                            //(exportStatus.dxfCreated, exportStatus.sigmaNote, exportStatus.dxfFilepath) = ExportToDXF(modelFilepath, filename, filedir, totalParts, options, swTreeFilenames, quantity);
                         }
                     }
 

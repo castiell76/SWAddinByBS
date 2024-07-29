@@ -101,5 +101,11 @@ namespace SWApp.Views.Pages
             }
 
         }
+
+        private void btnChooseDir_Click(object sender, RoutedEventArgs e)
+        {
+            txtPathDir.Text = ViewModel.ChooseDirectory();
+            
+        }
     }
 }
