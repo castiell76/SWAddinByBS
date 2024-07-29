@@ -90,15 +90,48 @@ namespace SWApp.Views.Pages
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if(cbCreateDXF.IsChecked == false || cbCreateSTEP.IsChecked == false)
+            int quantitySigma;
+            bool[] options = new bool[9];
+            if(txtSigmaQuantity.Text.ToString() == string.Empty)
+            {
+                quantitySigma = 0;
+            }
+            string filedirToSave = txtPathDir.Text.ToString();
+            options[0] = cbCreateDXF.IsChecked ?? false;
+            options[1] = cbCreateSTEP.IsChecked ?? false;
+            options[2] = cbPBSheet.IsChecked ?? false;
+            options[3] = cbPTSheet.IsChecked ?? false;
+            options[4] = cbDXFFromDrawing.IsChecked ?? false;
+            options[5] = cbAllDXF.IsChecked ?? false;
+            options[6] = cbCreateDXFForSigma.IsChecked ?? false;
+            options[7] = cbSketchInclude.IsChecked ?? false;
+            options[8] = cbFormingToolsInclude.IsChecked ?? false;
+
+            if (cbCreateDXF.IsChecked == false && cbCreateSTEP.IsChecked == false)
             {
                 _helpSerivce.SnackbarService.Show("Uwaga!", "Wybierz opcję eksportu DXF lub STEP", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Fluent24),
                 TimeSpan.FromSeconds(3));
             }
+            else if (int.TryParse(txtSigmaQuantity.Text.ToString(), out quantitySigma) && options[6])
+            {
+                _helpSerivce.SnackbarService.Show("Uwaga!", "Wprowadź poprawny nakład do sigmy!", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Fluent24),
+                TimeSpan.FromSeconds(3));
+            }
+            else if (!ViewModel.IsValidPath(filedirToSave))
+            {
+                _helpSerivce.SnackbarService.Show("Uwaga!", "Wprowadź poprawną ścieżkę zapisu!", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Fluent24),
+                TimeSpan.FromSeconds(3));
+            }
             else
             {
-                ViewModel.ExportFiles();
+                dgExport.ItemsSource = ViewModel.ExportFiles(options, quantitySigma, filedirToSave);
+                dgExport.Visibility= Visibility.Visible;
             }
+
+        }
+
+        private void btnChooseDir_Click(object sender, RoutedEventArgs e)
+        {
 
         }
 

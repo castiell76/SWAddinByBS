@@ -2,6 +2,7 @@
 using SWApp.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,28 +19,35 @@ namespace SWApp.Viewmodels.Pages
             _swObject = new SWObject();
             _helpService = new HelpService();
         }
-        public void ExportFiles() 
+        public ObservableCollection<ExportStatus> ExportFiles(bool[] options, int quantitySigma, string filedirToSave) 
         {
-            _swObject.ExportFromAssembly();
+            ObservableCollection<ExportStatus> exportStatuses = _swObject.ExportFromAssembly(options, quantitySigma, filedirToSave);
+            return exportStatuses;
         }
-
-        public string ChooseDirectory()
+        public bool IsValidPath(string path, bool allowRelativePaths = false)
         {
+            bool isValid = true;
+
             try
             {
-                var dialog = new CommonOpenFileDialog();
-                dialog.IsFolderPicker = true;
-                CommonFileDialogResult result = dialog.ShowDialog();
-                string filepath = dialog.FileName;
-                return filepath;
+                string fullPath = System.IO.Path.GetFullPath(path);
+
+                if (allowRelativePaths)
+                {
+                    isValid = System.IO.Path.IsPathRooted(path);
+                }
+                else
+                {
+                    string root = System.IO.Path.GetPathRoot(path);
+                    isValid = string.IsNullOrEmpty(root.Trim(new char[] { '\\', '/' })) == false;
+                }
+            }
+            catch (Exception ex)
+            {
+                isValid = false;
             }
 
-            catch (System.InvalidOperationException)
-            {
-                _helpService.SnackbarService.Show("Błąd", "Nie wybranu folderu", Wpf.Ui.Controls.ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Fluent24),
-                TimeSpan.FromSeconds(3));
-                return string.Empty;
-            }
+            return isValid;
         }
     }
 }
