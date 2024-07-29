@@ -9,9 +9,11 @@ namespace SWApp.Viewmodels
 {
     public class ExportStatus : ConvertStatus
     {
-        public bool stepCreated { get; set; }
-        public bool dxfCreated { get; set; }
-        public string sigmaNote { get; set; }
         public string dxfFilepath { get; set; }
+        public bool dxfCreated { get; set; }
+        public bool stepCreated { get; set; }
+       
+        public string sigmaNote { get; set; }
+        
     }
 }
