@@ -42,8 +42,8 @@ namespace SWApp.Views.Pages
         {
             cbPBSheet.IsEnabled = false;
             cbPTSheet.IsEnabled = false;
-            cbPBSheet.IsChecked = true;
-            cbPTSheet.IsChecked = true;
+            cbPBSheet.IsChecked = false;
+            cbPTSheet.IsChecked = false;
         }
 
         private void CbAllDXF_Unchecked(object sender, RoutedEventArgs e)
@@ -58,8 +58,6 @@ namespace SWApp.Views.Pages
             cbCreateDXF.IsChecked = true;
             _viewControl.ShowWithTransition(txtSigmaQuantity);
         }
-
-
 
         private void cbCreateDXFForSigma_Unchecked(object sender, RoutedEventArgs e)
         {
@@ -96,6 +94,7 @@ namespace SWApp.Views.Pages
             {
                 quantitySigma = 0;
             }
+            List<string>filters = new List<string>();
             string filedirToSave = txtPathDir.Text.ToString();
             options[0] = cbCreateDXF.IsChecked ?? false;
             options[1] = cbCreateSTEP.IsChecked ?? false;
@@ -107,6 +106,19 @@ namespace SWApp.Views.Pages
             options[7] = cbSketchInclude.IsChecked ?? false;
             options[8] = cbFormingToolsInclude.IsChecked ?? false;
 
+            if (options[2] && options[3])
+            {
+                filters.Add("PB");
+                filters.Add("PT");
+            }
+            else if (options[3])
+            {
+                filters.Add("PT");
+            }
+            else if (options[2])
+            {
+                filters.Add("PB");
+            }
             if (cbCreateDXF.IsChecked == false && cbCreateSTEP.IsChecked == false)
             {
                 _helpSerivce.SnackbarService.Show("Uwaga!", "Wybierz opcję eksportu DXF lub STEP", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Fluent24),
@@ -124,7 +136,7 @@ namespace SWApp.Views.Pages
             }
             else
             {
-                dgExport.ItemsSource = ViewModel.ExportFiles(options, quantitySigma, filedirToSave);
+                dgExport.ItemsSource = ViewModel.ExportFiles(options, quantitySigma, filedirToSave,filters);
                 dgExport.Visibility= Visibility.Visible;
             }
 
@@ -132,13 +144,7 @@ namespace SWApp.Views.Pages
 
         private void btnChooseDir_Click(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void btnChooseDir_Click(object sender, RoutedEventArgs e)
-        {
             txtPathDir.Text = ViewModel.ChooseDirectory();
-            
         }
     }
 }

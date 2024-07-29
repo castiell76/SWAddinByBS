@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 using System.Windows;
+using System.Windows.Forms;
 
 namespace SWApp.Controls
 {
@@ -85,6 +86,16 @@ namespace SWApp.Controls
 
             // Uruchomienie animacji
             storyboard.Begin();
+        }
+
+        public string ChooseDirectory()
+        {
+            string filepath;
+            string systemPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.System);
+            FolderBrowserDialog saveFileDialog = new FolderBrowserDialog();
+            saveFileDialog.ShowDialog();
+            filepath = saveFileDialog.SelectedPath;
+            return filepath;
         }
     }
 }

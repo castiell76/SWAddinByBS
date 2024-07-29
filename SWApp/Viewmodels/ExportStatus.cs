@@ -7,7 +7,7 @@ using SWApp.Models;
 
 namespace SWApp.Viewmodels
 {
-    public class ExportStatus : ConvertStatus
+    public class ExportStatus
     {
         public string dxfFilepath { get; set; }
         public bool dxfCreated { get; set; }

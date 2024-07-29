@@ -1,4 +1,5 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using SWApp.Controls;
 using SWApp.Services;
 using System;
 using System.Collections.Generic;
@@ -14,14 +15,16 @@ namespace SWApp.Viewmodels.Pages
     {
         private SWObject _swObject;
         private HelpService _helpService;
+        private ViewControl _viewControl;
         public ExportFilesViewModel()
         {
             _swObject = new SWObject();
             _helpService = new HelpService();
+            _viewControl = new ViewControl();
         }
-        public ObservableCollection<ExportStatus> ExportFiles(bool[] options, int quantitySigma, string filedirToSave) 
+        public ObservableCollection<ExportStatus> ExportFiles(bool[] options, int quantitySigma, string filedirToSave, List<string>filters) 
         {
-            ObservableCollection<ExportStatus> exportStatuses = _swObject.ExportFromAssembly(options, quantitySigma, filedirToSave);
+            ObservableCollection<ExportStatus> exportStatuses = _swObject.ExportFromAssembly(options, quantitySigma, filedirToSave, filters);
             return exportStatuses;
         }
         public bool IsValidPath(string path, bool allowRelativePaths = false)
@@ -48,6 +51,11 @@ namespace SWApp.Viewmodels.Pages
             }
 
             return isValid;
+        }
+
+        public string ChooseDirectory()
+        {
+            return _viewControl.ChooseDirectory();
         }
     }
 }

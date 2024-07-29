@@ -682,13 +682,7 @@ namespace SWApp
         }
 
 
-            catch (System.InvalidOperationException)
-            {
-                //MessageBox.Show("Błąd");
-                return "";
-            }
-        }
-        public ObservableCollection<ExportStatus> ExportFromAssembly(bool[] options, int quantitySigma, string filedirToSave)
+        public ObservableCollection<ExportStatus> ExportFromAssembly(bool[] options, int quantitySigma, string filedirToSave, List<string> filters)
         {
             ObservableCollection<ExportStatus> exportStatuses = new ObservableCollection<ExportStatus>();
             List<string> doneComponents = new List<string>();
@@ -696,31 +690,27 @@ namespace SWApp
             ModelDoc2 swModel = _swApp.ActiveDoc as ModelDoc2;
             ModelDoc2 swModelChild;
             AssemblyDoc swAssemblyDoc = swModel as AssemblyDoc;
-            List<string> countedParts = CountParts(swAssemblyDoc);
-            object[] swComps = swAssemblyDoc.GetComponents(false) as object[];
-            foreach (Component2 swComp in swComps)
+            Dictionary<string,int> partsToExport = CountParts(swAssemblyDoc, filters);
+            int extensionOption = 1;
+
+            foreach (string path in partsToExport.Keys)
             {
-                swModelChild = swComp.GetModelDoc2() as ModelDoc2;
-                if (!doneComponents.Contains(swModelChild.GetPathName()))
+                swModelChild = (ModelDoc2)_swApp.ActivateDoc3(path, false, 0, 0);
+                if(Path.GetExtension(path) == ".SLDASM")
                 {
-                    if ((options[2] && swModelChild.GetPathName().Contains("PB")) || options[3] && swModel.GetPathName().Contains("PT"))
-                    {
-                        exportStatuses.Add(ExportSingleFile(swComp, filedirToSave, countedParts, options, quantitySigma));
-                        doneComponents.Add(swModelChild.GetPathName());
-                    }
-                   
-                    else if (options[5])
-                    {
-                        exportStatuses.Add(ExportSingleFile(swComp, filedirToSave, countedParts, options, quantitySigma));
-                        doneComponents.Add(swModelChild.GetPathName());
-                    }
-                    else
-                    {
-                        exportStatuses.Add(ExportSingleFile(swComp, filedirToSave, countedParts, options, quantitySigma));
-                        doneComponents.Add(swModelChild.GetPathName());
-                    }
-                    
+                    extensionOption = 2;
                 }
+                else
+                {
+                    extensionOption = 1;
+                }
+                if (swModelChild == null)
+                {
+                    swModelChild = _swApp.OpenDoc6(Path.GetFileName(path), extensionOption, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
+                    swModelChild = (ModelDoc2)_swApp.ActivateDoc3(path, false, 0, 0);
+                }
+                exportStatuses.Add(ExportSingleFile(filedirToSave, partsToExport, options, quantitySigma));
+                _swApp.CloseDoc(path);
             }
             if (options[4])
             {
@@ -770,7 +760,7 @@ namespace SWApp
             }
             
         }
-        private ExportedDXF ExportToDXF(string filepath, string filedirToSave, List<string> totalParts, bool[] options, int quantity)
+        private ExportedDXF ExportToDXF(string filepath, string filedirToSave, Dictionary<string,int> totalParts, bool[] options, int quantity)
         {
             ExportedDXF outputDXF = new ExportedDXF();
             bool boolstatus = false;
@@ -786,7 +776,6 @@ namespace SWApp
             optionsInt += options[7] ? 8 : (options[8] ? 64 : 0);
             decimal thickness;
             string thicknessStr;
-            string filename = Path.GetFileName(modelFilepath);
             ModelDoc2 swModel;
             try
             {
@@ -807,7 +796,7 @@ namespace SWApp
                      thickness = 0;
                 }
 
-                var quantityPerPiece = totalParts.Where(x => x == filepath).Count();
+                var quantityPerPiece = totalParts[filepath];
                 var material = swPart.MaterialIdName;
                 if(material == "" || material == null)
                 {
@@ -841,7 +830,7 @@ namespace SWApp
 
             return outputDXF;
         }
-        private bool ExportToSTEP(string filepath, string filedirToSave, List<string> totalParts)
+        private bool ExportToSTEP(string filepath, string filedirToSave, Dictionary<string,int> totalParts)
         {
             ModelDoc2 swModel;
             string filename = Path.GetFileName(filepath);
@@ -850,11 +839,11 @@ namespace SWApp
             swModel = (ModelDoc2)_swApp.ActiveDoc;
 
             swModelExt = swModel.Extension;
-            var quantity = totalParts.Where(x => x == filepath).Count(); 
+            var quantity = totalParts[filepath];
 
             return swModelExt.SaveAs($"{filedirToSave}\\{filename}_{quantity}-szt.STEP", (int)swSaveAsVersion_e.swSaveAsCurrentVersion, (int)swSaveAsOptions_e.swSaveAsOptions_SaveReferenced, null, 0, 0); ;
         }
-        private ExportStatus ExportSingleFile(Component2 swComp,string filedirToSave, List<string> totalParts, bool[] options, int quantitySigma)
+        private ExportStatus ExportSingleFile(string filedirToSave, Dictionary<string,int> totalParts, bool[] options, int quantitySigma)
         {
             ModelDoc2 swModel;
             ExportStatus exportStatus = new ExportStatus();
@@ -870,8 +859,6 @@ namespace SWApp
             {
                 filedirToSave = Path.GetDirectoryName(filepath);
             }
-
-            swModel = (ModelDoc2)swComp.GetModelDoc2();
             if(swModel != null)
             {
                 modelFilepath = swModel.GetPathName(); //pathname inc. filename with extension
@@ -895,33 +882,48 @@ namespace SWApp
                         exportedDxf = ExportToDXF(modelFilepath, filedirToSave, totalParts, options, quantitySigma);
                         exportStatus.dxfCreated = exportedDxf.Status;
                     }
-                    
-                    _swApp.CloseDoc(modelFilepath);
                 }
         }
             return exportStatus;
         }
 
-        public List<string> CountParts(AssemblyDoc swAss)
+        public Dictionary<string,int> CountParts(AssemblyDoc swAss, List<string> filters)
         {
             
             var obj = (object[])swAss.GetComponents(false); //false for take all parts from main assembly and subassemblies
-            List<string> totalParts = new List<string>();
+            Dictionary<string,int> totalParts = new Dictionary<string,int>();
+            string filepath;
 
             foreach (Component2 comp in obj)
             {
-                if (comp.GetSuppression2() != (int)swComponentSuppressionState_e.swComponentResolved || comp.GetSuppression2() != (int)swComponentSuppressionState_e.swComponentFullyResolved) //if components is in lightweight mode or is suppressed it has to be unsuppressed to get count 
+                var suppresion = comp.GetSuppression2();
+                if (suppresion != (int)swComponentSuppressionState_e.swComponentResolved || suppresion != (int)swComponentSuppressionState_e.swComponentFullyResolved) //if components is in lightweight mode or is suppressed it has to be unsuppressed to get count 
                 {
                     comp.SetSuppression2(3);
                 }
 
                 ModelDoc2 swModel = (ModelDoc2)comp.GetModelDoc2();
+                filepath = swModel.GetPathName();
                 if(swModel != null)
                 {
-                    totalParts.Add(swModel.GetPathName());
+                    if (!totalParts.ContainsKey(filepath))
+                    {
+                        totalParts.Add(filepath, 1);
+                    }
+                    else
+                    {
+                        totalParts[filepath]++;
+                    }
                 }
+
+                comp.SetSuppression2(suppresion);
                 
             }
+            if(filters.Count() != 0)
+            {
+                totalParts = totalParts.Where(k => filters.Any(f => k.Key.Contains(f))).ToDictionary(k => k.Key, k => k.Value);
+            }
+            
             return totalParts;
 
         }
@@ -2353,27 +2355,27 @@ namespace SWApp
 
         }
 
-         public List<TrackingPart> TrackParts()
-         {
-            SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-            AssemblyDoc swAss = (AssemblyDoc)swApp.ActiveDoc;
-            List<TrackingPart> trackingParts = new List<TrackingPart>();
-            string part;
-            var partsList = CountParts(swAss);
-            foreach (var path in partsList)
-            {
-                part = System.IO.Path.GetFileNameWithoutExtension(path);
-                if (trackingParts.Any(x => x.Name == part) == false)
-                {
-                    TrackingPart trackingPart = new TrackingPart();
-                    trackingPart.Name = part;
-                    trackingPart.Quantity = partsList.Where(n => n == path).Count();
-                    trackingParts.Add(trackingPart);
-                }
-            }
+         //public List<TrackingPart> TrackParts()
+         //{
+         //   SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
+         //   AssemblyDoc swAss = (AssemblyDoc)swApp.ActiveDoc;
+         //   List<TrackingPart> trackingParts = new List<TrackingPart>();
+         //   string part;
+         //   var partsList = CountParts(swAss);
+         //   foreach (var path in partsList)
+         //   {
+         //       part = System.IO.Path.GetFileNameWithoutExtension(path);
+         //       if (trackingParts.Any(x => x.Name == part) == false)
+         //       {
+         //           TrackingPart trackingPart = new TrackingPart();
+         //           trackingPart.Name = part;
+         //           trackingPart.Quantity = partsList.Where(n => n == path).Count();
+         //           trackingParts.Add(trackingPart);
+         //       }
+         //   }
 
-            return trackingParts;
-         }
+         //   return trackingParts;
+         //}
 
         public CalculationObject InfoAboutPart()
         {
