@@ -38,6 +38,7 @@ using SWApp.Viewmodels;
 using SWApp.Services;
 using Wpf.Ui.Controls;
 using System.Linq.Expressions;
+using Aspose.Pdf.Operators;
 
 namespace SWApp
 {
@@ -83,7 +84,7 @@ namespace SWApp
             {"SKALA","SCALE" },
             {"MONTAŻ","INSTALLATION" }
         };
-        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
+        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
 
         public SWObject()
         {
@@ -93,6 +94,8 @@ namespace SWApp
             _templatePartPath = ($"{_systemPath}EBA\\SZABLONY\\Solidworks\\EBA_Część.prtdot");
             _helpService = new HelpService();
         }
+
+        public event Action<string> ErrorOccurred;
 
         //public (string,string,string,List<SWFileProperties>) ReadData()
         //{
@@ -230,7 +233,7 @@ namespace SWApp
         //        MessageBox.Show("Otwórz plik SolidWorks");
         //        return (null,null,null,null);
         //    }
-            
+
         //}
 
         public string CreateAssembly()
@@ -560,23 +563,19 @@ namespace SWApp
                 if (allLevels)
                 {
                     SortTreeAll(swModel,orderToSort, groupComponents);
-                    ShowHelpService("Sukces!", "Elementy zostały posortowane", Wpf.Ui.Controls.ControlAppearance.Success, new SymbolIcon(SymbolRegular.Fluent24), TimeSpan.FromSeconds(3));
+                    _helpService.SnackbarService.Show("Sukces!", "Elementy zostały posortowane", Wpf.Ui.Controls.ControlAppearance.Success, new SymbolIcon(SymbolRegular.Important24), TimeSpan.FromSeconds(3));
                 }
                 else
                 {
                     SortTreeSingle(swModel,orderToSort, groupComponents);
-                    ShowHelpService("Sukces!", "Elementy posortowane", Wpf.Ui.Controls.ControlAppearance.Success, new SymbolIcon(SymbolRegular.Fluent24), TimeSpan.FromSeconds(3));
+                    _helpService.SnackbarService.Show("Sukces!", "Elementy posortowane", Wpf.Ui.Controls.ControlAppearance.Success, new SymbolIcon(SymbolRegular.Important24), TimeSpan.FromSeconds(3));
                 }
             }
             catch (NullReferenceException ex)
             {
-                ShowHelpService("Uwaga!", "Otwórz pliku typu złożenie", Wpf.Ui.Controls.ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Fluent24), TimeSpan.FromSeconds(3));
+                _helpService.SnackbarService.Show("Uwaga!", "Otwórz pliku typu złożenie", Wpf.Ui.Controls.ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24), TimeSpan.FromSeconds(3));
             }
 
-        }
-        private void ShowHelpService(string title, string message, ControlAppearance appearance, SymbolIcon icon, TimeSpan time)
-        {
-            _helpService.SnackbarService.Show(title,message,appearance,icon,time);
         }
         private void SortTreeAll(ModelDoc2 swModel, List<string> orderToSort, bool groupComponents)
         {
@@ -685,36 +684,49 @@ namespace SWApp
         public ObservableCollection<ExportStatus> ExportFromAssembly(bool[] options, int quantitySigma, string filedirToSave, List<string> filters)
         {
             ObservableCollection<ExportStatus> exportStatuses = new ObservableCollection<ExportStatus>();
-            List<string> doneComponents = new List<string>();
-            
-            ModelDoc2 swModel = _swApp.ActiveDoc as ModelDoc2;
-            ModelDoc2 swModelChild;
-            AssemblyDoc swAssemblyDoc = swModel as AssemblyDoc;
-            Dictionary<string,int> partsToExport = CountParts(swAssemblyDoc, filters);
-            int extensionOption = 1;
 
-            foreach (string path in partsToExport.Keys)
+            try
             {
-                swModelChild = (ModelDoc2)_swApp.ActivateDoc3(path, false, 0, 0);
-                if(Path.GetExtension(path) == ".SLDASM")
+                ModelDoc2 swModel = _swApp.ActiveDoc as ModelDoc2;
+                ModelDoc2 swModelChild;
+                AssemblyDoc swAssemblyDoc = swModel as AssemblyDoc;
+                Dictionary<string, int> partsToExport = CountParts(swAssemblyDoc, filters);
+
+                if (partsToExport == null || partsToExport.Count == 0)
                 {
-                    extensionOption = 2;
+                    throw new InvalidOperationException("No parts to export or CountParts returned null.");
                 }
-                else
+
+                int extensionOption = 1;
+
+                foreach (string path in partsToExport.Keys)
                 {
-                    extensionOption = 1;
-                }
-                if (swModelChild == null)
-                {
-                    swModelChild = _swApp.OpenDoc6(Path.GetFileName(path), extensionOption, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
                     swModelChild = (ModelDoc2)_swApp.ActivateDoc3(path, false, 0, 0);
+                    if (Path.GetExtension(path) == ".SLDASM")
+                    {
+                        extensionOption = 2;
+                    }
+                    else
+                    {
+                        extensionOption = 1;
+                    }
+                    if (swModelChild == null)
+                    {
+                        swModelChild = _swApp.OpenDoc6(Path.GetFileName(path), extensionOption, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
+                        swModelChild = (ModelDoc2)_swApp.ActivateDoc3(path, false, 0, 0);
+                    }
+                    exportStatuses.Add(ExportSingleFile(filedirToSave, partsToExport, options, quantitySigma));
+                    _swApp.CloseDoc(path);
                 }
-                exportStatuses.Add(ExportSingleFile(filedirToSave, partsToExport, options, quantitySigma));
-                _swApp.CloseDoc(path);
+
+                if (options[4])
+                {
+                    ExportToDXFFromDrawing(filedirToSave);
+                }
             }
-            if (options[4])
+            catch (NullReferenceException)
             {
-                ExportToDXFFromDrawing(filedirToSave);
+                ErrorOccurred?.Invoke("Aktywny plik nie jest złożeniem SolidWorks");
             }
 
             return exportStatuses;
@@ -863,7 +875,6 @@ namespace SWApp
             {
                 modelFilepath = swModel.GetPathName(); //pathname inc. filename with extension
                 filename = System.IO.Path.GetFileName(filepath);
-                exportStatus.name = System.IO.Path.GetFileNameWithoutExtension(modelFilepath);
                 exportStatus.stepCreated = false;
                 exportStatus.dxfCreated = false;
                 exportStatus.filepath = modelFilepath;
@@ -889,43 +900,42 @@ namespace SWApp
 
         public Dictionary<string,int> CountParts(AssemblyDoc swAss, List<string> filters)
         {
-            
-            var obj = (object[])swAss.GetComponents(false); //false for take all parts from main assembly and subassemblies
-            Dictionary<string,int> totalParts = new Dictionary<string,int>();
-            string filepath;
+           
+                var obj = (object[])swAss.GetComponents(false); //false for take all parts from main assembly and subassemblies
+                Dictionary<string, int> totalParts = new Dictionary<string, int>();
+                string filepath;
 
-            foreach (Component2 comp in obj)
-            {
-                var suppresion = comp.GetSuppression2();
-                if (suppresion != (int)swComponentSuppressionState_e.swComponentResolved || suppresion != (int)swComponentSuppressionState_e.swComponentFullyResolved) //if components is in lightweight mode or is suppressed it has to be unsuppressed to get count 
+                foreach (Component2 comp in obj)
                 {
-                    comp.SetSuppression2(3);
+                    var suppresion = comp.GetSuppression2();
+                    if (suppresion != (int)swComponentSuppressionState_e.swComponentResolved || suppresion != (int)swComponentSuppressionState_e.swComponentFullyResolved) //if components is in lightweight mode or is suppressed it has to be unsuppressed to get count 
+                    {
+                        comp.SetSuppression2(3);
+                    }
+
+                    ModelDoc2 swModel = (ModelDoc2)comp.GetModelDoc2();
+                    filepath = swModel.GetPathName();
+                    if (swModel != null)
+                    {
+                        if (!totalParts.ContainsKey(filepath))
+                        {
+                            totalParts.Add(filepath, 1);
+                        }
+                        else
+                        {
+                            totalParts[filepath]++;
+                        }
+                    }
+
+                    comp.SetSuppression2(suppresion);
+
+                }
+                if (filters.Count() != 0)
+                {
+                    totalParts = totalParts.Where(k => filters.Any(f => k.Key.Contains(f))).ToDictionary(k => k.Key, k => k.Value);
                 }
 
-                ModelDoc2 swModel = (ModelDoc2)comp.GetModelDoc2();
-                filepath = swModel.GetPathName();
-                if(swModel != null)
-                {
-                    if (!totalParts.ContainsKey(filepath))
-                    {
-                        totalParts.Add(filepath, 1);
-                    }
-                    else
-                    {
-                        totalParts[filepath]++;
-                    }
-                }
-
-                comp.SetSuppression2(suppresion);
-                
-            }
-            if(filters.Count() != 0)
-            {
-                totalParts = totalParts.Where(k => filters.Any(f => k.Key.Contains(f))).ToDictionary(k => k.Key, k => k.Value);
-            }
-            
-            return totalParts;
-
+                return totalParts;
         }
  
         public void CreateRectangleProfile(ProfileSW profileSW, string filepath)
@@ -2486,10 +2496,19 @@ namespace SWApp
             return swTreeNodes;
         }
 
-        public void OpenSelectedPart(string path)
+        public void OpenSelectedPart(string filepath)
         {
-            SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-            swApp.ActivateDoc3(path, false, 0, 0);
+            int extensionInt = 0;
+            if(Path.GetExtension(filepath) == "SLDPRT")
+            {
+                extensionInt = 1;
+            }
+            else if(Path.GetExtension(filepath) == "SLDASM")
+            {
+                extensionInt = 2;
+            }
+            _swApp.OpenDoc6(filepath, (int)swDocumentTypes_e.swDocPART, 0, "", 0, 0);
+            _swApp.ActivateDoc3(System.IO.Path.GetFileName(filepath), false, 0, 0);
         }
         public void CalculateAssembly(ModelDoc2 swModel)
         {

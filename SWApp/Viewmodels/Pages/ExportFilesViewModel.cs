@@ -1,31 +1,58 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using SolidWorks.Interop.swconst;
 using SWApp.Controls;
 using SWApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.ComponentModel.Composition.Primitives;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 using Wpf.Ui.Controls;
 
 namespace SWApp.Viewmodels.Pages
 {
-    public class ExportFilesViewModel
+    public class ExportFilesViewModel : INotifyPropertyChanged
     {
         private SWObject _swObject;
         private HelpService _helpService;
         private ViewControl _viewControl;
+        private ObservableCollection<ExportStatus> _exportStatuses;
+        private readonly Dispatcher _dispatcher;
         public ExportFilesViewModel()
         {
             _swObject = new SWObject();
             _helpService = new HelpService();
+            _dispatcher = Application.Current?.Dispatcher ?? Dispatcher.CurrentDispatcher;
             _viewControl = new ViewControl();
+            _swObject.ErrorOccurred += OnModelErrorOccurred;
         }
-        public ObservableCollection<ExportStatus> ExportFiles(bool[] options, int quantitySigma, string filedirToSave, List<string>filters) 
+        public ObservableCollection<ExportStatus> ExportStatuses
         {
-            ObservableCollection<ExportStatus> exportStatuses = _swObject.ExportFromAssembly(options, quantitySigma, filedirToSave, filters);
-            return exportStatuses;
+            get => _exportStatuses ?? (_exportStatuses = new ObservableCollection<ExportStatus>());
+            set
+            {
+                _exportStatuses = value;
+                OnPropertyChanged(nameof(ExportStatuses));
+            }
+        }
+        public async Task ExportFilesAsync(bool[] options, int quantitySigma, string filedirToSave, List<string> filters)
+        {
+            try
+            {
+                _exportStatuses = await Task.Run(() =>
+                    _swObject.ExportFromAssembly(options, quantitySigma, filedirToSave, filters));
+            }
+
+            catch(Exception ex)
+            {
+                OnModelErrorOccurred(ex.Message);
+            }
         }
         public bool IsValidPath(string path, bool allowRelativePaths = false)
         {
@@ -56,6 +83,28 @@ namespace SWApp.Viewmodels.Pages
         public string ChooseDirectory()
         {
             return _viewControl.ChooseDirectory();
+        }
+        private void OnModelErrorOccurred(string errorMessage)
+        {
+            // Przełączenie na wątek UI
+            _dispatcher.Invoke(() =>
+            {
+                _helpService.SnackbarService.Show("Błąd!", errorMessage, ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24), TimeSpan.FromSeconds(3));
+            });
+
+        }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        public void OpenSelectedComponent(System.Windows.Controls.DataGrid dataGrid)
+        {
+            ExportStatus component = (ExportStatus)dataGrid.SelectedItem;
+            string filepath = component.filepath;
+            _swObject.OpenSelectedPart(filepath);
+           
         }
     }
 }

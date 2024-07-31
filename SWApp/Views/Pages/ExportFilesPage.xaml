@@ -28,6 +28,7 @@
             </ResourceDictionary.MergedDictionaries>
             <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
             <helpers:ThemeToIndexConverter x:Key="ThemeToIndexConverter" />
+            <helpers:FileNameConverter x:Key="FileNameConverter" />
         </ResourceDictionary>
     </Page.Resources>
     <StackPanel>
@@ -63,7 +64,12 @@
                         <ui:Button x:Name="btnChooseDir" Content="Wyszukaj folder" Margin="50,0,0,0" Click="btnChooseDir_Click"></ui:Button>
                     </DockPanel>
                 </controls:ControlExample>
-                <ui:Button HorizontalAlignment="Center" Content="Eksportuj" Margin="0,30,0,0" Click="Button_Click"></ui:Button>
+                <ui:Button HorizontalAlignment="Center" Margin="0,30,0,0" x:Name="btnExport" Click="btnExport_Click" >
+                    <DockPanel>
+                        <TextBlock x:Name="tbExport" Text="Eksportuj" ></TextBlock>
+                        <ui:ProgressRing Width="20" Height="20" Margin="8,0,0,0" x:Name="progressRing" IsIndeterminate="True" Visibility="Collapsed"/>
+                    </DockPanel>
+                </ui:Button>
             </StackPanel>
         </DockPanel>
         <controls:ControlExample Margin="15" HeaderText="Tabela wygenerowanych plików">
@@ -79,9 +85,12 @@
       HorizontalAlignment="Stretch"
       AutoGenerateColumns="True"  
       FontSize="10"
-    IsReadOnly="True"
-    Style="{StaticResource datagridStyle}"
-       Visibility="Collapsed">
+      CanUserAddRows="False"
+      IsReadOnly="False"
+      Style="{StaticResource datagridStyle}"
+      Visibility="Collapsed"
+                          >
+                    
                     <DataGrid.Resources>
                         <ResourceDictionary>
                             <ResourceDictionary.MergedDictionaries>
@@ -91,7 +100,7 @@
                     </DataGrid.Resources>
                     <DataGrid.ContextMenu>
                         <ContextMenu>
-                            <MenuItem x:Name="miExportOpen" Header="Otwórz" IsEnabled="False" Click="miExportOpen_Click"></MenuItem>
+                            <MenuItem x:Name="miExportOpen" Header="Otwórz" Click="miExportOpen_Click"></MenuItem>
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                 </DataGrid>

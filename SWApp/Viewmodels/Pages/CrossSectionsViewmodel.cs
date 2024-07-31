@@ -36,7 +36,7 @@ namespace SWApp.Viewmodels.Pages
                 title,
                 message,
                 appearance,
-                new SymbolIcon(SymbolRegular.Fluent24),
+                new SymbolIcon(SymbolRegular.Important24),
                 TimeSpan.FromSeconds(3)
             );
         }

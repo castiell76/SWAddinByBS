@@ -3,6 +3,8 @@ using SWApp.Services;
 using SWApp.Viewmodels.Pages;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.Composition.Primitives;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,12 +32,12 @@ namespace SWApp.Views.Pages
         public ViewControl _viewControl;
         private HelpService _helpSerivce;
 
-        public ExportFilesPage() 
+        public ExportFilesPage()
         {
             InitializeComponent();
             ViewModel = new ExportFilesViewModel();
             _helpSerivce = new HelpService();
-            _viewControl= new ViewControl();
+            _viewControl = new ViewControl();
         }
 
         private void CbAllDXF_Checked(object sender, RoutedEventArgs e)
@@ -66,17 +68,13 @@ namespace SWApp.Views.Pages
 
         private void miExportOpen_Click(object sender, RoutedEventArgs e)
         {
-            //SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-            //ExportStatus exportToOpen = (ExportStatus)dgExport.SelectedItem;
-            //string filepath = exportToOpen.filepath;
-            //swApp.OpenDoc6(filepath, (int)swDocumentTypes_e.swDocPART, 0, "", 0, 0);
-            //swApp.ActivateDoc3(System.IO.Path.GetFileName(filepath), false, 0, 0);
+            ViewModel.OpenSelectedComponent(dgExport);
         }
 
 
         private void btnShowTable_Click(object sender, RoutedEventArgs e)
         {
-            if(dgExport.Visibility == Visibility.Hidden || dgExport.Visibility == Visibility.Collapsed)
+            if (dgExport.Visibility == Visibility.Hidden || dgExport.Visibility == Visibility.Collapsed)
             {
                 _viewControl.ShowWithTransition(dgExport);
             }
@@ -86,15 +84,16 @@ namespace SWApp.Views.Pages
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void btnExport_Click(object sender, RoutedEventArgs e)
         {
+            
             int quantitySigma;
             bool[] options = new bool[9];
-            if(txtSigmaQuantity.Text.ToString() == string.Empty)
+            if (txtSigmaQuantity.Text.ToString() == string.Empty)
             {
                 quantitySigma = 0;
             }
-            List<string>filters = new List<string>();
+            List<string> filters = new List<string>();
             string filedirToSave = txtPathDir.Text.ToString();
             options[0] = cbCreateDXF.IsChecked ?? false;
             options[1] = cbCreateSTEP.IsChecked ?? false;
@@ -121,30 +120,87 @@ namespace SWApp.Views.Pages
             }
             if (cbCreateDXF.IsChecked == false && cbCreateSTEP.IsChecked == false)
             {
-                _helpSerivce.SnackbarService.Show("Uwaga!", "Wybierz opcję eksportu DXF lub STEP", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Fluent24),
+                _helpSerivce.SnackbarService.Show("Uwaga!", "Wybierz opcję eksportu DXF lub STEP", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24),
                 TimeSpan.FromSeconds(3));
             }
             else if (int.TryParse(txtSigmaQuantity.Text.ToString(), out quantitySigma) && options[6])
             {
-                _helpSerivce.SnackbarService.Show("Uwaga!", "Wprowadź poprawny nakład do sigmy!", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Fluent24),
+                _helpSerivce.SnackbarService.Show("Uwaga!", "Wprowadź poprawny nakład do sigmy!", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24),
                 TimeSpan.FromSeconds(3));
             }
             else if (!ViewModel.IsValidPath(filedirToSave))
             {
-                _helpSerivce.SnackbarService.Show("Uwaga!", "Wprowadź poprawną ścieżkę zapisu!", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Fluent24),
+                _helpSerivce.SnackbarService.Show("Uwaga!", "Wprowadź poprawną ścieżkę zapisu!", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24),
                 TimeSpan.FromSeconds(3));
             }
             else
             {
-                dgExport.ItemsSource = ViewModel.ExportFiles(options, quantitySigma, filedirToSave,filters);
-                dgExport.Visibility= Visibility.Visible;
+                try
+                {
+                    btnExport.IsEnabled = false;
+                    tbExport.Text = "Eksportowanie...";
+                    progressRing.IsEnabled = true;
+                    progressRing.Visibility = Visibility.Visible;
+                    progressRing.IsIndeterminate = true;
+                    await ViewModel.ExportFilesAsync(options, quantitySigma, filedirToSave, filters);
+                    dgExport.Visibility = Visibility.Visible;
+                    dgExport.AutoGeneratingColumn += dgPrimaryGrid_AutoGeneratingColumn;
+                    dgExport.ItemsSource = ViewModel.ExportStatuses;
+                }
+                catch (Exception ex)
+                {
+                    _helpSerivce.SnackbarService.Show("Błąd!", ex.Message, ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24), TimeSpan.FromSeconds(3));
+                }
+                finally
+                {
+                    progressRing.Visibility = Visibility.Collapsed;
+                    progressRing.IsIndeterminate = false;
+                    progressRing.IsEnabled = false;
+                    btnExport.IsEnabled = true;
+                    tbExport.Text = "Eksportuj";
+                    
+                }
             }
-
         }
 
         private void btnChooseDir_Click(object sender, RoutedEventArgs e)
         {
             txtPathDir.Text = ViewModel.ChooseDirectory();
+        }
+
+        void dgPrimaryGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            var desc = e.PropertyDescriptor as PropertyDescriptor;
+            var attName = desc.Attributes[typeof(ColumnNameAttribute)] as ColumnNameAttribute;
+            var attVis = desc.Attributes[typeof(ColumnVisibilityAttribute)] as ColumnVisibilityAttribute;
+            if (attName != null)
+            {
+                e.Column.Header = attName.Name;
+
+            }
+            if (attVis != null)
+            {
+                e.Column.Visibility = attVis.IsVisible ? Visibility.Visible : Visibility.Hidden;
+            }
+            if (desc.Name == "filepath")
+            {
+                var templateColumn = new DataGridTemplateColumn
+                {
+                    Header = e.Column.Header
+                };
+
+                var template = new DataTemplate();
+                var factory = new FrameworkElementFactory(typeof(System.Windows.Controls.TextBlock));
+                factory.SetBinding(System.Windows.Controls.TextBlock.TextProperty, new Binding(desc.Name)
+                {
+                    Converter = (IValueConverter)this.Resources["FileNameConverter"]
+                });
+                template.VisualTree = factory;
+
+                templateColumn.CellTemplate = template;
+
+                e.Column = templateColumn;
+            }
         }
     }
 }

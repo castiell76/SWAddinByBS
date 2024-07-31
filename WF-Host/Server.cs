@@ -40,12 +40,12 @@ namespace WF_Host
         private void LoadUI()
         {
             string[] bitmap = new string[6];
-            bitmap[0] = "C:\\Users\\ebabs\\Downloads\\20x20.bmp";
-            bitmap[1] = "C:\\Users\\ebabs\\Downloads\\32x32.bmp";
-            bitmap[2] = "C:\\Users\\ebabs\\Downloads\\40x40.bmp";
-            bitmap[3] = "C:\\Users\\ebabs\\Downloads\\64x64.bmp";
-            bitmap[4] = "C:\\Users\\ebabs\\Downloads\\96x96.bmp";
-            bitmap[5] = "C:\\Users\\ebabs\\Downloads\\128x128.bmp";
+            bitmap[0] = "C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\20x20.bmp";
+            bitmap[1] = "C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\32x32.bmp";
+            bitmap[2] = "C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\40x40.bmp";
+            bitmap[3] = "C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\64x64.bmp";
+            bitmap[4] = "C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\96x96.bmp";
+            bitmap[5] = "C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\128x128.bmp";
             mTaskPaneView = swApp.CreateTaskpaneView3(bitmap, "SWAddin By BS");
             userControl = new HostUserControl();
             
