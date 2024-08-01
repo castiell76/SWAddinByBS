@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows.Threading;
+using SWApp.Views.Pages;
 
 namespace WF_Host
 {
@@ -29,7 +30,6 @@ namespace WF_Host
             components = new System.ComponentModel.Container();
             elementHost2 = new ElementHost();
             mainWindow2 = new MainWindow();
-
             SuspendLayout();
 
             // elementHost2
@@ -39,24 +39,38 @@ namespace WF_Host
             elementHost2.Name = "elementHost2";
             elementHost2.TabIndex = 1;
             elementHost2.Child = mainWindow2;
-           
+
+            mainWindow2.ThemeChanged += OnThemeChanged;
+
             // HostUserControl
             AccessibleRole = AccessibleRole.ScrollBar;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = System.Drawing.SystemColors.Control;
+
             Controls.Add(elementHost2);
             ForeColor = Color.Transparent;
             BackColor = Color.Transparent;
             Margin = new Padding(4, 3, 4, 3);
             Name = "HostUserControl";
             Size = new System.Drawing.Size(630, 800);
-            
+            var cos = BackColor;
             ResumeLayout(false);
         }
+
         private void OnThemeChanged(object sender, bool isDarkTheme)
         {
-            elementHost2.BackColor = Color.FromArgb(62, 62, 62);
+            SuspendLayout();
+            if (isDarkTheme)
+            {
+                BackColor = Color.Black;
+            }
+            else
+            {
+                BackColor = Color.FromArgb(240, 240, 240, 240);
+                ForeColor = Color.Black;
+
+            }
+            ResumeLayout(false);
         }
 
     }

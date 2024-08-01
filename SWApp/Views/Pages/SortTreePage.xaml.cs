@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 namespace SWApp.Views.Pages
@@ -32,11 +33,13 @@ namespace SWApp.Views.Pages
 
         public SortTreePage()
         {
+            
             ViewModel = new SortTreeViewModel();
             InitializeComponent();
             DataContext = ViewModel;
             _items = ViewModel.Items;
             sortTreeListBox.ItemsSource = _items;
+            ApplicationThemeManager.Apply(this);
         }
         private void ListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

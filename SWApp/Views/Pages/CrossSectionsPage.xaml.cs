@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Wpf.Ui;
+using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 
@@ -33,7 +34,9 @@ namespace SWApp.Views.Pages
             
             ViewModel = viewModel;
             DataContext = ViewModel;
+            
             InitializeComponent();
+            ApplicationThemeManager.Apply(this);
 
         }
         public CrossSectionsPage() : this(HelpService.GetRequiredService<CrossSectionsViewmodel>())

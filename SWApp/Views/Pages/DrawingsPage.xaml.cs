@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Appearance;
 
 namespace SWApp.Views.Pages
 {
@@ -22,7 +23,9 @@ namespace SWApp.Views.Pages
     {
         public DrawingsPage()
         {
+           
             InitializeComponent();
+            ApplicationThemeManager.Apply(this);
         }
     }
 }

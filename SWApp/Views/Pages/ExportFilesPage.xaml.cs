@@ -18,6 +18,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 namespace SWApp.Views.Pages
@@ -38,6 +39,7 @@ namespace SWApp.Views.Pages
             ViewModel = new ExportFilesViewModel();
             _helpSerivce = new HelpService();
             _viewControl = new ViewControl();
+            ApplicationThemeManager.Apply(this);
         }
 
         private void CbAllDXF_Checked(object sender, RoutedEventArgs e)

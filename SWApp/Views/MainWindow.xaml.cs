@@ -91,6 +91,7 @@ namespace SWApp.Views
             _contentDialogService = _helpService.ContentDialogService;
             _themeService = _helpService.ThemeService;
             _snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
+            ApplicationThemeManager.Apply(this);
             //_navigationService.SetNavigationControl(NavigationView);
             //_contentDialogService.SetDialogHost(RootContentDialog);
 
@@ -174,18 +175,24 @@ namespace SWApp.Views
         public event EventHandler<bool> ThemeChanged;
         public void ChangeTheme()
         {
-            bool isDarkTheme = true; // or false, depending on the desired theme
+            var isDarkTheme = ApplicationThemeManager.GetAppTheme();
             
 
-            if (isDarkTheme)
+            if (isDarkTheme == ApplicationTheme.Light)
             {
                 ApplicationThemeManager.Apply(ApplicationTheme.Dark);
+                ApplicationThemeManager.Apply(this);
+               // _themeService.SetTheme(ApplicationTheme.Dark);
+                ThemeChanged?.Invoke(this, true);
+
             }
             else
             {
-                this.Background = new SolidColorBrush(Colors.White);
+                ApplicationThemeManager.Apply(ApplicationTheme.Light);
+                ApplicationThemeManager.Apply(this);
+                ThemeChanged?.Invoke(this, false);
             }
-            ThemeChanged?.Invoke(this, isDarkTheme);
+            
         }
 
         public void Show()
@@ -193,11 +200,10 @@ namespace SWApp.Views
             throw new NotImplementedException();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             ChangeTheme();
         }
-
 
         //public void Show()
         //{
@@ -793,5 +799,7 @@ namespace SWApp.Views
             Feature swFeat = swModel.FirstFeature() as Feature;
             sWObject.TraverseFeatureFeatures_Test(swFeat);
         }
+
+
     }
 }

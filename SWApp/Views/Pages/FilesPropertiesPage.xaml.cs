@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui.Appearance;
 
 namespace SWApp.Views.Pages
 {
@@ -24,8 +25,10 @@ namespace SWApp.Views.Pages
         private ViewControl _viewControl;
         public FilesPropertiesPage()
         {
+            
             InitializeComponent();
             _viewControl = new ViewControl();
+            ApplicationThemeManager.Apply(this);
         }
 
         private void cbSetIndex_Checked(object sender, RoutedEventArgs e)

@@ -65,9 +65,10 @@
             </ui:NavigationView.ContentOverlay>
         </ui:NavigationView>
         <ContentPresenter x:Name="RootContentDialog" Grid.Row="0">
-
+           
 
         </ContentPresenter>
+        <Button Height="79" Width="91" Click="Button_Click_1"></Button>
     </Grid>
 
 </UserControl>
