@@ -1,5 +1,6 @@
 ﻿using SWApp.Controls;
 using SWApp.Services;
+using SWApp.Viewmodels;
 using SWApp.Viewmodels.Pages;
 using System;
 using System.Collections.Generic;
@@ -204,5 +205,8 @@ namespace SWApp.Views.Pages
                 e.Column = templateColumn;
             }
         }
+
+
+
     }
 }

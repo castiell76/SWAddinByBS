@@ -6,6 +6,8 @@ using System.Windows.Controls.Primitives;
 using Wpf.Ui.Controls;
 using SWApp.Views.Pages;
 using System.ComponentModel;
+using Wpf.Ui.Appearance;
+using System;
 
 namespace SWApp.Viewmodels
 {
@@ -21,9 +23,8 @@ namespace SWApp.Viewmodels
             new NavigationViewItem("Działania na rysunkach",SymbolRegular.DrawShape24, typeof(DrawingsPage)),
             new NavigationViewItem("Konwertowanie na arkusz blachy",SymbolRegular.ConvertRange24, typeof(ConvertToSheetPage)),
             new NavigationViewItem("Ustawienia",SymbolRegular.Settings48, typeof(SettingsPage)),
-            
-        };
 
+        };
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
@@ -31,7 +32,6 @@ namespace SWApp.Viewmodels
         }
 
 
-    
 
-}
+    } 
 }

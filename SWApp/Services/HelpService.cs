@@ -15,7 +15,7 @@ using Wpf.Ui;
 
 namespace SWApp.Services
 {
-    internal class HelpService : IWindow
+    public class HelpService : IWindow
     {
         private static Microsoft.Extensions.Hosting.IHost _host;
         private static INavigationService _navigationService;
@@ -51,7 +51,7 @@ namespace SWApp.Services
                           _ = services.AddHostedService<ApplicationHostService>();
 
                           //// Main window container with navigation
-                          _ = services.AddSingleton<IWindow, MainWindow>();
+                          _ = services.AddSingleton<MainWindow>();
                           _ = services.AddSingleton<MainWindowViewModel>();
 
                           _ = services.AddSingleton<INavigationService, Wpf.Ui.NavigationService>();
@@ -70,6 +70,7 @@ namespace SWApp.Services
 
                           services.AddTransient<SettingsViewModel>();   
                           services.AddTransient<CrossSectionsViewmodel>();
+                          
                       }
                   )
                   .Build();

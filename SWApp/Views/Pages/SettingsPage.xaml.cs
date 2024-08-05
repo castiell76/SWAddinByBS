@@ -28,12 +28,15 @@ namespace SWApp.Views.Pages
     public partial class SettingsPage : INavigableView<SettingsViewModel>
     {
         public SettingsViewModel ViewModel { get; }
+        public SettingsViewModel SettingsViewModel { get; }
+
+        public event EventHandler ThemeChanged;
         private MainWindow _mainWindow;
-        public SettingsPage(SettingsViewModel viewModel)
+        public SettingsPage(SettingsViewModel viewModel, MainWindow mainWindow)
         {
             ViewModel = viewModel;
             DataContext = ViewModel;
-            
+
             InitializeComponent();
 
         }
@@ -43,10 +46,17 @@ namespace SWApp.Views.Pages
             InitializeComponent();
         }
 
+        public SettingsPage(SettingsViewModel settingsViewModel)
+        {
+            SettingsViewModel = settingsViewModel;
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-           ChangeTheme();
+
         }
+
+
 
     }
 }

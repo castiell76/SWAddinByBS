@@ -45,7 +45,7 @@ namespace SWApp.Views
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     [ComVisible(true)]
-    public partial class MainWindow : UserControl, IWindow
+    public partial class MainWindow : UserControl
     {
 
         SWObject sWObject = new SWObject();
@@ -67,7 +67,7 @@ namespace SWApp.Views
         private  IContentDialogService _contentDialogService;
         private  HelpService _helpService;
         public event RoutedEventHandler Loaded;
-      
+      private readonly SettingsPage _settingsPage;
         /// <summary>
         /// Occurs when the application is loading.
         /// </summary>
@@ -79,19 +79,22 @@ namespace SWApp.Views
             //ViewModel = viewModel;
 
             DataContext = this;
-         
+
             InitializeComponent();
 
+
+            ApplicationThemeManager.Apply(this);
+            MainWindowViewModel viewModel = new MainWindowViewModel();
+            DataContext = viewModel;
             _helpService = new HelpService();
             _helpService.GetServices();
             _navigationService = _helpService.NavigationService;
-
+            
             _serviceProvider = _helpService.ServiceProvider;
             _snackbarService = _helpService.SnackbarService;
+            _snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
             _contentDialogService = _helpService.ContentDialogService;
             _themeService = _helpService.ThemeService;
-            _snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
-            ApplicationThemeManager.Apply(this);
             //_navigationService.SetNavigationControl(NavigationView);
             //_contentDialogService.SetDialogHost(RootContentDialog);
 
@@ -173,12 +176,9 @@ namespace SWApp.Views
         //    _isPaneOpenedOrClosedFromCode = false;
         //}
         public event EventHandler<bool> ThemeChanged;
-        public void ChangeTheme()
+        public void ChangeTheme(bool isDarkTheme)
         {
-            var isDarkTheme = ApplicationThemeManager.GetAppTheme();
-            
-
-            if (isDarkTheme == ApplicationTheme.Light)
+            if (isDarkTheme)
             {
                 ApplicationThemeManager.Apply(ApplicationTheme.Dark);
                 ApplicationThemeManager.Apply(this);
@@ -192,18 +192,10 @@ namespace SWApp.Views
                 ApplicationThemeManager.Apply(this);
                 ThemeChanged?.Invoke(this, false);
             }
-            
+
         }
 
-        public void Show()
-        {
-            throw new NotImplementedException();
-        }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme();
-        }
 
         //public void Show()
         //{
@@ -801,5 +793,14 @@ namespace SWApp.Views
         }
 
 
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeTheme(false);
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            ChangeTheme(true);
+        }
     }
 }

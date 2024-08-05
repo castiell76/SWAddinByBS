@@ -31,6 +31,7 @@
             <helpers:FileNameConverter x:Key="FileNameConverter" />
         </ResourceDictionary>
     </Page.Resources>
+
     <StackPanel>
         <DockPanel>
             <controls:ControlExample HeaderText="Wskaż odpowiednie opcje eksportu" Margin="15">
@@ -43,10 +44,13 @@
                     <CheckBox x:Name="cbAllDXF" Checked="CbAllDXF_Checked" Unchecked="CbAllDXF_Unchecked">
                         <TextBlock TextWrapping="Wrap">Wygeneruj z niestandardowych <LineBreak/>nazw części"</TextBlock>
                     </CheckBox>
+                    
                     <StackPanel>
                         <CheckBox x:Name="cbCreateDXFForSigma" Checked="CbCreateDXFForSigma_Checked" Unchecked="cbCreateDXFForSigma_Unchecked" Content="Stwórz do Sigmy"></CheckBox>
                         <ui:TextBox x:Name="txtSigmaQuantity" PlaceholderText="Wprowadź nakład do sigmy" Visibility="Collapsed"></ui:TextBox>
+                        
                     </StackPanel>
+                    
                 </StackPanel>
             </controls:ControlExample>
             <StackPanel Margin="15">
