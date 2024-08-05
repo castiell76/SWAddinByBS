@@ -14,8 +14,7 @@ using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows.Threading;
 using SWApp.Views.Pages;
-using System.Configuration;
-
+using System.ComponentModel.Design;
 namespace WF_Host
 {
     [ComVisible(true)]
@@ -56,10 +55,9 @@ namespace WF_Host
             var cos = BackColor;
             ResumeLayout(false);
         }
-        
+
         private void OnThemeChanged(object sender, bool isDarkTheme)
         {
-            SuspendLayout();
             if (isDarkTheme)
             {
                 BackColor = Color.Black;
@@ -70,7 +68,6 @@ namespace WF_Host
                 ForeColor = Color.Black;
 
             }
-            ResumeLayout(false);
         }
 
     }

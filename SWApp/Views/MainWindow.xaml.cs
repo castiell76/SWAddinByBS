@@ -58,6 +58,7 @@ namespace SWApp.Views
         List<string> engineers = new List<string>();
         ExcelFile excelFile = new ExcelFile();
         ObservableCollection<ProfileSW> profilesSW = new ObservableCollection<ProfileSW>();
+
         private  Microsoft.Extensions.Hosting.IHost _host;
         private  INavigationService _navigationService;
         private  System.IServiceProvider _serviceProvider;
@@ -65,9 +66,11 @@ namespace SWApp.Views
         private static IThemeService _themeService;
         private  IContentDialogService _contentDialogService;
         private  HelpService _helpService;
-        private SettingsPage _settingsPage;
         public event RoutedEventHandler Loaded;
-      
+      private readonly SettingsPage _settingsPage;
+        /// <summary>
+        /// Occurs when the application is loading.
+        /// </summary>
 
 
         public MainWindow()
@@ -76,22 +79,22 @@ namespace SWApp.Views
             //ViewModel = viewModel;
 
             DataContext = this;
-         
-          
 
+            InitializeComponent();
+
+
+            ApplicationThemeManager.Apply(this);
+            MainWindowViewModel viewModel = new MainWindowViewModel();
+            DataContext = viewModel;
             _helpService = new HelpService();
             _helpService.GetServices();
             _navigationService = _helpService.NavigationService;
-
+            
             _serviceProvider = _helpService.ServiceProvider;
             _snackbarService = _helpService.SnackbarService;
+            _snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
             _contentDialogService = _helpService.ContentDialogService;
             _themeService = _helpService.ThemeService;
-            InitializeComponent();
-            _snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
-            ApplicationThemeManager.Apply(this);
-            //var SettingsPage = HelpService.GetRequiredService<SettingsPage>();
-            //_settingsPage.ChangeThemeRequested += ChangeTheme;
             //_navigationService.SetNavigationControl(NavigationView);
             //_contentDialogService.SetDialogHost(RootContentDialog);
 
@@ -121,7 +124,6 @@ namespace SWApp.Views
             engineers.Sort();
 
         }
-
         private void NavigationView_OnPaneOpened(NavigationView sender, RoutedEventArgs args)
         {
             if (_isPaneOpenedOrClosedFromCode)
@@ -143,8 +145,6 @@ namespace SWApp.Views
         }
 
         public MainWindowViewModel ViewModel { get; }
-
-
         private bool _isUserClosedPane;
 
         private bool _isPaneOpenedOrClosedFromCode;
@@ -171,22 +171,19 @@ namespace SWApp.Views
         //        return;
         //    }
 
-        //    _isPaneOpenedOrClosedFromCode = true;s
+        //    _isPaneOpenedOrClosedFromCode = true;
         //    NavigationView.SetCurrentValue(NavigationView.IsPaneOpenProperty, e.NewSize.Width > 1200);
         //    _isPaneOpenedOrClosedFromCode = false;
         //}
         public event EventHandler<bool> ThemeChanged;
-        public void ChangeTheme()
+        public void ChangeTheme(bool isDarkTheme)
         {
-            var isDarkTheme = ApplicationThemeManager.GetAppTheme();
-            
-
-            if (isDarkTheme == ApplicationTheme.Light)
+            if (isDarkTheme)
             {
                 ApplicationThemeManager.Apply(ApplicationTheme.Dark);
                 ApplicationThemeManager.Apply(this);
-                //_themeService.SetTheme(ApplicationTheme.Dark);
-               ThemeChanged?.Invoke(this, true);
+               // _themeService.SetTheme(ApplicationTheme.Dark);
+                ThemeChanged?.Invoke(this, true);
 
             }
             else
@@ -195,13 +192,10 @@ namespace SWApp.Views
                 ApplicationThemeManager.Apply(this);
                 ThemeChanged?.Invoke(this, false);
             }
-            
+
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme();
-        }
+
 
         //public void Show()
         //{
@@ -799,5 +793,14 @@ namespace SWApp.Views
         }
 
 
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeTheme(false);
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            ChangeTheme(true);
+        }
     }
 }

@@ -15,7 +15,7 @@ using Wpf.Ui;
 
 namespace SWApp.Services
 {
-    internal class HelpService : IWindow
+    public class HelpService : IWindow
     {
         private static Microsoft.Extensions.Hosting.IHost _host;
         private static INavigationService _navigationService;
@@ -23,7 +23,6 @@ namespace SWApp.Services
         private static ISnackbarService _snackbarService;
         private static IContentDialogService _contentDialogService;
         private static IThemeService _themeService;
-        private MainWindow _mainWindow;
 
         public INavigationService NavigationService { get { return _navigationService; } }
         public IServiceProvider ServiceProvider { get { return _serviceProvider; } }
@@ -32,7 +31,6 @@ namespace SWApp.Services
         public IThemeService ThemeService { get { return _themeService; } }
 
         public event RoutedEventHandler Loaded;
-
 
 
         public void Show()
@@ -53,10 +51,8 @@ namespace SWApp.Services
                           _ = services.AddHostedService<ApplicationHostService>();
 
                           //// Main window container with navigation
-                          ///_
-                          //_ = services.AddSingleton<IWindow, MainWindow>();
+                          _ = services.AddSingleton<MainWindow>();
                           _ = services.AddSingleton<MainWindowViewModel>();
-                          _ = services.AddSingleton<Views.MainWindow>();
 
                           _ = services.AddSingleton<INavigationService, Wpf.Ui.NavigationService>();
                           _ = services.AddSingleton<IThemeService, ThemeService>();
@@ -69,12 +65,12 @@ namespace SWApp.Services
                           _ = services.AddSingleton<Views.Pages.CrossSectionsPage>();
                           _ = services.AddSingleton<Views.Pages.SortTreePage>();
                           _ = services.AddSingleton<Views.Pages.FilesPropertiesPage>();
-                          _ = services.AddSingleton<HelpService>();
                           _ = services.AddSingleton<Views.Pages.ExportFilesPage>();
                           _ = services.AddSingleton<Views.Pages.DrawingsPage>();
 
                           services.AddTransient<SettingsViewModel>();   
                           services.AddTransient<CrossSectionsViewmodel>();
+                          
                       }
                   )
                   .Build();
@@ -100,6 +96,5 @@ namespace SWApp.Services
         {
             return _host.Services.GetRequiredService<T>();
         }
-
     }
 }

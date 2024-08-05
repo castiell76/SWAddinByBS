@@ -69,7 +69,14 @@
            
 
         </ContentPresenter>
-        <Button Height="79" Width="91" Click="Button_Click_1"></Button>
+        <ui:DropDownButton VerticalAlignment="Bottom" Content="Wybierz wygląd">
+            <ui:DropDownButton.Flyout>
+                <ContextMenu>
+                    <MenuItem Header="Jasny" Click="MenuItem_Click"/>
+                    <MenuItem Header="Ciemny" Click="MenuItem_Click_1"/>
+                </ContextMenu>
+            </ui:DropDownButton.Flyout>
+        </ui:DropDownButton>
     </Grid>
 
 </UserControl>
