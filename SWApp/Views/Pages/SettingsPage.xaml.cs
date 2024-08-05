@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using Wpf.Ui;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
+using Application = System.Windows.Application;
 
 namespace SWApp.Views.Pages
 {
@@ -28,24 +29,54 @@ namespace SWApp.Views.Pages
     public partial class SettingsPage : INavigableView<SettingsViewModel>
     {
         public SettingsViewModel ViewModel { get; }
+        public SettingsViewModel SettingsViewModel { get; }
         private MainWindow _mainWindow;
+
         public SettingsPage(SettingsViewModel viewModel)
         {
             ViewModel = viewModel;
             DataContext = ViewModel;
-            
             InitializeComponent();
+            ApplicationThemeManager.Apply(this);
 
         }
         public SettingsPage() : this(HelpService.GetRequiredService<SettingsViewModel>())
         {
+            HelpService _helpService = new HelpService();
+            _mainWindow = HelpService.GetRequiredService<MainWindow>();
             DataContext = new SettingsViewModel(HelpService.GetRequiredService<IThemeService>());
+            _mainWindow = HelpService.GetRequiredService<MainWindow>();
             InitializeComponent();
+            ApplicationThemeManager.Apply(this);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-           ChangeTheme();
+            ChangeTheme();
+
+
+
+        }
+
+        public void ChangeTheme()
+        {
+            var isDarkTheme = ApplicationThemeManager.GetAppTheme();
+
+
+            if (isDarkTheme == ApplicationTheme.Light)
+            {
+                ApplicationThemeManager.Apply(ApplicationTheme.Dark);
+                ApplicationThemeManager.Apply(_mainWindow);
+                //ThemeChanged?.Invoke(this, true);
+
+            }
+            else
+            {
+                ApplicationThemeManager.Apply(ApplicationTheme.Light);
+                ApplicationThemeManager.Apply(_mainWindow);
+                //ThemeChanged?.Invoke(this, false);
+            }
+
         }
 
     }

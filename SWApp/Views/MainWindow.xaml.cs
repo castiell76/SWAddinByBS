@@ -45,7 +45,7 @@ namespace SWApp.Views
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     [ComVisible(true)]
-    public partial class MainWindow : UserControl, IWindow
+    public partial class MainWindow : UserControl
     {
 
         SWObject sWObject = new SWObject();
@@ -58,7 +58,6 @@ namespace SWApp.Views
         List<string> engineers = new List<string>();
         ExcelFile excelFile = new ExcelFile();
         ObservableCollection<ProfileSW> profilesSW = new ObservableCollection<ProfileSW>();
-
         private  Microsoft.Extensions.Hosting.IHost _host;
         private  INavigationService _navigationService;
         private  System.IServiceProvider _serviceProvider;
@@ -66,11 +65,9 @@ namespace SWApp.Views
         private static IThemeService _themeService;
         private  IContentDialogService _contentDialogService;
         private  HelpService _helpService;
+        private SettingsPage _settingsPage;
         public event RoutedEventHandler Loaded;
       
-        /// <summary>
-        /// Occurs when the application is loading.
-        /// </summary>
 
 
         public MainWindow()
@@ -80,7 +77,7 @@ namespace SWApp.Views
 
             DataContext = this;
          
-            InitializeComponent();
+          
 
             _helpService = new HelpService();
             _helpService.GetServices();
@@ -90,8 +87,11 @@ namespace SWApp.Views
             _snackbarService = _helpService.SnackbarService;
             _contentDialogService = _helpService.ContentDialogService;
             _themeService = _helpService.ThemeService;
+            InitializeComponent();
             _snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
             ApplicationThemeManager.Apply(this);
+            //var SettingsPage = HelpService.GetRequiredService<SettingsPage>();
+            //_settingsPage.ChangeThemeRequested += ChangeTheme;
             //_navigationService.SetNavigationControl(NavigationView);
             //_contentDialogService.SetDialogHost(RootContentDialog);
 
@@ -121,6 +121,7 @@ namespace SWApp.Views
             engineers.Sort();
 
         }
+
         private void NavigationView_OnPaneOpened(NavigationView sender, RoutedEventArgs args)
         {
             if (_isPaneOpenedOrClosedFromCode)
@@ -142,6 +143,8 @@ namespace SWApp.Views
         }
 
         public MainWindowViewModel ViewModel { get; }
+
+
         private bool _isUserClosedPane;
 
         private bool _isPaneOpenedOrClosedFromCode;
@@ -168,7 +171,7 @@ namespace SWApp.Views
         //        return;
         //    }
 
-        //    _isPaneOpenedOrClosedFromCode = true;
+        //    _isPaneOpenedOrClosedFromCode = true;s
         //    NavigationView.SetCurrentValue(NavigationView.IsPaneOpenProperty, e.NewSize.Width > 1200);
         //    _isPaneOpenedOrClosedFromCode = false;
         //}
@@ -182,8 +185,8 @@ namespace SWApp.Views
             {
                 ApplicationThemeManager.Apply(ApplicationTheme.Dark);
                 ApplicationThemeManager.Apply(this);
-               // _themeService.SetTheme(ApplicationTheme.Dark);
-                ThemeChanged?.Invoke(this, true);
+                //_themeService.SetTheme(ApplicationTheme.Dark);
+               ThemeChanged?.Invoke(this, true);
 
             }
             else
@@ -193,11 +196,6 @@ namespace SWApp.Views
                 ThemeChanged?.Invoke(this, false);
             }
             
-        }
-
-        public void Show()
-        {
-            throw new NotImplementedException();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)

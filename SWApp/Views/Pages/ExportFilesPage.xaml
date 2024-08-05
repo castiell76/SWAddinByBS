@@ -70,6 +70,9 @@
                         <ui:ProgressRing Width="20" Height="20" Margin="8,0,0,0" x:Name="progressRing" IsIndeterminate="True" Visibility="Collapsed"/>
                     </DockPanel>
                 </ui:Button>
+                <Button Height="42" Width="74" Click="Button_Click">
+                    
+                </Button>
             </StackPanel>
         </DockPanel>
         <controls:ControlExample Margin="15" HeaderText="Tabela wygenerowanych plików">
