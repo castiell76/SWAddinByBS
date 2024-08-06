@@ -38,6 +38,7 @@ using SWApp.Services;
 using System.Windows.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.OLE.Interop;
+using Application = System.Windows.Application;
 
 namespace SWApp.Views
 {
@@ -178,12 +179,16 @@ namespace SWApp.Views
         public event EventHandler<bool> ThemeChanged;
         public void ChangeTheme(bool isDarkTheme)
         {
+            ResourceDictionary lightTheme = new ResourceDictionary { Source = new Uri("pack://application:,,,/SWApp;component/Controls/LightThemeDatagrid.xaml", UriKind.Absolute) };
+            ResourceDictionary darkTheme = new ResourceDictionary { Source = new Uri("pack://application:,,,/SWApp;component/Controls/DarkThemeDatagrid.xaml", UriKind.Absolute) };
             if (isDarkTheme)
             {
                 ApplicationThemeManager.Apply(ApplicationTheme.Dark);
                 ApplicationThemeManager.Apply(this);
                // _themeService.SetTheme(ApplicationTheme.Dark);
                 ThemeChanged?.Invoke(this, true);
+               
+              
 
             }
             else
