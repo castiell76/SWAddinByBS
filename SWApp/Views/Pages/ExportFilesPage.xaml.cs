@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Composition.Primitives;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,12 +14,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms.Integration;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
@@ -204,6 +208,38 @@ namespace SWApp.Views.Pages
 
                 e.Column = templateColumn;
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            
+           ChangeTheme();
+        }
+
+        public void ChangeTheme()
+        {
+            var isDarkTheme = ApplicationThemeManager.GetAppTheme();
+            var mainWindow = HelpService.GetRequiredService<MainWindow>();
+
+            if (isDarkTheme == ApplicationTheme.Light)
+            {
+                ApplicationThemeManager.Apply(ApplicationTheme.Dark);
+                ApplicationThemeManager.Apply(this);
+                ApplicationThemeManager.Apply(mainWindow);
+                var dataprovider = (System.Windows.Data.XmlDataProvider)(
+  ((UserControl)(el.Child)).Resources["rssData"]
+);
+                dataprovider.Refresh();
+                //ThemeChanged?.Invoke(this, true);
+
+            }
+            else
+            {
+                ApplicationThemeManager.Apply(ApplicationTheme.Light);
+                ApplicationThemeManager.Apply(this);
+                //ThemeChanged?.Invoke(this, false);
+            }
+
         }
 
 
