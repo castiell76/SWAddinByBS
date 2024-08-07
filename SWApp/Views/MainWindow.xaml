@@ -39,7 +39,7 @@
             PaneDisplayMode="Left"
             IsBackButtonVisible="Visible" 
             BreadcrumbBar="{Binding ElementName=BreadcrumbBar}"
-            FrameMargin="0"
+            FrameMargin="0,0,0,35"
             IsPaneToggleVisible="True"
             Transition="FadeInWithSlide"
             MenuItemsSource="{Binding MenuItems, Mode=OneWay}"

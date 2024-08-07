@@ -179,8 +179,7 @@ namespace SWApp.Views
         public event EventHandler<bool> ThemeChanged;
         public void ChangeTheme(bool isDarkTheme)
         {
-            ResourceDictionary lightTheme = new ResourceDictionary { Source = new Uri("pack://application:,,,/SWApp;component/Controls/LightThemeDatagrid.xaml", UriKind.Absolute) };
-            ResourceDictionary darkTheme = new ResourceDictionary { Source = new Uri("pack://application:,,,/SWApp;component/Controls/DarkThemeDatagrid.xaml", UriKind.Absolute) };
+          
             if (isDarkTheme)
             {
                 ApplicationThemeManager.Apply(ApplicationTheme.Dark);
@@ -200,12 +199,6 @@ namespace SWApp.Views
 
         }
 
-
-
-        //public void Show()
-        //{
-        //    throw new NotImplementedException();
-        //}
 
 
 
