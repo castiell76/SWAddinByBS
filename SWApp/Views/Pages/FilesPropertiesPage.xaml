@@ -32,7 +32,11 @@
     </Page.Resources>
 
     <StackPanel>
+<<<<<<< HEAD
         <controls:ControlExample HeaderText="Wskaż odpowiednie opcje dla właściwości" Margin="15">
+=======
+        <controls:ControlExample Margin="15" HeaderText="Konfigurowanie właściwości plików">
+>>>>>>> d495ec67d0e81006e806b9f38c48f344aeee00bc
             <DockPanel>
                 <StackPanel>
                     <CheckBox x:Name="cbCopyPropsToAllConfigs" Content="Kopiuj właściwości do wszystkich konfiguracji" Grid.Column="3"/>
@@ -40,8 +44,17 @@
                     <CheckBox x:Name="cbSetThickness" Content="Ustaw grubości materiałów"  Grid.Column="3"/>
                     <CheckBox x:Name="cbClearNums" Content="Wyczyść numery rysunków"  Grid.Column="3"/>
                     <CheckBox x:Name="cbSetNums" Content="Numeruj części"  Grid.Column="3"/>
+                    <StackPanel x:Name="customProperties">
+                        <CheckBox x:Name="cbCustomProperties" Content="Nadaj własne właściwości"  Grid.Column="3" Checked="cbCustomProperties_Checked" Unchecked="cbCustomProperties_Unchecked"/>
+                        <DockPanel x:Name="customProperty" Visibility="Collapsed">
+                            <ui:TextBox  PlaceholderText="Nazwa właściwości"></ui:TextBox>
+                            <ui:TextBox  PlaceholderText="Wartość właściwości" Margin="10,0,0,0"></ui:TextBox>
+                            <ui:Button Icon="{ui:SymbolIcon AddSquare24}" BorderThickness="0" FontSize="25" Click="Button_Click"></ui:Button>
+                        </DockPanel>
+                    </StackPanel>
+                    
                 </StackPanel>
-                <StackPanel Margin="25,0,0,0">
+                <StackPanel Margin="15,0,0,0">
                     <StackPanel>
                         <CheckBox x:Name="cbDevelopedBy" Content="Dodaj inżyniera projektu" Checked="cbDevelopedBy_Checked" Unchecked="cbDevelopedBy_Unchecked"/>
                         <ComboBox x:Name="comboDevelopedBy" Visibility="Collapsed"  IsEditable="True" ItemsSource="{Binding EngineersList}"></ComboBox>
@@ -68,7 +81,11 @@
                 <ui:TextBox x:Name="tbassConfig" Visibility="Hidden"></ui:TextBox>
             </DockPanel>
 
+<<<<<<< HEAD
         <controls:ControlExample HeaderText="Tabela elementów" Margin="15">
+=======
+        <controls:ControlExample HeaderText="Tabela z wynikami" Margin="15">
+>>>>>>> d495ec67d0e81006e806b9f38c48f344aeee00bc
             <DataGrid x:Name="dgAllProperties"  
                       ItemsSource="{Binding list}" 
                       AutoGenerateColumns="False"

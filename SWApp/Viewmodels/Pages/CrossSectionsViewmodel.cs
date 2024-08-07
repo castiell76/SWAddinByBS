@@ -127,6 +127,7 @@ namespace SWApp.Viewmodels.Pages
             List<ProfileSW> toCopy = new List<ProfileSW>();
             for (int i = 0; i < dgprofiles.SelectedItems.Count; i++)
             {
+
                 ProfileSW toDuplicate = (ProfileSW)dgprofiles.SelectedItems[i];
                 ProfileSW toInsert = new ProfileSW
                 {

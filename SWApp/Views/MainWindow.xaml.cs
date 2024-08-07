@@ -37,6 +37,7 @@ using SWApp.Services;
 using System.Windows.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.OLE.Interop;
+using Application = System.Windows.Application;
 
 namespace SWApp.Views
 {
@@ -167,12 +168,15 @@ namespace SWApp.Views
         public event EventHandler<bool> ThemeChanged;
         public void ChangeTheme(bool isDarkTheme)
         {
+          
             if (isDarkTheme)
             {
                 ApplicationThemeManager.Apply(ApplicationTheme.Dark);
                 ApplicationThemeManager.Apply(this);
                // _themeService.SetTheme(ApplicationTheme.Dark);
                 ThemeChanged?.Invoke(this, true);
+               
+              
 
             }
             else
@@ -184,12 +188,6 @@ namespace SWApp.Views
 
         }
 
-
-
-        //public void Show()
-        //{
-        //    throw new NotImplementedException();
-        //}
 
 
 
