@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SWApp.Services.Contracts;
 using SWApp.Views;
 using System;
 using System.Collections.Generic;
@@ -50,9 +49,8 @@ namespace SWApp.Services
                 return Task.CompletedTask;
             }
 
-            IWindow mainWindow = _serviceProvider.GetRequiredService<IWindow>();
+            MainWindow mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
             mainWindow.Loaded += OnMainWindowLoaded;
-            mainWindow?.Show();
 
             return Task.CompletedTask;
         }

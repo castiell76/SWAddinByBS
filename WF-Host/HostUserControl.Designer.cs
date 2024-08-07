@@ -5,7 +5,6 @@ using System.Windows.Forms.Integration;
 using SWApp.Views;
 using Microsoft.Extensions.Configuration;
 using SWApp.Services;
-using SWApp.Services.Contracts;
 using SWApp.Viewmodels;
 using Wpf.Ui;
 using System.Windows.Navigation;

@@ -11,7 +11,7 @@
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="FilesPropertiesPage"
-          d:DataContext="{d:DesignInstance local:SortTreePage,
+          d:DataContext="{d:DesignInstance local:FilesPropertiesPage,
                                      IsDesignTimeCreatable=False}"
       ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
       ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
@@ -32,7 +32,7 @@
     </Page.Resources>
 
     <StackPanel>
-        <controls:ControlExample Margin="15">
+        <controls:ControlExample HeaderText="Wskaż odpowiednie opcje dla właściwości" Margin="15">
             <DockPanel>
                 <StackPanel>
                     <CheckBox x:Name="cbCopyPropsToAllConfigs" Content="Kopiuj właściwości do wszystkich konfiguracji" Grid.Column="3"/>
@@ -44,7 +44,7 @@
                 <StackPanel Margin="25,0,0,0">
                     <StackPanel>
                         <CheckBox x:Name="cbDevelopedBy" Content="Dodaj inżyniera projektu" Checked="cbDevelopedBy_Checked" Unchecked="cbDevelopedBy_Unchecked"/>
-                        <ComboBox x:Name="comboDevelopedBy" Visibility="Collapsed"  IsEditable="True"></ComboBox>
+                        <ComboBox x:Name="comboDevelopedBy" Visibility="Collapsed"  IsEditable="True" ItemsSource="{Binding EngineersList}"></ComboBox>
                     </StackPanel>
                     <StackPanel>
                         <CheckBox x:Name="cbCheckedBy"  Content="Dodaj sprawdzającego projekt" Checked="cbCheckedBy_Checked" Unchecked="cbCheckedBy_Unchecked"/>
@@ -68,7 +68,7 @@
                 <ui:TextBox x:Name="tbassConfig" Visibility="Hidden"></ui:TextBox>
             </DockPanel>
 
-        <controls:ControlExample>
+        <controls:ControlExample HeaderText="Tabela elementów" Margin="15">
             <DataGrid x:Name="dgAllProperties"  
                       ItemsSource="{Binding list}" 
                       AutoGenerateColumns="False"

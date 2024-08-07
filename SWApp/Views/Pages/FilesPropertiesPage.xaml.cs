@@ -1,4 +1,5 @@
 ﻿using SWApp.Controls;
+using SWApp.Viewmodels.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,11 +24,14 @@ namespace SWApp.Views.Pages
     public partial class FilesPropertiesPage :  Page
     {
         private ViewControl _viewControl;
+        private FilesPropertiesViewModel _viewModel;
         public FilesPropertiesPage()
         {
             
             InitializeComponent();
             _viewControl = new ViewControl();
+            _viewModel = new FilesPropertiesViewModel();
+            DataContext = _viewModel;
             ApplicationThemeManager.Apply(this);
         }
 

@@ -164,6 +164,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\Contracts\" />
+  </ItemGroup>
   <PropertyGroup>
     <NeutralLanguage>aa</NeutralLanguage>
     <PlatformTarget>AnyCPU</PlatformTarget>

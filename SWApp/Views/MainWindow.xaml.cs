@@ -32,7 +32,6 @@ using Microsoft.ML.Runtime;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SWApp.Services.Contracts;
 using System.Configuration;
 using SWApp.Services;
 using System.Windows.Threading;
@@ -67,7 +66,6 @@ namespace SWApp.Views
         private  IContentDialogService _contentDialogService;
         private  HelpService _helpService;
         public event RoutedEventHandler Loaded;
-      private readonly SettingsPage _settingsPage;
         /// <summary>
         /// Occurs when the application is loading.
         /// </summary>
@@ -111,16 +109,7 @@ namespace SWApp.Views
             fileProperties.Add(new FileProperty() { name = "status dokumentacji", value = null});
             fileProperties.Add(new FileProperty() { name = "Akronim klienta", value = ""});
 
-            engineers.Add("B.Szulc");
-            engineers.Add("K.Królikowski");
-            engineers.Add("M.Szczawiński");
-            engineers.Add("P.Węgrzyn");
-            engineers.Add("J.Kielar");
-            engineers.Add("M.Gładysz");
-            engineers.Add("J.Gaździk");
-            engineers.Add("D.Jakubik");
-            engineers.Add("M.Zdybel");
-            engineers.Add("G.Kosterski");
+         
             engineers.Sort();
 
         }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SWApp.Services.Contracts;
 using SWApp.Viewmodels;
 using SWApp.Viewmodels.Pages;
 using SWApp.Views;
@@ -15,7 +14,7 @@ using Wpf.Ui;
 
 namespace SWApp.Services
 {
-    public class HelpService : IWindow
+    public class HelpService 
     {
         private static Microsoft.Extensions.Hosting.IHost _host;
         private static INavigationService _navigationService;
@@ -64,7 +63,7 @@ namespace SWApp.Services
                           _ = services.AddSingleton<WindowsProviderService>();
 
                          // _ = services.AddSingleton<INavigationWindow, Views.MainWindow>();
-                          _ = services.AddSingleton<Views.Pages.SettingsPage>();
+                          
                           _ = services.AddSingleton<Views.Pages.CrossSectionsPage>();
                           _ = services.AddSingleton<Views.Pages.SortTreePage>();
                           _ = services.AddSingleton<Views.Pages.FilesPropertiesPage>();
@@ -72,7 +71,7 @@ namespace SWApp.Services
                           _ = services.AddSingleton<Views.Pages.ExportFilesPage>();
                           _ = services.AddSingleton<Views.Pages.DrawingsPage>();
 
-                          services.AddTransient<SettingsViewModel>();   
+                          
                           services.AddTransient<CrossSectionsViewmodel>();
                           
                       }
