@@ -211,10 +211,5 @@ namespace SWApp.Views.Pages
                 e.Column = templateColumn;
             }
         }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> d495ec67d0e81006e806b9f38c48f344aeee00bc
     }
 }
