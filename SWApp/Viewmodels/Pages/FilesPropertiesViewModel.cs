@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using EnvDTE80;
+using SWApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,9 +22,10 @@ namespace SWApp.Viewmodels.Pages
             _swObject = new SWObject();
         }
 
-        public void SetProperties()
+        public void SetProperties(List<FileProperty> customProperties, string[]optionsStr, bool[] options)
         {
-            //_swObject.Set
+            List<string> doneParts = new List<string>();
+            _swObject.SetProperties(doneParts, customProperties,optionsStr, options);
         }
     }
 }

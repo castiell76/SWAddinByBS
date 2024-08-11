@@ -1,4 +1,5 @@
 ﻿using SWApp.Controls;
+using SWApp.Models;
 using SWApp.Viewmodels.Pages;
 using System;
 using System.Collections.Generic;
@@ -23,13 +24,13 @@ namespace SWApp.Views.Pages
     /// <summary>
     /// Interaction logic for FilesPropertiesPage.xaml
     /// </summary>
-    public partial class FilesPropertiesPage :  Page
+    public partial class FilesPropertiesPage : Page
     {
         private ViewControl _viewControl;
         private FilesPropertiesViewModel _viewModel;
         public FilesPropertiesPage()
         {
-            
+
             InitializeComponent();
             _viewControl = new ViewControl();
             _viewModel = new FilesPropertiesViewModel();
@@ -86,7 +87,7 @@ namespace SWApp.Views.Pages
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             DockPanel newDockPanel = new DockPanel();
-            newDockPanel.Margin = new Thickness(0,10,0,0);
+            newDockPanel.Margin = new Thickness(0, 10, 0, 0);
             // Tworzenie TextBox dla nazwy właściwości
             Wpf.Ui.Controls.TextBox nameTextBox = new Wpf.Ui.Controls.TextBox
             {
@@ -148,7 +149,58 @@ namespace SWApp.Views.Pages
 
         private void btnSetProperties_Click(object sender, RoutedEventArgs e)
         {
-            //_viewModel.
+            List<FileProperty> customPropertiesToGive = new List<FileProperty>();
+            foreach (var child in customProperties.Children)
+            {
+                if (child is DockPanel dockPanel)
+                {
+                    string name = string.Empty;
+                    string value = string.Empty;
+
+                    foreach (var panelChild in dockPanel.Children)
+                    {
+                        if (panelChild is Wpf.Ui.Controls.TextBox textBox)
+                        {
+                            if (string.IsNullOrEmpty(name))
+                            {
+                                name = textBox.Text;
+                            }
+                            else
+                            {
+                                value = textBox.Text;
+                            }
+                        }
+                        customPropertiesToGive.Add(new FileProperty { name = name, value = value });
+                    }
+
+                }
+
+                string[] optionsStr =
+            {
+                "",
+                "",
+                "",
+                "",
+                "materialTest",
+                comboDevelopedBy.Text,
+                comboCheckedBy.Text,
+                tbIndex.Text,
+            };
+                bool[] options =
+                {
+                cbCopyPropsToAllConfigs.IsChecked ?? false,
+                cbSetQuantity.IsChecked ?? false,
+                cbSetThickness.IsChecked ?? false,
+                cbClearNums.IsChecked ?? false,
+                cbSetNums.IsChecked ?? false,
+                cbDevelopedBy.IsChecked ?? false,
+                cbCheckedBy.IsChecked ?? false,
+                false,
+                cbSetIndex.IsChecked ?? false,
+
+            };
+                _viewModel.SetProperties(customPropertiesToGive, optionsStr, options);
+            }
         }
     }
 }

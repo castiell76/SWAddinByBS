@@ -253,158 +253,187 @@ namespace SWApp
             swAssembly.SaveAs3($"{filepath}.SLDASM", 0, 8);
             return filepath;
         }
-
-        public void SetAllProperties(TreeControlItem node, List<string> doneParts, List<string>allParts, List<FileProperty> fileProperties, string parentNum, bool copyToAllConfigs, bool setQty, bool setThickness, bool clearNums, 
-                bool setNums, bool addEngineer, bool AddCheckingEngineer, bool setMaterial, string material, string engineer, string checkingEngineer)
+        public void SetProperties(List<string> doneParts, List<FileProperty> customProperties, string[] optionsStr, bool[] options)
         {
+            TreeControlItem node;
             swModel = (ModelDoc2)_swApp.ActiveDoc;
+            List<string> filters = new List<string>();
+            Dictionary<string,int> allParts = CountParts(swModel, filters);
             swFeatMgr = swModel.FeatureManager;
-            //TreeControlItem node = swFeatMgr.GetFeatureTreeRootItem2((int)swFeatMgrPane_e.swFeatMgrPaneBottom);
+            node = swFeatMgr.GetFeatureTreeRootItem2((int)swFeatMgrPane_e.swFeatMgrPaneBottom);
             node = node.GetFirstChild();
-            int drawingNum = 1;
-            string evaluatedParentNum;
-            string parentNumOld;
-            string finalDrawingNum = drawingNum.ToString();
-            string paintQty;
-            int nodeType;
-            TreeControlItem childNode;
-
-            while (node != null)
+            SetProperties(node, doneParts, allParts, customProperties, optionsStr, options);
+        }
+        private void SetProperties(TreeControlItem node,List<string> doneParts, Dictionary<string,int>allParts, List<FileProperty> customProperties, string[]optionsStr, bool[]options)
+        {
+            try
             {
-                nodeType = node.ObjectType;
-                if (nodeType == (int)swTreeControlItemType_e.swFeatureManagerItem_Component)
+                TreeControlItem childNode;
+                
+                int drawingNum = 1;
+                string parentNum,evaluatedParentNum, parentNumOld, finalDrawingNum, paintQty, material, engineer, checkingEngineer, index;
+                bool copyToAllConfigs, setQuantity, setThickness, clearNums, setNums, addEngineer, AddCheckingEngineer, setMaterial, setIndex;
+                finalDrawingNum = drawingNum.ToString();
+                int nodeType;
+
+                parentNum = optionsStr[0];
+                evaluatedParentNum = optionsStr[1];
+                parentNumOld = optionsStr[2];
+                finalDrawingNum = optionsStr[3];
+                material = optionsStr[4];
+                engineer = optionsStr[5];
+                checkingEngineer = optionsStr[6];
+                index = optionsStr[7];
+
+                copyToAllConfigs = options[0];
+                setQuantity = options[1];
+                setThickness = options[2];
+                clearNums = options[3];
+                setNums = options[4];
+                addEngineer = options[5];
+                AddCheckingEngineer = options[6];
+                setMaterial = options[7];
+                setIndex = options[8];
+
+                while (node != null)
                 {
-                    swComp = (Component2)node.Object;
-                    swModel = (ModelDoc2)swComp.GetModelDoc2();
-                    swModelExt = swModel.Extension;
-                    string path = swModel.GetPathName();
-                    swCustomPropMgr = swModelExt.get_CustomPropertyManager("");
-                    swMassProp = (MassProperty2)swModelExt.CreateMassProperty2();
-                    paintQty = Math.Round((swMassProp.SurfaceArea * 100 * 0.0015),3).ToString();
-
-                    if (doneParts.Contains(swModel.GetPathName()) == false)
+                    nodeType = node.ObjectType;
+                    if (nodeType == (int)swTreeControlItemType_e.swFeatureManagerItem_Component)
                     {
-                        doneParts.Add(swModel.GetPathName());
+                        swComp = (Component2)node.Object;
+                        swModel = (ModelDoc2)swComp.GetModelDoc2();
+                        swModelExt = swModel.Extension;
+                        string path = swModel.GetPathName();
+                        swCustomPropMgr = swModelExt.get_CustomPropertyManager("");
+                        swMassProp = (MassProperty2)swModelExt.CreateMassProperty2();
+                        paintQty = Math.Round((swMassProp.SurfaceArea * 100 * 0.0015), 3).ToString();
 
-                        if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
+                        if (!doneParts.Contains(swModel.GetPathName()))
                         {
-                            parentNumOld = parentNum;
-                            parentNum = $"{parentNum}.{drawingNum}";
-                            
+                            doneParts.Add(swModel.GetPathName());
 
-                            foreach (FileProperty fileProperty in fileProperties)
+                            if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
                             {
-                                SetCustomProperty(swModel, fileProperty.name, fileProperty.value, "");
-                                
-                            }
+                                parentNumOld = parentNum;
+                                parentNum = $"{parentNum}.{drawingNum}";
 
-                            if (setQty)
-                            {
-                                int qty = allParts.Count(x=> x== swModel.GetPathName());
-                                SetCustomProperty(swModel, "szt na kpl", qty.ToString(), "");
-                            }
-                            if (setThickness)
-                            {
-                                swFeature = (Feature)swModelExt.GetTemplateSheetMetal();
-                                if(swFeature != null)
+
+                                foreach (FileProperty customProperty in customProperties)
                                 {
-                                    SheetMetalFeatureData swMetalData = (SheetMetalFeatureData)swFeature.GetDefinition();
-                                    double thickness;
-                                    
-                                    thickness = swMetalData.Thickness;
-                                    SetCustomProperty(swModel, "grubosc materialu", thickness.ToString(), "");
+                                    SetCustomProperty(swModel, customProperty.name, customProperty.value, "");
+
                                 }
-                            }
-                            if (clearNums)
-                            {
-                                SetCustomProperty(swModel, "nr rysunku", " ", "");
-                            }
-                            if (setNums)
-                            {
-                                SetCustomProperty(swModel, "nr rysunku", parentNum.Remove(0, 1), "");
-                            }
-                            if (addEngineer)
-                            {
-                                SetCustomProperty(swModel, "utworzyl", engineer , "");
-                            }
-                            if (AddCheckingEngineer)
-                            {
-                                SetCustomProperty(swModel, "sprawdzil", checkingEngineer , "");
-                            }
 
-                          
-                            if (copyToAllConfigs)
-                            {
-                                SetPropForAllConfigs(swModel);
-                            }
-                            //Set paint quantity - ALWAYS
-                            SetCustomProperty(swModel, "ilosc farby", paintQty, "");
-                       
-                            childNode = node.GetFirstChild();
-                            SetAllProperties(childNode, doneParts,allParts,fileProperties, parentNum, copyToAllConfigs,setQty,setThickness,clearNums,setNums,addEngineer,AddCheckingEngineer,setMaterial,material,engineer,checkingEngineer);
-                            parentNum = parentNumOld;
-
-                        }
-                        else
-                        {
-                            foreach (FileProperty fileProperty in fileProperties)
-                            {
-                                SetCustomProperty(swModel, fileProperty.name, fileProperty.value, "");
-                            }
-
-                            
-                            if (setQty)
-                            {
-                                int qty = allParts.Count(x => x == swModel.GetPathName());
-                                SetCustomProperty(swModel, "szt na kpl", qty.ToString(), "");
-                            }
-                            if (setThickness)
-                            {
-                                swFeature = (Feature)swModelExt.GetTemplateSheetMetal();
-                                if (swFeature != null)
+                                if (setQuantity)
                                 {
-                                    SheetMetalFeatureData swMetalData = (SheetMetalFeatureData)swFeature.GetDefinition();
-                                    double thickness;
-
-                                    thickness = swMetalData.Thickness;
-                                    SetCustomProperty(swModel, "grubosc materialu", String.Format("{0:.0}",(thickness*1000),1).ToString(), "");
+                                    int qty = allParts[swModel.GetPathName()];
+                                    SetCustomProperty(swModel, "szt na kpl", qty.ToString(), "");
                                 }
-                            }
-                            if (clearNums)
-                            {
-                                SetCustomProperty(swModel, "nr rysunku", "", "");
-                            }
-                            if (setNums)
-                            {
-                                evaluatedParentNum = $"{parentNum}.{drawingNum}";
-                                SetCustomProperty(swModel, "nr rysunku", evaluatedParentNum.Remove(0, 1), "");
-                            }
-                            if (addEngineer)
-                            {
-                                SetCustomProperty(swModel, "utworzyl", engineer, "");
-                            }
-                            if (AddCheckingEngineer)
-                            {
-                                SetCustomProperty(swModel, "sprawdzil", checkingEngineer, "");
-                            }
-                            if (setMaterial)
-                            {
-                                swPart = (PartDoc)swModel;
-                                swPart.SetMaterialPropertyName2("", "c:\\eba\\szablony\\solidworks\\eba materiały.sldmat", material);
-                            }
-                            if (copyToAllConfigs)
-                            {
-                                SetPropForAllConfigs(swModel);
-                            }
+                                if (clearNums)
+                                {
+                                    SetCustomProperty(swModel, "nr rysunku", " ", "");
+                                }
+                                if (setNums)
+                                {
+                                    SetCustomProperty(swModel, "nr rysunku", parentNum.Remove(0, 1), "");
+                                }
+                                if (addEngineer)
+                                {
+                                    SetCustomProperty(swModel, "utworzyl", engineer, "");
+                                }
+                                if (AddCheckingEngineer)
+                                {
+                                    SetCustomProperty(swModel, "sprawdzil", checkingEngineer, "");
+                                }
+                                if (setIndex)
+                                {
+                                    SetCustomProperty(swModel, "index", index, "");
+                                }
 
-                            //Set paint quantity - ALWAYS
-                            SetCustomProperty(swModel, "ilosc farby", paintQty, "");
+
+                                if (copyToAllConfigs)
+                                {
+                                    SetPropForAllConfigs(swModel);
+                                }
+                                //Set paint quantity - ALWAYS
+                                SetCustomProperty(swModel, "ilosc farby", paintQty, "");
+
+                                childNode = node.GetFirstChild();
+                                SetProperties(childNode, doneParts, allParts, customProperties, optionsStr, options);
+                                parentNum = parentNumOld;
+
+                            }
+                            else
+                            {
+                                foreach (FileProperty fileProperty in customProperties)
+                                {
+                                    SetCustomProperty(swModel, fileProperty.name, fileProperty.value, "");
+                                }
+
+
+                                if (setQuantity)
+                                {
+                                    int qty = allParts[swModel.GetPathName()];
+                                    SetCustomProperty(swModel, "szt na kpl", qty.ToString(), "");
+                                }
+                                if (setThickness)
+                                {
+                                    swFeature = (Feature)swModelExt.GetTemplateSheetMetal();
+                                    if (swFeature != null)
+                                    {
+                                        SheetMetalFeatureData swMetalData = (SheetMetalFeatureData)swFeature.GetDefinition();
+                                        double thickness;
+
+                                        thickness = swMetalData.Thickness;
+                                        SetCustomProperty(swModel, "grubosc materialu", String.Format("{0:.0}", (thickness * 1000), 1).ToString(), "");
+                                    }
+                                }
+                                if (clearNums)
+                                {
+                                    SetCustomProperty(swModel, "nr rysunku", "", "");
+                                }
+                                if (setNums)
+                                {
+                                    evaluatedParentNum = $"{parentNum}.{drawingNum}";
+                                    SetCustomProperty(swModel, "nr rysunku", evaluatedParentNum.Remove(0, 1), "");
+                                }
+                                if (addEngineer)
+                                {
+                                    SetCustomProperty(swModel, "utworzyl", engineer, "");
+                                }
+                                if (AddCheckingEngineer)
+                                {
+                                    SetCustomProperty(swModel, "sprawdzil", checkingEngineer, "");
+                                }
+                                if (setMaterial)
+                                {
+                                    swPart = (PartDoc)swModel;
+                                    swPart.SetMaterialPropertyName2("", $"{_systemPath}:\\eba\\szablony\\solidworks\\eba materiały.sldmat", material);
+                                }
+                                if (setIndex)
+                                {
+                                    SetCustomProperty(swModel, "index", index, "");
+                                }
+                                if (copyToAllConfigs)
+                                {
+                                    SetPropForAllConfigs(swModel);
+                                }
+
+                                //Set paint quantity - ALWAYS
+                                SetCustomProperty(swModel, "ilosc farby", paintQty, "");
+                            }
+                            drawingNum++;
                         }
-                        drawingNum++;
                     }
+                    node = node.GetNext();
                 }
-                node = node.GetNext();
+
             }
+            catch (NullReferenceException)
+            {
+                _helpService.SnackbarService.Show("Uwaga!", "Włącz plik SolidWorks", Wpf.Ui.Controls.ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24), TimeSpan.FromSeconds(3));
+            }
+            
 
         }
         public void SetCustomProperty(ModelDoc2 swModel, string name, string value, string configName)
@@ -690,7 +719,7 @@ namespace SWApp
                 ModelDoc2 swModel = _swApp.ActiveDoc as ModelDoc2;
                 ModelDoc2 swModelChild;
                 AssemblyDoc swAssemblyDoc = swModel as AssemblyDoc;
-                Dictionary<string, int> partsToExport = CountParts(swAssemblyDoc, filters);
+                Dictionary<string, int> partsToExport = CountParts(swModel, filters);
 
                 if (partsToExport == null || partsToExport.Count == 0)
                 {
@@ -898,43 +927,54 @@ namespace SWApp
             return exportStatus;
         }
 
-        public Dictionary<string,int> CountParts(AssemblyDoc swAss, List<string> filters)
+        public Dictionary<string,int> CountParts(ModelDoc2 swModel, List<string> filters)
         {
-           
-                var obj = (object[])swAss.GetComponents(false); //false for take all parts from main assembly and subassemblies
-                Dictionary<string, int> totalParts = new Dictionary<string, int>();
-                string filepath;
+            Dictionary<string, int> totalParts = new Dictionary<string, int>();
+            string filepath;
 
-                foreach (Component2 comp in obj)
+            swAss = (AssemblyDoc)swModel;
+            if (swAss != null)
                 {
-                    var suppresion = comp.GetSuppression2();
-                    if (suppresion != (int)swComponentSuppressionState_e.swComponentResolved || suppresion != (int)swComponentSuppressionState_e.swComponentFullyResolved) //if components is in lightweight mode or is suppressed it has to be unsuppressed to get count 
+                    var obj = (object[])swAss.GetComponents(false); //false for take all parts from main assembly and subassemblies
+                    
+                    
+
+                    foreach (Component2 comp in obj)
                     {
-                        comp.SetSuppression2(3);
-                    }
+                        var suppresion = comp.GetSuppression2();
+                        if (suppresion != (int)swComponentSuppressionState_e.swComponentResolved || suppresion != (int)swComponentSuppressionState_e.swComponentFullyResolved) //if components is in lightweight mode or is suppressed it has to be unsuppressed to get count 
+                        {
+                            comp.SetSuppression2(3);
+                        }
 
-                    ModelDoc2 swModel = (ModelDoc2)comp.GetModelDoc2();
-                    filepath = swModel.GetPathName();
-                    if (swModel != null)
+                         swModel = (ModelDoc2)comp.GetModelDoc2();
+                        filepath = swModel.GetPathName();
+                        if (swModel != null)
+                        {
+                            if (!totalParts.ContainsKey(filepath))
+                            {
+                                totalParts.Add(filepath, 1);
+                            }
+                            else
+                            {
+                                totalParts[filepath]++;
+                            }
+                        }
+
+                        comp.SetSuppression2(suppresion);
+
+                    }
+                    if (filters.Count() != 0)
                     {
-                        if (!totalParts.ContainsKey(filepath))
-                        {
-                            totalParts.Add(filepath, 1);
-                        }
-                        else
-                        {
-                            totalParts[filepath]++;
-                        }
+                        totalParts = totalParts.Where(k => filters.Any(f => k.Key.Contains(f))).ToDictionary(k => k.Key, k => k.Value);
                     }
-
-                    comp.SetSuppression2(suppresion);
-
                 }
-                if (filters.Count() != 0)
-                {
-                    totalParts = totalParts.Where(k => filters.Any(f => k.Key.Contains(f))).ToDictionary(k => k.Key, k => k.Value);
-                }
-
+            else
+            {
+                swModel = (ModelDoc2)_swApp.ActiveDoc;
+                filepath = swModel.GetPathName();
+                totalParts.Add(filepath, 1);
+            }
                 return totalParts;
         }
  
