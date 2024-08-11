@@ -12,14 +12,18 @@ namespace SWApp.Viewmodels.Pages
 {
     public partial class FilesPropertiesViewModel
     {
-
-
+        private SWObject _swObject;
         public ObservableCollection<string> EngineersList { get; set; }
 
         public FilesPropertiesViewModel()
         {
             EngineersList = new ObservableCollection<string> { "Błaz", "Ktoś", "ktoś2s" };
+            _swObject = new SWObject();
+        }
 
+        public void SetProperties()
+        {
+            //_swObject.Set
         }
     }
 }

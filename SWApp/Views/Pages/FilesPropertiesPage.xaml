@@ -71,25 +71,29 @@
                 </StackPanel>
             </DockPanel>
         </controls:ControlExample>
-        <ui:Button x:Name="btnSetProperties" Content="Dodaj właściwości" HorizontalAlignment="Center"></ui:Button>
+        <ui:Button x:Name="btnSetProperties" Content="Dodaj właściwości" HorizontalAlignment="Center" Click="btnSetProperties_Click"></ui:Button>
         <DockPanel>
             <ui:TextBox x:Name="tbassFilepath" Visibility="Hidden"></ui:TextBox>
                 <ui:TextBox x:Name="tbassConfig" Visibility="Hidden"></ui:TextBox>
             </DockPanel>
 
-        <controls:ControlExample>
-            <DataGrid x:Name="dgAllProperties"  
+        <controls:ControlExample HeaderText="Tabela plików z drzewa" Margin="15">
+            <StackPanel>
+                <ToggleButton Content="Rozwiń tabelę" x:Name="btnShowTable" Click="btnShowTable_Click"></ToggleButton>
+                <DataGrid x:Name="dgAllProperties"  
                       ItemsSource="{Binding list}" 
                       AutoGenerateColumns="False"
-                      Style="{StaticResource datagridStyle}">
-                <DataGrid.Resources>
-                    <ResourceDictionary>
-                        <ResourceDictionary.MergedDictionaries>
-                            <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/DatagridResource.xaml"></ResourceDictionary>
-                        </ResourceDictionary.MergedDictionaries>
-                    </ResourceDictionary>
-                </DataGrid.Resources>
-            </DataGrid >
+                      Style="{StaticResource datagridStyle}"
+                Visibility="Collapsed">
+                    <DataGrid.Resources>
+                        <ResourceDictionary>
+                            <ResourceDictionary.MergedDictionaries>
+                                <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/DatagridResource.xaml"></ResourceDictionary>
+                            </ResourceDictionary.MergedDictionaries>
+                        </ResourceDictionary>
+                    </DataGrid.Resources>
+                </DataGrid >
+            </StackPanel>
         </controls:ControlExample>
     </StackPanel>
 

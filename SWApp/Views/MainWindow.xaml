@@ -39,16 +39,10 @@
             PaneDisplayMode="Left"
             IsBackButtonVisible="Visible" 
             BreadcrumbBar="{Binding ElementName=BreadcrumbBar}"
-<<<<<<< HEAD
-            FrameMargin="0,0,0,30"
-=======
             FrameMargin="0,0,0,35"
->>>>>>> d495ec67d0e81006e806b9f38c48f344aeee00bc
             IsPaneToggleVisible="True"
             Transition="FadeInWithSlide"
-            MenuItemsSource="{Binding MenuItems, Mode=OneWay}"
-           
-            >
+            MenuItemsSource="{Binding MenuItems, Mode=OneWay}">
 
             <!--<ui:NavigationView.Header>
                 <StackPanel>

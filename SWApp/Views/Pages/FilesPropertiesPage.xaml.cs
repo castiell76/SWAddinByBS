@@ -2,6 +2,7 @@
 using SWApp.Viewmodels.Pages;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition.Primitives;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -131,6 +132,23 @@ namespace SWApp.Views.Pages
                     }
                 }
             }
+        }
+
+        private void btnShowTable_Click(object sender, RoutedEventArgs e)
+        {
+            if (dgAllProperties.Visibility == Visibility.Hidden || dgAllProperties.Visibility == Visibility.Collapsed)
+            {
+                _viewControl.ShowWithTransition(dgAllProperties);
+            }
+            else
+            {
+                _viewControl.HideWithTransition(dgAllProperties);
+            }
+        }
+
+        private void btnSetProperties_Click(object sender, RoutedEventArgs e)
+        {
+            //_viewModel.
         }
     }
 }

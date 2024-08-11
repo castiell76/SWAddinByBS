@@ -59,13 +59,13 @@ namespace SWApp.Views
         ExcelFile excelFile = new ExcelFile();
         ObservableCollection<ProfileSW> profilesSW = new ObservableCollection<ProfileSW>();
 
-        private  Microsoft.Extensions.Hosting.IHost _host;
-        private  INavigationService _navigationService;
-        private  System.IServiceProvider _serviceProvider;
-        private  ISnackbarService _snackbarService;
+        private Microsoft.Extensions.Hosting.IHost _host;
+        private INavigationService _navigationService;
+        private System.IServiceProvider _serviceProvider;
+        private ISnackbarService _snackbarService;
         private static IThemeService _themeService;
-        private  IContentDialogService _contentDialogService;
-        private  HelpService _helpService;
+        private IContentDialogService _contentDialogService;
+        private HelpService _helpService;
         public event RoutedEventHandler Loaded;
         /// <summary>
         /// Occurs when the application is loading.
@@ -88,7 +88,7 @@ namespace SWApp.Views
             _helpService = new HelpService();
             _helpService.GetServices();
             _navigationService = _helpService.NavigationService;
-            
+
             _serviceProvider = _helpService.ServiceProvider;
             _snackbarService = _helpService.SnackbarService;
             _snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
@@ -105,12 +105,12 @@ namespace SWApp.Views
             ////generate rows for datagrid properties
             //dgProperties.ItemsSource = fileProperties;
 
-            fileProperties.Add(new FileProperty() { name = "index xl", value = ""});
-            fileProperties.Add(new FileProperty() { name = "Nazwa wyrobu", value = ""});
-            fileProperties.Add(new FileProperty() { name = "status dokumentacji", value = null});
-            fileProperties.Add(new FileProperty() { name = "Akronim klienta", value = ""});
+            fileProperties.Add(new FileProperty() { name = "index xl", value = "" });
+            fileProperties.Add(new FileProperty() { name = "Nazwa wyrobu", value = "" });
+            fileProperties.Add(new FileProperty() { name = "status dokumentacji", value = null });
+            fileProperties.Add(new FileProperty() { name = "Akronim klienta", value = "" });
 
-         
+
             engineers.Sort();
 
         }
@@ -168,15 +168,15 @@ namespace SWApp.Views
         public event EventHandler<bool> ThemeChanged;
         public void ChangeTheme(bool isDarkTheme)
         {
-          
+
             if (isDarkTheme)
             {
                 ApplicationThemeManager.Apply(ApplicationTheme.Dark);
                 ApplicationThemeManager.Apply(this);
-               // _themeService.SetTheme(ApplicationTheme.Dark);
+                // _themeService.SetTheme(ApplicationTheme.Dark);
                 ThemeChanged?.Invoke(this, true);
-               
-              
+
+
 
             }
             else
@@ -187,6 +187,7 @@ namespace SWApp.Views
             }
 
         }
+
 
 
 
@@ -360,100 +361,7 @@ namespace SWApp.Views
         //    sWObject.SortTree_All(cboxSort.IsChecked == true, swModel);
         //}
 
-        //private void BtnProperties_Click(object sender, RoutedEventArgs e)
-        //{
-        //    try
-        //    {
-        //        SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-
-        //        swModel = (ModelDoc2)swApp.ActiveDoc;
-        //        int modelType = swModel.GetType();
-
-        //        string material;
-        //        if(lbMaterials.SelectedItem == null)
-        //        {
-        //            material = "";
-        //        }
-        //        else
-        //        {
-        //            material = lbMaterials.SelectedItem.ToString();
-        //        }
-
-
-        //        List<FileProperty> fileProperties = new List<FileProperty>();
-
-        //        if (modelType == (int)swDocumentTypes_e.swDocASSEMBLY)
-        //        {
-        //            AssemblyDoc swAss = (AssemblyDoc)swApp.ActiveDoc;
-        //            if (swAss.HasUnloadedComponents() == true || swAss.GetLightWeightComponentCount() != 0)
-        //            {
-        //                MessageBox.Show("Przed konwersją należy przywrócić wygaszone/odciążone pliki w złożeniu");
-        //            }
-
-        //            swFeatMgr = swModel.FeatureManager;
-
-        //            if (cbSetNums.IsChecked == true)
-        //            {
-        //                ModelDocExtension swModelExt = swModel.Extension;
-        //                CustomPropertyManager swCustomPropMgr = swModelExt.get_CustomPropertyManager("");
-        //                swCustomPropMgr.Add3("nr rysunku", (int)swCustomInfoType_e.swCustomInfoText, "0", (int)swCustomPropertyAddOption_e.swCustomPropertyReplaceValue);
-        //            }
-
-        //            swConfMgr = (ConfigurationManager)swModel.ConfigurationManager;
-        //            TreeControlItem node = swFeatMgr.GetFeatureTreeRootItem2((int)swFeatMgrPane_e.swFeatMgrPaneBottom);
-        //            node = node.GetFirstChild();
-        //            List<string> doneParts = new List<string>();
-        //            List<string> allParts = sWObject.CountParts(swAss);
-
-
-        //            foreach (FileProperty fileProperty in dgProperties.Items)
-        //            {
-        //                fileProperties.Add(fileProperty);
-        //            }
-        //            bool cos = (bool)cbClearNums.IsChecked;
-        //            sWObject.SetAllProperties(node, doneParts, allParts, fileProperties, "", cbCopyPropsToAllConfigs.IsChecked == true, cbSetQuantity.IsChecked == true, (bool)cbSetThickness.IsChecked, (bool)cbClearNums.IsChecked, (bool)cbSetNums.IsChecked,
-        //                cbDevelopedBy.IsChecked == true, cbCheckedBy.IsChecked == true, cbSetMaterial.IsChecked == true, material, comboDevelopedBy.Text, comboCheckedBy.Text);
-        //            if (cbGenerateDrawings.IsChecked == true)
-        //            {
-        //                if (rbDrawingsTogether.IsChecked == true)
-        //                {
-        //                    sWObject.GenerateDrawingsTogether();
-        //                }
-        //                else if (rbDrawingsSplitted.IsChecked == true)
-        //                {
-        //                    List<string> filepaths = new List<string>();
-        //                    sWObject.GenerateDrawingsSplitted(swAss, filepaths);
-        //                }
-        //            }
-        //        }
-        //        else if (modelType == (int)swDocumentTypes_e.swDocPART)
-        //        {
-        //            foreach (FileProperty fileProperty in dgProperties.Items)
-        //            {
-        //                fileProperties.Add(fileProperty);
-        //            }
-        //            swFeatMgr = swModel.FeatureManager;
-        //            swConfMgr = (ConfigurationManager)swModel.ConfigurationManager;
-        //            TreeControlItem node = swFeatMgr.GetFeatureTreeRootItem2((int)swFeatMgrPane_e.swFeatMgrPaneBottom);
-        //            node = node.GetFirstChild();
-
-        //            sWObject.SetAllProperties(node, null, null, fileProperties, "", cbCopyPropsToAllConfigs.IsChecked == true, cbSetQuantity.IsChecked == true, cbSetThickness.IsChecked == true, cbClearNums.IsChecked == true, false,
-        //                cbDevelopedBy.IsChecked == true, cbCheckedBy.IsChecked == true, cbSetMaterial.IsChecked == true, material, comboDevelopedBy.Text, comboCheckedBy.Text);
-        //            if (cbGenerateDrawings.IsChecked == true)
-        //            {
-        //                sWObject.GenerateDrawingsTogether();
-        //            }
-        //        }
-        //        TakeProperties();
-        //    }
-        //    catch (InvalidCastException)
-        //    {
-        //        MessageBox.Show("Otwórz plik typu złożenie");
-        //    }
-        //    catch (NullReferenceException)
-        //    {
-        //        MessageBox.Show("Otwórz plik SolidWorks");
-        //    }
+       
 
 
         //}
@@ -566,7 +474,7 @@ namespace SWApp.Views
         //    {
         //        SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
         //        swModel = (ModelDoc2)swApp.ActiveDoc;
-        //        swFeatMgr = swModel.FeatureManager;
+        //        swFeatMgr = swModel.FeatureManager;```
         //        swConfMgr = (ConfigurationManager)swModel.ConfigurationManager;
         //        swConfig = (Configuration)swConfMgr.ActiveConfiguration;
         //        swComp = (Component2)swConfig.GetRootComponent3(true);
@@ -770,24 +678,21 @@ namespace SWApp.Views
         //    calculationModule.ShowDialog();
         //}
 
-        private void TestTraverseTree()
-        {
-            SWObject sWObject = new SWObject();
-            SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-            ModelDoc2 swModel = swApp.ActiveDoc as ModelDoc2;
-            Feature swFeat = swModel.FirstFeature() as Feature;
-            sWObject.TraverseFeatureFeatures_Test(swFeat);
-        }
+        //private void TestTraverseTree()
+        //{
+        //    SWObject sWObject = new SWObject();
+        //    SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
+        //    ModelDoc2 swModel = swApp.ActiveDoc as ModelDoc2;
+        //    Feature swFeat = swModel.FirstFeature() as Feature;
+        //    sWObject.TraverseFeatureFeatures_Test(swFeat);
+        //}
 
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme(false);
-        }
+        private void MenuItem_Click(object sender, RoutedEventArgs e) => ChangeTheme(false);
 
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
             ChangeTheme(true);
         }
-    }
+    } 
 }

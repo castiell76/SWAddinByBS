@@ -49,22 +49,22 @@ namespace SWApp
 
         private SldWorks _swApp;
         string installDir;
-        ModelDoc2 swModel;
-        PartDoc swPart;
-        SheetMetalFeatureData swSheetMetalData;
-        Feature swFeature;
-        ModelDocExtension swModelExt;
-        DrawingDoc drawingDoc;
-        AssemblyDoc swAss;
-        SketchManager skManager;
-        ModelDocExtension swExt;
-        SweepFeatureData swSweep;
-        FeatureManager swFeatMgr;
-        Component2 swComp;
-        CustomPropertyManager swCustomPropMgr;
-        Configuration swConfig;
-        Configuration swAssConfig;
-        MassProperty2 swMassProp;
+        private ModelDoc2 swModel;
+        private PartDoc swPart;
+        private SheetMetalFeatureData swSheetMetalData;
+        private Feature swFeature;
+        private ModelDocExtension swModelExt;
+        private  DrawingDoc drawingDoc;
+        private AssemblyDoc swAss;
+        private SketchManager skManager;
+        private ModelDocExtension swExt;
+        private SweepFeatureData swSweep;
+        private FeatureManager swFeatMgr;
+        private Component2 swComp;
+        private CustomPropertyManager swCustomPropMgr;
+        private Configuration swConfig;
+        private Configuration swAssConfig;
+        private MassProperty2 swMassProp;
         private string _templateAssemblyPath;
         private string _templatePartPath;
         private string _systemPath;
@@ -257,15 +257,15 @@ namespace SWApp
         public void SetAllProperties(TreeControlItem node, List<string> doneParts, List<string>allParts, List<FileProperty> fileProperties, string parentNum, bool copyToAllConfigs, bool setQty, bool setThickness, bool clearNums, 
                 bool setNums, bool addEngineer, bool AddCheckingEngineer, bool setMaterial, string material, string engineer, string checkingEngineer)
         {
-
-            ModelDoc2 swModel;
-
+            swModel = (ModelDoc2)_swApp.ActiveDoc;
+            swFeatMgr = swModel.FeatureManager;
+            //TreeControlItem node = swFeatMgr.GetFeatureTreeRootItem2((int)swFeatMgrPane_e.swFeatMgrPaneBottom);
+            node = node.GetFirstChild();
             int drawingNum = 1;
             string evaluatedParentNum;
             string parentNumOld;
             string finalDrawingNum = drawingNum.ToString();
             string paintQty;
-
             int nodeType;
             TreeControlItem childNode;
 
