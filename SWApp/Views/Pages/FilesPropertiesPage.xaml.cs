@@ -149,7 +149,12 @@ namespace SWApp.Views.Pages
 
         private void btnSetProperties_Click(object sender, RoutedEventArgs e)
         {
-            List<FileProperty> customPropertiesToGive = new List<FileProperty>();
+            SetProperties();
+            _viewModel.ReadProperties();
+        }
+        private void SetProperties()
+        {
+            List<CustomProperty> customPropertiesToGive = new List<CustomProperty>();
             foreach (var child in customProperties.Children)
             {
                 if (child is DockPanel dockPanel)
@@ -170,7 +175,7 @@ namespace SWApp.Views.Pages
                                 value = textBox.Text;
                             }
                         }
-                        customPropertiesToGive.Add(new FileProperty { name = name, value = value });
+                        customPropertiesToGive.Add(new CustomProperty { name = name, value = value });
                     }
 
                 }
@@ -201,6 +206,7 @@ namespace SWApp.Views.Pages
             };
                 _viewModel.SetProperties(customPropertiesToGive, optionsStr, options);
             }
-        }
+        
+    }
     }
 }

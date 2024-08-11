@@ -25,5 +25,9 @@ namespace SWApp
         public bool dxfExist { get; set; }
         public bool stepExist { get; set; }
         public string comments { get; set; }
+        public string index { get; set; }
+        public string assemblyFilePath {  get; set; }
+        public string assemblyConfig {  get; set; }
+
     }
 }

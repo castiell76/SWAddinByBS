@@ -96,145 +96,144 @@ namespace SWApp
         }
 
         public event Action<string> ErrorOccurred;
-
-        //public (string,string,string,List<SWFileProperties>) ReadData()
-        //{
-        //    try
-        //    {
-        //        SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
-        //        ModelDoc2 swModel;
-        //        ConfigurationManager swConfMgr;
-        //        swAss = (AssemblyDoc)swApp.ActiveDoc;
-
-
-        //        //get data for the assembly filepath and configuration
-        //        swModel = (ModelDoc2)swApp.ActiveDoc;
-        //        swModelExt = swModel.Extension;
-        //        string path = swModel.GetPathName();
-        //        string assemblyConfig;
-        //        swConfMgr = swModel.ConfigurationManager;
-        //        swAssConfig = (Configuration)swConfMgr.ActiveConfiguration;
-        //        assemblyConfig = swAssConfig.Name;
-        //        swCustomPropMgr = swModelExt.get_CustomPropertyManager("");
-
-        //        List<SWFileProperties> swFilesProperties = new List<SWFileProperties>();
-
-        //        object[] swComps;
-        //        string name;
-        //        string valOutDescription;
-        //        string valOutDrawingNum;
-        //        string valOutQty;
-        //        string resolvedValOut;
-        //        string material;
-        //        string resolvedMaterial;
-        //        string mass;
-        //        string resolvedMass;
-        //        string surface;
-        //        string paintQty;
-        //        string comments;
-        //        string thickness;
-        //        string resolvedThickness;
-        //        bool wasResolved;
-        //        bool linkToProperty;
-        //        string configName;
-        //        string status;
-        //        string createdBy;
-        //        string checkedBy;
-        //        bool dxfExist;
-        //        bool stepExist;
+        public List<SWFileProperties> ReadProperties()
+        {
+            try
+            {
+                SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
+                ModelDoc2 swModel;
+                ConfigurationManager swConfMgr;
+                swAss = (AssemblyDoc)swApp.ActiveDoc;
 
 
-        //        swCustomPropMgr.Get6("index xl", false, out valOutDescription, out resolvedValOut, out wasResolved, out linkToProperty);
-        //        string index = valOutDescription;
+                //get data for the assembly filepath and configuration
+                swModel = (ModelDoc2)swApp.ActiveDoc;
+                swModelExt = swModel.Extension;
+                string path = swModel.GetPathName();
+                string assemblyConfig;
+                swConfMgr = swModel.ConfigurationManager;
+                swAssConfig = (Configuration)swConfMgr.ActiveConfiguration;
+                assemblyConfig = swAssConfig.Name;
+                swCustomPropMgr = swModelExt.get_CustomPropertyManager("");
 
-        //        MessageBoxResult suppressedChoice = default(MessageBoxResult);
+                List<SWFileProperties> swFilesProperties = new List<SWFileProperties>();
 
-        //        swComps = (object[])swAss.GetComponents(false); //true for all comps in the assembly
-        //        List<string> doneswComps = new List<string>();
-        //        bool hasSuppresed = swAss.HasUnloadedComponents();
-        //        int lightWeightCompsCount = swAss.GetLightWeightComponentCount();
-        //        if (hasSuppresed || lightWeightCompsCount != 0)
-        //        {
-        //            suppressedChoice = MessageBox.Show("Wykryto pliki w odciążeniu i/lub wygaszone. Czy chcesz przywrócić je do pełnej pamięci i je wygenerować?", "Złożenie posiada wygaszone pliki", MessageBoxButton.YesNo);
-        //        }
+                object[] swComps;
+                string name;
+                string valOutDescription;
+                string valOutDrawingNum;
+                string valOutQty;
+                string resolvedValOut;
+                string material;
+                string resolvedMaterial;
+                string mass;
+                string resolvedMass;
+                string surface;
+                string paintQty;
+                string comments;
+                string thickness;
+                string resolvedThickness;
+                bool wasResolved;
+                bool linkToProperty;
+                string configName;
+                string status;
+                string createdBy;
+                string checkedBy;
+                bool dxfExist;
+                bool stepExist;
 
 
-        //        //adding rows for each component
+                swCustomPropMgr.Get6("index xl", false, out valOutDescription, out resolvedValOut, out wasResolved, out linkToProperty);
+                string index = valOutDescription;
 
-        //        foreach (Component2 swComp in swComps)
-        //        {
-        //            try
-        //            {
-        //                if (suppressedChoice == MessageBoxResult.Yes && swComp.IsSuppressed() == true)
-        //                {
-        //                    swComp.SetSuppression2((int)swComponentSuppressionState_e.swComponentFullyResolved);
-        //                }
-        //                swModel = (ModelDoc2)swComp.GetModelDoc2();
-        //                string compFilepath = swModel.GetPathName();
-        //                swModelExt = swModel.Extension;
-        //                swConfMgr = swModel.ConfigurationManager;
-        //                swConfig = (Configuration)swConfMgr.ActiveConfiguration;
-        //                configName = swConfig.Name;
-        //                swCustomPropMgr = swModelExt.get_CustomPropertyManager("");
-        //                name = System.IO.Path.GetFileNameWithoutExtension(swModel.GetPathName());
-        //                if (doneswComps.Contains(name) == false)
-        //                {
-        //                    doneswComps.Add(name);
-        //                    swCustomPropMgr.Get6("opis", false, out valOutDescription, out resolvedValOut, out wasResolved, out linkToProperty);
-        //                    swCustomPropMgr.Get6("material", false, out material, out resolvedMaterial, out wasResolved, out linkToProperty);
-        //                    swCustomPropMgr.Get6("grubosc materialu", false, out thickness, out resolvedThickness, out wasResolved, out linkToProperty);
-        //                    swCustomPropMgr.Get6("masa", false, out mass, out resolvedMass, out wasResolved, out linkToProperty);
-        //                    swCustomPropMgr.Get6("powierzchnia dm2", false, out surface, out resolvedValOut, out wasResolved, out linkToProperty);
-        //                    swCustomPropMgr.Get6("ilosc farby", false, out paintQty, out resolvedValOut, out wasResolved, out linkToProperty);
-        //                    swCustomPropMgr.Get6("nr rysunku", false, out valOutDrawingNum, out resolvedValOut, out wasResolved, out linkToProperty);
-        //                    swCustomPropMgr.Get6("szt na kpl", false, out valOutQty, out resolvedValOut, out wasResolved, out linkToProperty);
-        //                    swCustomPropMgr.Get6("uwagi", false, out comments, out resolvedValOut, out wasResolved, out linkToProperty);
-        //                    swCustomPropMgr.Get6("status dokumentacji", false, out status, out resolvedValOut, out wasResolved, out linkToProperty);
-        //                    swCustomPropMgr.Get6("utworzyl", false, out createdBy, out resolvedValOut, out wasResolved, out linkToProperty);
-        //                    swCustomPropMgr.Get6("sprawdzil", false, out checkedBy, out resolvedValOut, out wasResolved, out linkToProperty);
+                MessageBoxResult suppressedChoice = default(MessageBoxResult);
 
-        //                    dxfExist = File.Exists(System.IO.Path.ChangeExtension(swModel.GetPathName(), "DXF"));
+                swComps = (object[])swAss.GetComponents(false); //true for all comps in the assembly
+                List<string> doneswComps = new List<string>();
+                bool hasSuppresed = swAss.HasUnloadedComponents();
+                int lightWeightCompsCount = swAss.GetLightWeightComponentCount();
+                if (hasSuppresed || lightWeightCompsCount != 0)
+                {
+                    suppressedChoice = MessageBox.Show("Wykryto pliki w odciążeniu i/lub wygaszone. Czy chcesz przywrócić je do pełnej pamięci i je wygenerować?", "Złożenie posiada wygaszone pliki", MessageBoxButton.YesNo);
+                }
 
-        //                    stepExist = File.Exists(System.IO.Path.ChangeExtension(swModel.GetPathName(), "STEP"));
 
-        //                    SWFileProperties swFileProperties = new SWFileProperties();
-        //                    swFileProperties.filepath = compFilepath;
-        //                    swFileProperties.name = name;
-        //                    swFileProperties.description = valOutDescription;
-        //                    swFileProperties.material = resolvedMaterial;
-        //                    swFileProperties.thickness = resolvedThickness;
-        //                    swFileProperties.mass = resolvedMass;
-        //                    swFileProperties.area = surface;
-        //                    swFileProperties.paintQty = paintQty;
-        //                    swFileProperties.drawingNum = valOutDrawingNum;
-        //                    swFileProperties.Qty = valOutQty;
-        //                    swFileProperties.configuration = configName;
-        //                    swFileProperties.status = status;
-        //                    swFileProperties.createdBy = createdBy;
-        //                    swFileProperties.checkedBy = checkedBy;
-        //                    swFileProperties.dxfExist = dxfExist;
-        //                    swFileProperties.stepExist = stepExist;
-        //                    swFileProperties.comments = comments;
-        //                    swFilesProperties.Add(swFileProperties);
+                //adding rows for each component
 
-        //                }
-        //            }
+                foreach (Component2 swComp in swComps)
+                {
+                    try
+                    {
+                        if (suppressedChoice == MessageBoxResult.Yes && swComp.IsSuppressed() == true)
+                        {
+                            swComp.SetSuppression2((int)swComponentSuppressionState_e.swComponentFullyResolved);
+                        }
+                        swModel = (ModelDoc2)swComp.GetModelDoc2();
+                        string compFilepath = swModel.GetPathName();
+                        swModelExt = swModel.Extension;
+                        swConfMgr = swModel.ConfigurationManager;
+                        swConfig = (Configuration)swConfMgr.ActiveConfiguration;
+                        configName = swConfig.Name;
+                        swCustomPropMgr = swModelExt.get_CustomPropertyManager("");
+                        name = System.IO.Path.GetFileNameWithoutExtension(swModel.GetPathName());
+                        if (doneswComps.Contains(name) == false)
+                        {
+                            doneswComps.Add(name);
+                            swCustomPropMgr.Get6("opis", false, out valOutDescription, out resolvedValOut, out wasResolved, out linkToProperty);
+                            swCustomPropMgr.Get6("material", false, out material, out resolvedMaterial, out wasResolved, out linkToProperty);
+                            swCustomPropMgr.Get6("grubosc materialu", false, out thickness, out resolvedThickness, out wasResolved, out linkToProperty);
+                            swCustomPropMgr.Get6("masa", false, out mass, out resolvedMass, out wasResolved, out linkToProperty);
+                            swCustomPropMgr.Get6("powierzchnia dm2", false, out surface, out resolvedValOut, out wasResolved, out linkToProperty);
+                            swCustomPropMgr.Get6("ilosc farby", false, out paintQty, out resolvedValOut, out wasResolved, out linkToProperty);
+                            swCustomPropMgr.Get6("nr rysunku", false, out valOutDrawingNum, out resolvedValOut, out wasResolved, out linkToProperty);
+                            swCustomPropMgr.Get6("szt na kpl", false, out valOutQty, out resolvedValOut, out wasResolved, out linkToProperty);
+                            swCustomPropMgr.Get6("uwagi", false, out comments, out resolvedValOut, out wasResolved, out linkToProperty);
+                            swCustomPropMgr.Get6("status dokumentacji", false, out status, out resolvedValOut, out wasResolved, out linkToProperty);
+                            swCustomPropMgr.Get6("utworzyl", false, out createdBy, out resolvedValOut, out wasResolved, out linkToProperty);
+                            swCustomPropMgr.Get6("sprawdzil", false, out checkedBy, out resolvedValOut, out wasResolved, out linkToProperty);
 
-        //            catch (System.NullReferenceException)
-        //            {
+                            dxfExist = File.Exists(System.IO.Path.ChangeExtension(swModel.GetPathName(), "DXF"));
 
-        //            }
+                            stepExist = File.Exists(System.IO.Path.ChangeExtension(swModel.GetPathName(), "STEP"));
 
-        //        }
-        //        return (index, path, assemblyConfig, swFilesProperties);
-        //    }
-        //    catch
-        //    {
-        //        MessageBox.Show("Otwórz plik SolidWorks");
-        //        return (null,null,null,null);
-        //    }
+                            SWFileProperties swFileProperties = new SWFileProperties();
+                            swFileProperties.filepath = compFilepath;
+                            swFileProperties.name = name;
+                            swFileProperties.description = valOutDescription;
+                            swFileProperties.material = resolvedMaterial;
+                            swFileProperties.thickness = resolvedThickness;
+                            swFileProperties.mass = resolvedMass;
+                            swFileProperties.area = surface;
+                            swFileProperties.paintQty = paintQty;
+                            swFileProperties.drawingNum = valOutDrawingNum;
+                            swFileProperties.Qty = valOutQty;
+                            swFileProperties.configuration = configName;
+                            swFileProperties.status = status;
+                            swFileProperties.createdBy = createdBy;
+                            swFileProperties.checkedBy = checkedBy;
+                            swFileProperties.dxfExist = dxfExist;
+                            swFileProperties.stepExist = stepExist;
+                            swFileProperties.comments = comments;
+                            swFilesProperties.Add(swFileProperties);
 
-        //}
+                        }
+                    }
+
+                    catch (System.NullReferenceException)
+                    {
+
+                    }
+
+                }
+                return swFilesProperties;
+            }
+            catch
+            {
+                MessageBox.Show("Otwórz plik SolidWorks");
+                return (null, null, null, null);
+            }
+
+        }
 
         public string CreateAssembly()
         {
@@ -253,7 +252,7 @@ namespace SWApp
             swAssembly.SaveAs3($"{filepath}.SLDASM", 0, 8);
             return filepath;
         }
-        public void SetProperties(List<string> doneParts, List<FileProperty> customProperties, string[] optionsStr, bool[] options)
+        public void SetProperties(List<string> doneParts, List<CustomProperty> customProperties, string[] optionsStr, bool[] options)
         {
             TreeControlItem node;
             swModel = (ModelDoc2)_swApp.ActiveDoc;
@@ -264,7 +263,7 @@ namespace SWApp
             node = node.GetFirstChild();
             SetProperties(node, doneParts, allParts, customProperties, optionsStr, options);
         }
-        private void SetProperties(TreeControlItem node,List<string> doneParts, Dictionary<string,int>allParts, List<FileProperty> customProperties, string[]optionsStr, bool[]options)
+        private void SetProperties(TreeControlItem node,List<string> doneParts, Dictionary<string,int>allParts, List<CustomProperty> customProperties, string[]optionsStr, bool[]options)
         {
             try
             {
@@ -318,7 +317,7 @@ namespace SWApp
                                 parentNum = $"{parentNum}.{drawingNum}";
 
 
-                                foreach (FileProperty customProperty in customProperties)
+                                foreach (CustomProperty customProperty in customProperties)
                                 {
                                     SetCustomProperty(swModel, customProperty.name, customProperty.value, "");
 
@@ -365,7 +364,7 @@ namespace SWApp
                             }
                             else
                             {
-                                foreach (FileProperty fileProperty in customProperties)
+                                foreach (CustomProperty fileProperty in customProperties)
                                 {
                                     SetCustomProperty(swModel, fileProperty.name, fileProperty.value, "");
                                 }

@@ -22,10 +22,15 @@ namespace SWApp.Viewmodels.Pages
             _swObject = new SWObject();
         }
 
-        public void SetProperties(List<FileProperty> customProperties, string[]optionsStr, bool[] options)
+        public void SetProperties(List<CustomProperty> customProperties, string[]optionsStr, bool[] options)
         {
             List<string> doneParts = new List<string>();
             _swObject.SetProperties(doneParts, customProperties,optionsStr, options);
+        }
+
+        public void ReadProperties()
+        {
+            _swObject.ReadProperties();
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace SWApp.Models
 {
-    public class FileProperty
+    public class CustomProperty
     {
         public string name { get; set; }
         public string value { get; set; }
