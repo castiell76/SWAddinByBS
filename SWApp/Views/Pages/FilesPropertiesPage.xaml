@@ -32,7 +32,7 @@
     </Page.Resources>
 
     <StackPanel>
-        <controls:ControlExample Margin="15">
+        <controls:ControlExample Margin="15" x:Name="RootContentPresenter">
             <DockPanel>
                 <StackPanel>
                     <CheckBox x:Name="cbCopyPropsToAllConfigs" Content="Kopiuj właściwości do wszystkich konfiguracji" Grid.Column="3"/>
@@ -81,8 +81,7 @@
             <StackPanel>
                 <ToggleButton Content="Rozwiń tabelę" x:Name="btnShowTable" Click="btnShowTable_Click"></ToggleButton>
                 <DataGrid x:Name="dgAllProperties"  
-                      ItemsSource="{Binding list}" 
-                      AutoGenerateColumns="False"
+                      AutoGenerateColumns="True"
                       Style="{StaticResource datagridStyle}"
                 Visibility="Collapsed">
                     <DataGrid.Resources>
@@ -93,8 +92,11 @@
                         </ResourceDictionary>
                     </DataGrid.Resources>
                 </DataGrid >
+                <ui:Button HorizontalAlignment="Center" Content="Pobierz tabelę" Click="Button_Click_1"></ui:Button>
+                <ui:Button HorizontalAlignment="Right" Content="Zapisz do xls"></ui:Button>
             </StackPanel>
         </controls:ControlExample>
+       
     </StackPanel>
 
 </Page>

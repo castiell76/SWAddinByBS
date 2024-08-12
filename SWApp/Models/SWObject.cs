@@ -39,6 +39,8 @@ using SWApp.Services;
 using Wpf.Ui.Controls;
 using System.Linq.Expressions;
 using Aspose.Pdf.Operators;
+using System.Threading;
+using Wpf.Ui;
 
 namespace SWApp
 {
@@ -85,6 +87,7 @@ namespace SWApp
             {"MONTAŻ","INSTALLATION" }
         };
         private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
+        private IContentDialogService _contentDialogService;
 
         public SWObject()
         {
@@ -93,21 +96,38 @@ namespace SWApp
             _templateAssemblyPath = ($"{_systemPath}EBA\\SZABLONY\\Solidworks\\EBA_Złożenie.asmdot");
             _templatePartPath = ($"{_systemPath}EBA\\SZABLONY\\Solidworks\\EBA_Część.prtdot");
             _helpService = new HelpService();
+            _contentDialogService = HelpService.GetRequiredService<IContentDialogService>();
         }
 
         public event Action<string> ErrorOccurred;
+        private async Task<ContentDialogResult> ShowDialogContent()
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "Uwaga!",
+                Content = "Wykryto części wygaszone i/lub w stanie odciążenia. Czy chcesz przywrócić je do pełnej pamięci?",
+                PrimaryButtonText = "Tak",
+                CloseButtonText = "Nie"
+            };
+
+            var result = _contentDialogService.ShowAsync(dialog, CancellationToken.None);
+            Wpf.Ui.Controls.ContentDialogResult suppressedChoice = await result;
+
+            return suppressedChoice;
+        }
+
+        
+
         public List<SWFileProperties> ReadProperties()
         {
             try
             {
-                SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
+                
                 ModelDoc2 swModel;
                 ConfigurationManager swConfMgr;
-                swAss = (AssemblyDoc)swApp.ActiveDoc;
-
-
+                swAss = (AssemblyDoc)_swApp.ActiveDoc;
                 //get data for the assembly filepath and configuration
-                swModel = (ModelDoc2)swApp.ActiveDoc;
+                swModel = (ModelDoc2)_swApp.ActiveDoc;
                 swModelExt = swModel.Extension;
                 string path = swModel.GetPathName();
                 string assemblyConfig;
@@ -146,25 +166,24 @@ namespace SWApp
                 swCustomPropMgr.Get6("index xl", false, out valOutDescription, out resolvedValOut, out wasResolved, out linkToProperty);
                 string index = valOutDescription;
 
-                MessageBoxResult suppressedChoice = default(MessageBoxResult);
+                var suppressedChoice = default(ContentDialogResult);
 
                 swComps = (object[])swAss.GetComponents(false); //true for all comps in the assembly
                 List<string> doneswComps = new List<string>();
                 bool hasSuppresed = swAss.HasUnloadedComponents();
                 int lightWeightCompsCount = swAss.GetLightWeightComponentCount();
+
                 if (hasSuppresed || lightWeightCompsCount != 0)
                 {
-                    suppressedChoice = MessageBox.Show("Wykryto pliki w odciążeniu i/lub wygaszone. Czy chcesz przywrócić je do pełnej pamięci i je wygenerować?", "Złożenie posiada wygaszone pliki", MessageBoxButton.YesNo);
+                    suppressedChoice= ShowDialogContent().Result;
                 }
-
-
                 //adding rows for each component
 
                 foreach (Component2 swComp in swComps)
                 {
                     try
                     {
-                        if (suppressedChoice == MessageBoxResult.Yes && swComp.IsSuppressed() == true)
+                        if (suppressedChoice == ContentDialogResult.Primary && swComp.IsSuppressed() == true)
                         {
                             swComp.SetSuppression2((int)swComponentSuppressionState_e.swComponentFullyResolved);
                         }
@@ -227,10 +246,10 @@ namespace SWApp
                 }
                 return swFilesProperties;
             }
-            catch
+            catch(Exception)
             {
-                MessageBox.Show("Otwórz plik SolidWorks");
-                return (null, null, null, null);
+                _helpService.SnackbarService.Show("Uwaga!", "Otwórz pliku typu złożenie", Wpf.Ui.Controls.ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24), TimeSpan.FromSeconds(3));
+                return null;
             }
 
         }

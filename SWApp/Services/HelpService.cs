@@ -73,6 +73,7 @@ namespace SWApp.Services
 
                           
                           services.AddTransient<CrossSectionsViewmodel>();
+                          services.AddTransient<FilesPropertiesViewModel>();
                           
                       }
                   )

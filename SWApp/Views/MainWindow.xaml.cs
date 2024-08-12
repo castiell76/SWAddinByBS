@@ -47,17 +47,11 @@ namespace SWApp.Views
     [ComVisible(true)]
     public partial class MainWindow : UserControl
     {
-
-        SWObject sWObject = new SWObject();
-        ModelDoc2 swModel;
-        FeatureManager swFeatMgr;
-        Component2 swComp;
         //Configuration swConfig;
         //ConfigurationManager swConfMgr;
-        List<FileProperty> fileProperties = new List<FileProperty>();
-        List<string> engineers = new List<string>();
-        ExcelFile excelFile = new ExcelFile();
-        ObservableCollection<ProfileSW> profilesSW = new ObservableCollection<ProfileSW>();
+        //List<string> engineers = new List<string>();
+       // ExcelFile excelFile = new ExcelFile();
+        //ObservableCollection<ProfileSW> profilesSW = new ObservableCollection<ProfileSW>();
 
         private Microsoft.Extensions.Hosting.IHost _host;
         private INavigationService _navigationService;
@@ -93,6 +87,7 @@ namespace SWApp.Views
             _snackbarService = _helpService.SnackbarService;
             _snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
             _contentDialogService = _helpService.ContentDialogService;
+            _contentDialogService.SetContentPresenter(RootContentDialogPresenter);
             _themeService = _helpService.ThemeService;
             //_navigationService.SetNavigationControl(NavigationView);
             //_contentDialogService.SetDialogHost(RootContentDialog);
@@ -105,13 +100,8 @@ namespace SWApp.Views
             ////generate rows for datagrid properties
             //dgProperties.ItemsSource = fileProperties;
 
-            fileProperties.Add(new FileProperty() { name = "index xl", value = "" });
-            fileProperties.Add(new FileProperty() { name = "Nazwa wyrobu", value = "" });
-            fileProperties.Add(new FileProperty() { name = "status dokumentacji", value = null });
-            fileProperties.Add(new FileProperty() { name = "Akronim klienta", value = "" });
 
 
-            engineers.Sort();
 
         }
         private void NavigationView_OnPaneOpened(NavigationView sender, RoutedEventArgs args)

@@ -1,5 +1,6 @@
 ﻿using SWApp.Controls;
 using SWApp.Models;
+using SWApp.Services;
 using SWApp.Viewmodels.Pages;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Wpf.Ui;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
@@ -28,6 +30,7 @@ namespace SWApp.Views.Pages
     {
         private ViewControl _viewControl;
         private FilesPropertiesViewModel _viewModel;
+        private IContentDialogService _contentDialogService;
         public FilesPropertiesPage()
         {
 
@@ -35,7 +38,9 @@ namespace SWApp.Views.Pages
             _viewControl = new ViewControl();
             _viewModel = new FilesPropertiesViewModel();
             DataContext = _viewModel;
+            _contentDialogService=HelpService.GetRequiredService<IContentDialogService>();
             ApplicationThemeManager.Apply(this);
+
         }
 
         private void cbSetIndex_Checked(object sender, RoutedEventArgs e)
@@ -150,7 +155,8 @@ namespace SWApp.Views.Pages
         private void btnSetProperties_Click(object sender, RoutedEventArgs e)
         {
             SetProperties();
-            _viewModel.ReadProperties();
+            dgAllProperties.ItemsSource = _viewModel.ReadProperties();
+            dgAllProperties.Visibility = Visibility.Visible;
         }
         private void SetProperties()
         {
@@ -208,5 +214,11 @@ namespace SWApp.Views.Pages
             }
         
     }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            dgAllProperties.ItemsSource = _viewModel.ReadProperties();
+            dgAllProperties.Visibility = Visibility.Visible;
+        }
     }
 }
