@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -20,44 +21,43 @@ namespace SWApp.Viewmodels.Pages
     {
         [ObservableProperty]
         private ObservableCollection<ProfileSW> _crossSectionsList;
-        private HelpService _helpService = new HelpService();
+        private HelpService _helpService;
         private ISnackbarService _snackbarService;
+        private SWObject _sWObject;
 
         public CrossSectionsViewmodel(ISnackbarService snackbarService)
         {
             _snackbarService= snackbarService;
             CrossSectionsList = new ObservableCollection<ProfileSW>();
+            _helpService = new HelpService();
+            _sWObject = new SWObject();
+            _sWObject.ErrorOccurred += OnErrorOccured;
         }
 
-        public void OnOpenSnackbar(string title, string message, ControlAppearance appearance)
+
+
+        private void OnErrorOccured(string title, string message, ControlAppearance appearance, SymbolIcon icon)
         {
-            _snackbarService = _helpService.SnackbarService;
-            _snackbarService.Show(
-                title,
-                message,
-                appearance,
-                new SymbolIcon(SymbolRegular.Important24),
-                TimeSpan.FromSeconds(3)
-            );
+            _helpService.SnackbarService.Show(title, message, appearance, new SymbolIcon(SymbolRegular.Important24), TimeSpan.FromSeconds(3));
         }
 
         public void GenerateCrossSections()
         {
             string assemblyFilepath;
             string filePathDir;
-            SWObject sWObject = new SWObject();
+            
             try
             {
                 
                 if (CrossSectionsList.Any(x => x.Type == ("wprowadź dane profila")) || CrossSectionsList.Any(x => x.Type == ("")) || CrossSectionsList.Count == 0 || CrossSectionsList.Any(x=> x.Type == string.Empty))
                 {
-                    OnOpenSnackbar("Uwaga!","Wprowadź poprawne dane profila", ControlAppearance.Caution);
+                    OnErrorOccured("Uwaga!","Wprowadź poprawne dane profila", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24));
                 }
                 else
                 {
-                    assemblyFilepath = sWObject.CreateAssembly();
+                    assemblyFilepath = _sWObject.CreateAssembly();
                     filePathDir = System.IO.Path.GetDirectoryName(assemblyFilepath);
-                    sWObject.CloseDoc(assemblyFilepath);
+                    _sWObject.CloseDoc(assemblyFilepath);
 
 
                     foreach (ProfileSW profile in CrossSectionsList)
@@ -65,38 +65,39 @@ namespace SWApp.Viewmodels.Pages
                         switch (profile.Type)
                         {
                             case "pręt okrągły":
-                                sWObject.CreateCircularRod(profile, $"{filePathDir}\\");
-                                sWObject.AddToAssembly($"{filePathDir}\\{profile.Name}.SLDPRT", assemblyFilepath);
-                                sWObject.CloseDoc($"{profile.Name}.SLDPRT");
+                                _sWObject.CreateCircularRod(profile, $"{filePathDir}\\");
+                                _sWObject.AddToAssembly($"{filePathDir}\\{profile.Name}.SLDPRT", assemblyFilepath);
+                                _sWObject.CloseDoc($"{profile.Name}.SLDPRT");
                                 break;
                             case "pręt prostokątny":
-                                sWObject.CreateRectangleRod(profile, $"{filePathDir}\\");
-                                sWObject.AddToAssembly($"{filePathDir}\\{profile.Name}.SLDPRT", assemblyFilepath);
-                                sWObject.CloseDoc($"{profile.Name}.SLDPRT");
+                                _sWObject.CreateRectangleRod(profile, $"{filePathDir}\\");
+                                _sWObject.AddToAssembly($"{filePathDir}\\{profile.Name}.SLDPRT", assemblyFilepath);
+                                _sWObject.CloseDoc($"{profile.Name}.SLDPRT");
                                 break;
                             case "rura prostokątna":
-                                sWObject.CreateRectangleProfile(profile, $"{filePathDir}\\");
-                                sWObject.AddToAssembly($"{filePathDir}\\{profile.Name}.SLDPRT", assemblyFilepath);
-                                sWObject.CloseDoc($"{profile.Name}.SLDPRT");
+                                _sWObject.CreateRectangleProfile(profile, $"{filePathDir}\\");
+                                _sWObject.AddToAssembly($"{filePathDir}\\{profile.Name}.SLDPRT", assemblyFilepath);
+                                _sWObject.CloseDoc($"{profile.Name}.SLDPRT");
                                 break;
                             case "rura okrągła":
-                                sWObject.CreateCircularProfile(profile, $"{filePathDir}\\");
-                                sWObject.AddToAssembly($"{filePathDir}\\{profile.Name}.SLDPRT", assemblyFilepath);
-                                sWObject.CloseDoc($"{profile.Name}.SLDPRT");
+                                _sWObject.CreateCircularProfile(profile, $"{filePathDir}\\");
+                                _sWObject.AddToAssembly($"{filePathDir}\\{profile.Name}.SLDPRT", assemblyFilepath);
+                                _sWObject.CloseDoc($"{profile.Name}.SLDPRT");
                                 break;
                         }
 
                     }
-                    OnOpenSnackbar("Sukces!", "Generowanie zakończone", ControlAppearance.Success);
+                    OnErrorOccured("Sukces!", "Generowanie zakończone", ControlAppearance.Success, new SymbolIcon(SymbolRegular.Checkmark24));
+
                 }
             }
             catch (System.InvalidCastException)
             {
-                OnOpenSnackbar("Uwaga!", "Wprowadź poprawne dane profila", ControlAppearance.Caution);
+                OnErrorOccured("Uwaga!", "Wprowadź poprawne dane profila", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24));
             }
             catch (System.NullReferenceException)
             {
-                OnOpenSnackbar("Uwaga!REF", "Wprowadź poprawne dane profila", ControlAppearance.Caution);
+                OnErrorOccured("Uwaga!", "Wprowadź poprawne dane profila", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24));
             }
         }
 

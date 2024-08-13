@@ -9,6 +9,7 @@ using Wpf.Ui.Controls;
 using SWApp.Services;
 using System.Threading;
 using Wpf.Ui;
+using System;
 
 namespace SWApp.Viewmodels.Pages
 {
@@ -16,6 +17,7 @@ namespace SWApp.Viewmodels.Pages
     {
         private SWObject _swObject;
         private IContentDialogService _contentDialogService;
+        private HelpService _helpService;
 
         private ObservableCollection<SWFileProperties> _properties;
         public ObservableCollection<SWFileProperties> Properties
@@ -31,14 +33,23 @@ namespace SWApp.Viewmodels.Pages
             EngineersList = new ObservableCollection<string> { "Błaz", "Ktoś", "ktoś2s" };
 
             _swObject = new SWObject();
+            _helpService = new HelpService();
+
             _contentDialogService = HelpService.GetRequiredService<IContentDialogService>();
             _swObject.SupressedElementsDetected += OnSuprresedElementsDetected;
+            _swObject.ErrorOccurred += OnErrorOccured;
+        }
+
+        private void OnErrorOccured(string title, string message, ControlAppearance appearance, SymbolIcon icon)
+        {
+            _helpService.SnackbarService.Show(title, message, appearance, icon, TimeSpan.FromSeconds(3));
         }
 
         private async void OnSuprresedElementsDetected(object sender, bool e)
         {
             await ShowContentDialogAsync();
         }
+
 
         public async Task<ObservableCollection<SWFileProperties>> ReadPropertiesAsync()
         {
@@ -86,8 +97,16 @@ namespace SWApp.Viewmodels.Pages
         }
         public void SetProperties(List<CustomProperty> customProperties, string[] optionsStr, bool[] options)
         {
-            List<string> doneParts = new List<string>();
-            _swObject.SetProperties(doneParts, customProperties, optionsStr, options);
+            try
+            {
+                List<string> doneParts = new List<string>();
+                _swObject.SetProperties(doneParts, customProperties, optionsStr, options);
+            }
+            catch (NullReferenceException)
+            {
+                OnErrorOccured("Uwaga!", "Włącz poprawny plik SolidWorks", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24));
+            }
+            
 
         }
     }

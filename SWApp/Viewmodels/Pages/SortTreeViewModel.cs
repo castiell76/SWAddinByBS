@@ -1,13 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using SolidWorks.Interop.sldworks;
 using SWApp.Models;
+using SWApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Wpf.Ui.Controls;
 
 namespace SWApp.Viewmodels.Pages
 {
@@ -23,6 +26,7 @@ namespace SWApp.Viewmodels.Pages
         }
 
         private ObservableCollection<string> _items;
+        private HelpService _helpService;
         private SWObject _swObject = new SWObject();
         public SortTreeViewModel() 
         {
@@ -39,6 +43,13 @@ namespace SWApp.Viewmodels.Pages
                 "Elementy z drewna(PP)",
                 "Tworzywa Sztuczne (PT)",
                 "Mieszane elementy (PX)"};
+            _helpService = new HelpService();
+            _swObject.ErrorOccurred += OnErrorOccured;
+        }
+
+        private void OnErrorOccured(string title, string message, ControlAppearance appearance, SymbolIcon icon)
+        {
+            _helpService.SnackbarService.Show(title, message, appearance, icon, TimeSpan.FromSeconds(3));
         }
 
         public void SortItems(bool allLevels, List<string>input, bool groupComponents)
