@@ -1,35 +1,35 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using EnvDTE80;
 using SWApp.Models;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Wpf.Ui.Controls;
-using Wpf.Ui;
 using SWApp.Services;
 using System.Threading;
+using Wpf.Ui;
 
 namespace SWApp.Viewmodels.Pages
 {
-    public partial class FilesPropertiesViewModel : INotifyPropertyChanged
+    public partial class FilesPropertiesViewModel : ObservableObject
     {
         private SWObject _swObject;
         private IContentDialogService _contentDialogService;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        private ObservableCollection<SWFileProperties> _properties;
+        public ObservableCollection<SWFileProperties> Properties
+        {
+            get => _properties;
+            set => SetProperty(ref _properties, value);
+        }
 
         public ObservableCollection<string> EngineersList { get; set; }
 
         public FilesPropertiesViewModel()
         {
             EngineersList = new ObservableCollection<string> { "Błaz", "Ktoś", "ktoś2s" };
-            
+
             _swObject = new SWObject();
             _contentDialogService = HelpService.GetRequiredService<IContentDialogService>();
             _swObject.SupressedElementsDetected += OnSuprresedElementsDetected;
@@ -37,36 +37,58 @@ namespace SWApp.Viewmodels.Pages
 
         private async void OnSuprresedElementsDetected(object sender, bool e)
         {
-            await ShowContentDialog();
+            await ShowContentDialogAsync();
         }
 
-        public void SetProperties(List<CustomProperty> customProperties, string[]optionsStr, bool[] options)
+        public async Task<ObservableCollection<SWFileProperties>> ReadPropertiesAsync()
         {
-            List<string> doneParts = new List<string>();
-            _swObject.SetProperties(doneParts, customProperties,optionsStr, options);
-            
-        }
-
-        public ObservableCollection<SWFileProperties> ReadProperties()
-        {
+            bool hasSuppresedParts;
+            int lightWeightCompsCount;
+            object[] swComps;
             ObservableCollection<SWFileProperties> swFilesProperties = new ObservableCollection<SWFileProperties>();
-            swFilesProperties = _swObject.ReadProperties();
+
+            (swComps, hasSuppresedParts, lightWeightCompsCount) =  _swObject.ContainsSuppressedParts();
+
+            if (hasSuppresedParts || lightWeightCompsCount != 0)
+            {
+                var userChoice = await ShowContentDialogAsync();
+
+                if (userChoice == ContentDialogResult.Primary)
+                {
+                    swFilesProperties = _swObject.ReadProperties(swComps, true, lightWeightCompsCount, true);
+                }
+                else if (userChoice == ContentDialogResult.Secondary)
+                {
+                    swFilesProperties = _swObject.ReadProperties(swComps, true, lightWeightCompsCount, false);
+                }
+            }
+            else
+            {
+                swFilesProperties = _swObject.ReadProperties(swComps, false, lightWeightCompsCount, false);
+            }
+
+            Properties = swFilesProperties; 
             return swFilesProperties;
         }
 
-        private async Task  ShowContentDialog()
+        private async Task<ContentDialogResult> ShowContentDialogAsync()
         {
-            _contentDialogService = HelpService.GetRequiredService<IContentDialogService>();
-           await _contentDialogService.ShowAsync(
-                new ContentDialog()
+            var userChoice = await _contentDialogService.ShowAsync(
+                new ContentDialog
                 {
-                Title = "Uwaga!",
-                Content = "Wykryto komponenty wygaszone i/lub w odciążeniu. Czy chcesz przywrócić je do pełnej pamięci?",
-                PrimaryButtonText = "Tak",
-                SecondaryButtonText = "Nie",
-                }, CancellationToken.None
-                );
-        }
+                    Title = "Uwaga!",
+                    Content = "Wykryto komponenty wygaszone i/lub w odciążeniu. Czy chcesz przywrócić je do pełnej pamięci?",
+                    PrimaryButtonText = "Tak",
+                    SecondaryButtonText = "Nie",
+                }, CancellationToken.None);
 
+            return userChoice;
+        }
+        public void SetProperties(List<CustomProperty> customProperties, string[] optionsStr, bool[] options)
+        {
+            List<string> doneParts = new List<string>();
+            _swObject.SetProperties(doneParts, customProperties, optionsStr, options);
+
+        }
     }
 }

@@ -144,8 +144,7 @@ namespace SWApp.Views.Pages
 
         private void btnShowTable_Click(object sender, RoutedEventArgs e)
         {
-            //_viewModel.cos();
-            dgAllProperties.ItemsSource = _viewModel.ReadProperties();
+            _viewModel.ReadPropertiesAsync();
             stackpanelWithDatagrid.Visibility = Visibility.Visible;
 
         }
@@ -153,7 +152,7 @@ namespace SWApp.Views.Pages
         private void btnSetProperties_Click(object sender, RoutedEventArgs e)
         {
             SetProperties();
-            dgAllProperties.ItemsSource = _viewModel.ReadProperties();
+            _viewModel.ReadPropertiesAsync();
             dgAllProperties.Visibility = Visibility.Visible;
         }
         private void SetProperties()

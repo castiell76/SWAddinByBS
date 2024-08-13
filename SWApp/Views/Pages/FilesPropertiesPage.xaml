@@ -85,6 +85,7 @@
                     <DataGrid x:Name="dgAllProperties"  
           AutoGenerateColumns="True"
           Style="{StaticResource datagridStyle}"
+                              ItemsSource="{Binding Properties}"
     >
                         <DataGrid.Resources>
                             <ResourceDictionary>
