@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition.Primitives;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -42,6 +43,7 @@ namespace SWApp.Views.Pages
             ApplicationThemeManager.Apply(this);
 
         }
+
 
         private void cbSetIndex_Checked(object sender, RoutedEventArgs e)
         {
@@ -142,14 +144,10 @@ namespace SWApp.Views.Pages
 
         private void btnShowTable_Click(object sender, RoutedEventArgs e)
         {
-            if (dgAllProperties.Visibility == Visibility.Hidden || dgAllProperties.Visibility == Visibility.Collapsed)
-            {
-                _viewControl.ShowWithTransition(dgAllProperties);
-            }
-            else
-            {
-                _viewControl.HideWithTransition(dgAllProperties);
-            }
+            //_viewModel.cos();
+            dgAllProperties.ItemsSource = _viewModel.ReadProperties();
+            stackpanelWithDatagrid.Visibility = Visibility.Visible;
+
         }
 
         private void btnSetProperties_Click(object sender, RoutedEventArgs e)
@@ -215,10 +213,5 @@ namespace SWApp.Views.Pages
         
     }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            dgAllProperties.ItemsSource = _viewModel.ReadProperties();
-            dgAllProperties.Visibility = Visibility.Visible;
-        }
     }
 }

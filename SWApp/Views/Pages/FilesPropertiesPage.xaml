@@ -79,22 +79,25 @@
 
         <controls:ControlExample HeaderText="Tabela plików z drzewa" Margin="15">
             <StackPanel>
-                <ToggleButton Content="Rozwiń tabelę" x:Name="btnShowTable" Click="btnShowTable_Click"></ToggleButton>
-                <DataGrid x:Name="dgAllProperties"  
-                      AutoGenerateColumns="True"
-                      Style="{StaticResource datagridStyle}"
-                Visibility="Collapsed">
-                    <DataGrid.Resources>
-                        <ResourceDictionary>
-                            <ResourceDictionary.MergedDictionaries>
-                                <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/DatagridResource.xaml"></ResourceDictionary>
-                            </ResourceDictionary.MergedDictionaries>
-                        </ResourceDictionary>
-                    </DataGrid.Resources>
-                </DataGrid >
-                <ui:Button HorizontalAlignment="Center" Content="Pobierz tabelę" Click="Button_Click_1"></ui:Button>
-                <ui:Button HorizontalAlignment="Right" Content="Zapisz do xls"></ui:Button>
+                <ui:Button Content="Pobierz dane" x:Name="btnShowTable" Click="btnShowTable_Click"></ui:Button>
+                <StackPanel x:Name="stackpanelWithDatagrid" Visibility="Collapsed">
+
+                    <DataGrid x:Name="dgAllProperties"  
+          AutoGenerateColumns="True"
+          Style="{StaticResource datagridStyle}"
+    >
+                        <DataGrid.Resources>
+                            <ResourceDictionary>
+                                <ResourceDictionary.MergedDictionaries>
+                                    <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/DatagridResource.xaml"></ResourceDictionary>
+                                </ResourceDictionary.MergedDictionaries>
+                            </ResourceDictionary>
+                        </DataGrid.Resources>
+                    </DataGrid >
+                    <ui:Button HorizontalAlignment="Right" Content="Zapisz do xls"></ui:Button>
+                </StackPanel>
             </StackPanel>
+            
         </controls:ControlExample>
        
     </StackPanel>

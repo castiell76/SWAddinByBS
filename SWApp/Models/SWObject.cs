@@ -86,7 +86,7 @@ namespace SWApp
             {"SKALA","SCALE" },
             {"MONTAŻ","INSTALLATION" }
         };
-        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
+        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
         private IContentDialogService _contentDialogService;
 
         public SWObject()
@@ -100,25 +100,12 @@ namespace SWApp
         }
 
         public event Action<string> ErrorOccurred;
-        private async Task<ContentDialogResult> ShowDialogContent()
+        public event EventHandler<bool> SupressedElementsDetected;
+        protected virtual void OnSupressedElementsDetected(bool isSuppresed)
         {
-            var dialog = new ContentDialog
-            {
-                Title = "Uwaga!",
-                Content = "Wykryto części wygaszone i/lub w stanie odciążenia. Czy chcesz przywrócić je do pełnej pamięci?",
-                PrimaryButtonText = "Tak",
-                CloseButtonText = "Nie"
-            };
-
-            var result = _contentDialogService.ShowAsync(dialog, CancellationToken.None);
-            Wpf.Ui.Controls.ContentDialogResult suppressedChoice = await result;
-
-            return suppressedChoice;
+            SupressedElementsDetected?.Invoke(this, isSuppresed);
         }
-
-        
-
-        public List<SWFileProperties> ReadProperties()
+        public ObservableCollection<SWFileProperties> ReadProperties()
         {
             try
             {
@@ -136,7 +123,7 @@ namespace SWApp
                 assemblyConfig = swAssConfig.Name;
                 swCustomPropMgr = swModelExt.get_CustomPropertyManager("");
 
-                List<SWFileProperties> swFilesProperties = new List<SWFileProperties>();
+                ObservableCollection<SWFileProperties> swFilesProperties = new ObservableCollection<SWFileProperties>();
 
                 object[] swComps;
                 string name;
@@ -166,7 +153,7 @@ namespace SWApp
                 swCustomPropMgr.Get6("index xl", false, out valOutDescription, out resolvedValOut, out wasResolved, out linkToProperty);
                 string index = valOutDescription;
 
-                var suppressedChoice = default(ContentDialogResult);
+                var suppressedChoice = default(bool);
 
                 swComps = (object[])swAss.GetComponents(false); //true for all comps in the assembly
                 List<string> doneswComps = new List<string>();
@@ -175,7 +162,7 @@ namespace SWApp
 
                 if (hasSuppresed || lightWeightCompsCount != 0)
                 {
-                    suppressedChoice= ShowDialogContent().Result;
+                    OnSupressedElementsDetected(true);
                 }
                 //adding rows for each component
 
@@ -183,7 +170,7 @@ namespace SWApp
                 {
                     try
                     {
-                        if (suppressedChoice == ContentDialogResult.Primary && swComp.IsSuppressed() == true)
+                        if (suppressedChoice == true && swComp.IsSuppressed() == true)
                         {
                             swComp.SetSuppression2((int)swComponentSuppressionState_e.swComponentFullyResolved);
                         }

@@ -1,12 +1,12 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.3.32929.385
+# Visual Studio Express 15 for Windows Desktop
+VisualStudioVersion = 15.0.33423.255
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SWApp", "SWApp\SWApp.csproj", "{BA10173C-6C0F-48FD-ACA2-D58EBB16EE95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWApp", "SWApp\SWApp.csproj", "{BA10173C-6C0F-48FD-ACA2-D58EBB16EE95}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WF-Host", "WF-Host\WF-Host.csproj", "{6B2536DA-7459-45E6-8266-F5F46897EACC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WF-Host", "WF-Host\WF-Host.csproj", "{6B2536DA-7459-45E6-8266-F5F46897EACC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Host-TestApp", "Host-TestApp\Host-TestApp.csproj", "{966364F8-B6DA-48D2-958C-B4CF81F5F6D7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host-TestApp", "Host-TestApp\Host-TestApp.csproj", "{966364F8-B6DA-48D2-958C-B4CF81F5F6D7}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{C27F25FB-B891-4FC8-8BDD-46330DCE7274}"
 EndProject
