@@ -49,6 +49,7 @@ using System.Xml;
 using SkiaSharp;
 using stdole;
 using System.Drawing;
+using SWApp.Helpers;
 
 
 
@@ -2310,61 +2311,19 @@ namespace SWApp
             //ONLY FOR TESTINGAPP --> ANOTHER OPTIOFOR GENERATE BITMAP
             //bool guwnit = swApp.GetPreviewBitmapFile(filepath, configName, imgFilepath);
 
-            object imageObj = _swApp.GetPreviewBitmap(filepath, configName);
 
 
             //OLD METHOD
-            //object imageObj = _swApp.GetPreviewBitmap(filepath, configName);
-            //string fileName = System.IO.Path.GetFileNameWithoutExtension(filepath);
 
-            //var image = SKImage.FromBitmap(imageObj);
-            //image.Save(imgFilepath, System.Drawing.Imaging.ImageFormat.Bmp);
-
-            // Przykładowa konwersja z IPictureDisp do SKBitmap
-            using (var skBitmap = ConvertToSkBitmap(imageObj))
-            {
-                using (var image = SKImage.FromBitmap(skBitmap))
-                using (var data = image.Encode(SKEncodedImageFormat.Bmp, 100))
-                {
-                    using (var stream = File.OpenWrite(imgFilepath))
-                    {
-                        data.SaveTo(stream);
-                    }
-                }
-            }
+            object imageObj = _swApp.GetPreviewBitmap(filepath, configName);
+            string fileName = System.IO.Path.GetFileNameWithoutExtension(filepath);
+            var image = Models.PictureDispConverter.Convert(imageObj);
+            image.Save(imgFilepath, System.Drawing.Imaging.ImageFormat.Bmp);
 
             return imgFilepath;
 
         }
 
-        private SKBitmap ConvertToSkBitmap(object imageObj)
-        {
-            if (imageObj is stdole.IPictureDisp pictureDisp)
-            {
-                // Konwersja IPictureDisp do SKBitmap
-                using (var stream = ConvertIPictureDispToStream(pictureDisp))
-                {
-                    return SKBitmap.Decode(stream);
-                }
-            }
-
-            throw new InvalidOperationException("Nie można przekonwertować obiektu obrazu na SKBitmap.");
-        }
-
-        private Stream ConvertIPictureDispToStream(stdole.IPictureDisp pictureDisp)
-        {
-            // Pobierz uchwyt HBITMAP z IPictureDisp
-            IntPtr hbitmap = (IntPtr)pictureDisp.Handle;
-
-            // Konwersja HBITMAP do strumienia
-            using (var bitmap = System.Drawing.Image.FromHbitmap(hbitmap))
-            {
-                var ms = new MemoryStream();
-                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-                ms.Seek(0, SeekOrigin.Begin);
-                return ms;
-            }
-        }
 
         public char SetRevision()
         {

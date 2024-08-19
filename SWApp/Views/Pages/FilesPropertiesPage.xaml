@@ -77,7 +77,6 @@
             </DockPanel>
         </controls:ControlExample>
         <ui:Button x:Name="btnSetProperties" Content="Dodaj właściwości" HorizontalAlignment="Center" Click="btnSetProperties_Click"></ui:Button>
-        <ui:Button Height="66" Width="103" Click="Button_Click_2"></ui:Button>
         <DockPanel>
             <ui:TextBox x:Name="tbassFilepath" Visibility="Hidden"></ui:TextBox>
                 <ui:TextBox x:Name="tbassConfig" Visibility="Hidden"></ui:TextBox>
