@@ -46,6 +46,11 @@ using EnumsNET;
 using NPOI.SS.Formula.Functions;
 using System.Reflection;
 using System.Xml;
+using SkiaSharp;
+using stdole;
+using System.Drawing;
+
+
 
 namespace SWApp
 {
@@ -94,7 +99,7 @@ namespace SWApp
             {"SKALA","SCALE" },
             {"MONTAŻ","INSTALLATION" }
         };
-        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
+        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
 
         public SWObject()
         {
@@ -112,6 +117,32 @@ namespace SWApp
         protected virtual void OnSupressedElementsDetected(bool isSuppresed)
         {
             SupressedElementsDetected?.Invoke(this, isSuppresed);
+        }
+
+        public (string, string, string) GetDataForBitmap()
+        {
+            string index, filepath, configName = default;
+            try
+            {
+                swModel = (ModelDoc2)_swApp.ActiveDoc;
+                swModelExt = swModel.Extension;
+                swConfMgr = swModel.ConfigurationManager;
+                swConfig = (Configuration)swConfMgr.ActiveConfiguration;
+                swCustomPropMgr = swModelExt.get_CustomPropertyManager("");
+                filepath = swModel.GetPathName();
+                configName = swConfig.Name;
+                swCustomPropMgr.Get6("index xl", false, out string valOut, out index, out bool wasResolved, out bool linkToProperty);
+                return (index, filepath, configName);
+            }
+            catch (NullReferenceException)
+            {
+                ErrorOccurred?.Invoke("Uwaga!", "Włącz plik SolidWorks typu złożenie lub część", ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24));
+                return (string.Empty, string.Empty, string.Empty);
+                
+            }
+            
+
+            
         }
         public (object[],bool,int) ContainsSuppressedParts()
         {
@@ -227,6 +258,7 @@ namespace SWApp
                     swCustomPropMgr.Get6("material", false, out material, out resolvedMaterial, out wasResolved, out linkToProperty);
                     swCustomPropMgr.Get6("grubosc materialu", false, out thickness, out resolvedThickness, out wasResolved, out linkToProperty);
                     swCustomPropMgr.Get6("masa", false, out mass, out resolvedMass, out wasResolved, out linkToProperty);
+                    swCustomPropMgr.Get6("index", false, out index, out string resolvedIndex, out wasResolved, out linkToProperty);
                     swCustomPropMgr.Get6("powierzchnia dm2", false, out surface, out resolvedValOut, out wasResolved, out linkToProperty);
                     swCustomPropMgr.Get6("ilosc farby", false, out paintQty, out resolvedValOut, out wasResolved, out linkToProperty);
                     swCustomPropMgr.Get6("nr rysunku", false, out valOutDrawingNum, out resolvedValOut, out wasResolved, out linkToProperty);
@@ -257,6 +289,7 @@ namespace SWApp
                     swFileProperties.material = resolvedMaterial;
                     swFileProperties.thickness = resolvedThickness;
                     swFileProperties.mass = resolvedMass;
+                    swFileProperties.index = resolvedIndex;
                     swFileProperties.area = surface;
                     swFileProperties.paintQty = paintQty;
                     swFileProperties.drawingNum = valOutDrawingNum;
@@ -296,6 +329,7 @@ namespace SWApp
                                 swCustomPropMgr.Get6("material", false, out material, out resolvedMaterial, out wasResolved, out linkToProperty);
                                 swCustomPropMgr.Get6("grubosc materialu", false, out thickness, out resolvedThickness, out wasResolved, out linkToProperty);
                                 swCustomPropMgr.Get6("masa", false, out mass, out resolvedMass, out wasResolved, out linkToProperty);
+                                swCustomPropMgr.Get6("index", false, out index, out string resolvedIndex, out wasResolved, out linkToProperty);
                                 swCustomPropMgr.Get6("powierzchnia dm2", false, out surface, out resolvedValOut, out wasResolved, out linkToProperty);
                                 swCustomPropMgr.Get6("ilosc farby", false, out paintQty, out resolvedValOut, out wasResolved, out linkToProperty);
                                 swCustomPropMgr.Get6("nr rysunku", false, out valOutDrawingNum, out resolvedValOut, out wasResolved, out linkToProperty);
@@ -332,6 +366,7 @@ namespace SWApp
                                 swFileProperties.thickness = resolvedThickness;
                                 swFileProperties.mass = resolvedMass;
                                 swFileProperties.area = surface;
+                                swFileProperties.index = resolvedIndex;
                                 swFileProperties.paintQty = paintQty;
                                 swFileProperties.drawingNum = valOutDrawingNum;
                                 swFileProperties.Qty = valOutQty;
@@ -511,6 +546,7 @@ namespace SWApp
                 }
                 if (setIndex)
                 {
+                    SetCustomProperty(swModel, "index xl", index, "");
                     SetCustomProperty(swModel, "index", index, "");
                 }
 
@@ -571,6 +607,7 @@ namespace SWApp
                 }
                 if (setIndex)
                 {
+                    SetCustomProperty(swModel, "index xl", index, "");
                     SetCustomProperty(swModel, "index", index, "");
                 }
                 if (copyToAllConfigs)
@@ -2250,7 +2287,6 @@ namespace SWApp
         public string GetBitMap(string filepath,string configName)
         {
             
-            SldWorks swApp = (SldWorks)Marshal2.GetActiveObject("SldWorks.Application");
             string filename;
             string imgFilepath;
             string systemDir;
@@ -2272,15 +2308,62 @@ namespace SWApp
             }
 
             //ONLY FOR TESTINGAPP --> ANOTHER OPTIOFOR GENERATE BITMAP
-            bool guwnit = swApp.GetPreviewBitmapFile(filepath, configName, imgFilepath);
+            //bool guwnit = swApp.GetPreviewBitmapFile(filepath, configName, imgFilepath);
 
-            //object imageObj = swApp.GetPreviewBitmap(filepath, configName);
+            object imageObj = _swApp.GetPreviewBitmap(filepath, configName);
+
+
+            //OLD METHOD
+            //object imageObj = _swApp.GetPreviewBitmap(filepath, configName);
             //string fileName = System.IO.Path.GetFileNameWithoutExtension(filepath);
-            //System.Drawing.Image image;
-            //image = PictureDispConverter.Convert(imageObj);
+
+            //var image = SKImage.FromBitmap(imageObj);
             //image.Save(imgFilepath, System.Drawing.Imaging.ImageFormat.Bmp);
+
+            // Przykładowa konwersja z IPictureDisp do SKBitmap
+            using (var skBitmap = ConvertToSkBitmap(imageObj))
+            {
+                using (var image = SKImage.FromBitmap(skBitmap))
+                using (var data = image.Encode(SKEncodedImageFormat.Bmp, 100))
+                {
+                    using (var stream = File.OpenWrite(imgFilepath))
+                    {
+                        data.SaveTo(stream);
+                    }
+                }
+            }
+
             return imgFilepath;
-            
+
+        }
+
+        private SKBitmap ConvertToSkBitmap(object imageObj)
+        {
+            if (imageObj is stdole.IPictureDisp pictureDisp)
+            {
+                // Konwersja IPictureDisp do SKBitmap
+                using (var stream = ConvertIPictureDispToStream(pictureDisp))
+                {
+                    return SKBitmap.Decode(stream);
+                }
+            }
+
+            throw new InvalidOperationException("Nie można przekonwertować obiektu obrazu na SKBitmap.");
+        }
+
+        private Stream ConvertIPictureDispToStream(stdole.IPictureDisp pictureDisp)
+        {
+            // Pobierz uchwyt HBITMAP z IPictureDisp
+            IntPtr hbitmap = (IntPtr)pictureDisp.Handle;
+
+            // Konwersja HBITMAP do strumienia
+            using (var bitmap = System.Drawing.Image.FromHbitmap(hbitmap))
+            {
+                var ms = new MemoryStream();
+                bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                ms.Seek(0, SeekOrigin.Begin);
+                return ms;
+            }
         }
 
         public char SetRevision()

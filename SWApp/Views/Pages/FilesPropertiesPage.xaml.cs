@@ -148,6 +148,7 @@ namespace SWApp.Views.Pages
 
         private void btnShowTable_Click(object sender, RoutedEventArgs e)
         {
+            (tbSavedIndex.Text, tbAssyemblyFilepath.Text, tbConfigName.Text) = _viewModel.ReadAssemblyProperties();
             _viewModel.ReadPropertiesAsync();
             stackpanelWithDatagrid.Visibility = Visibility.Visible;
 
@@ -411,7 +412,12 @@ namespace SWApp.Views.Pages
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            _viewModel.SaveToExcel(dgAllProperties);
+            _viewModel.SaveToExcel(dgAllProperties, tbSavedIndex.Text, tbAssyemblyFilepath.Text, tbConfigName.Text);
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            _viewModel.Test();
         }
     }
 }

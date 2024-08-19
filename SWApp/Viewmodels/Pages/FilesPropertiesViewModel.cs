@@ -48,7 +48,7 @@ namespace SWApp.Viewmodels.Pages
             _swObject.SupressedElementsDetected += OnSuprresedElementsDetected;
             _swObject.ErrorOccurred += OnErrorOccured;
 
-            MaterialList = _swObject.GetMaterialList();
+           // MaterialList = _swObject.GetMaterialList();
         }
 
         public void OnErrorOccured(string title, string message, ControlAppearance appearance, SymbolIcon icon)
@@ -61,20 +61,16 @@ namespace SWApp.Viewmodels.Pages
             await ShowContentDialogAsync();
         }
 
-        public void SaveToExcel(System.Windows.Controls.DataGrid datagrid)
+        public void SaveToExcel(System.Windows.Controls.DataGrid datagrid, string index, string assemblyFilepath, string configName)
         {
             try
             {
                 DataTable dt = new DataTable();
                 ExcelFile excelFile = new ExcelFile();
-                string filepath;
                 string cellValue;
                 string cellValueToSort;
                 int cellValueInt;
-                string index = "2137";
-                string assemblyFilepath = "C:\\Users\\ebabs\\OneDrive\\Pulpit\\projekty\\Ritzi\\Fine Dine naladowy\\AX0_028_357.SLDASM";
-                string assemblyConfig = "Domyślna";
-                filepath = _viewControl.SaveDialog(index, ".xlsx", "Plik Excel (*.xlsx) |*.xlsx");
+                string filepath = _viewControl.SaveDialog(index, ".xlsx", "Plik Excel (*.xlsx) |*.xlsx");
                
 
                 var listFromDG = new List<SWFileProperties>(datagrid.ItemsSource as IEnumerable<SWFileProperties>);
@@ -107,7 +103,7 @@ namespace SWApp.Viewmodels.Pages
 
                 dt = dt.DefaultView.ToTable();
 
-                excelFile.CreateWorkBook(dt, index, filepath, assemblyFilepath, assemblyConfig);
+                excelFile.CreateWorkBook(dt, index, filepath, assemblyFilepath, configName);
             }
             catch (NullReferenceException)
             {
@@ -141,6 +137,13 @@ namespace SWApp.Viewmodels.Pages
                 dataTable.Rows.Add(values);
             }
             return dataTable;
+        }
+
+        public (string,string,string) ReadAssemblyProperties()
+        {
+            string index, filepath, configname;
+
+            return (index, filepath, configname) = _swObject.GetDataForBitmap();
         }
         public async Task<ObservableCollection<SWFileProperties>> ReadPropertiesAsync()
         {
@@ -212,6 +215,10 @@ namespace SWApp.Viewmodels.Pages
         public char SetRevision()
         {
             return _swObject.SetRevision();
+        }
+        public void Test()
+        {
+            _swObject.GetBitMap("C:\\Users\\Public\\Documents\\SOLIDWORKS\\SOLIDWORKS 2022\\samples\\tutorial\\motionstudies\\valve_cam.sldasm", "Default");
         }
     }
 }

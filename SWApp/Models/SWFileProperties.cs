@@ -52,7 +52,7 @@ namespace SWApp
         [ColumnVisibility(true)]
         public string Qty { get; set; }
 
-        [ColumnVisibility(false)]
+        [ColumnVisibility(true)]
         public string configuration { get; set; }
 
         [ColumnVisibility(false)]

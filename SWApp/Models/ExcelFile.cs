@@ -118,13 +118,13 @@ namespace SWApp.Models
                         ICell cell = row.CreateCell(j);
                         sheet.SetColumnWidth(j, 7000);
 
-                        configName = dt.Rows[i].Field<string>(10);
+                        configName = dt.Rows[i].Field<string>("configuration");
                         modelFilepath = dt.Rows[i].Field<string>(j);
                         imgFilepath = swObject.GetBitMap(modelFilepath, configName);
                         try
                         {
                             data = File.ReadAllBytes(imgFilepath);
-                            pictureIndex = workbook.AddPicture(data, (PictureType)XSSFWorkbook.PICTURE_TYPE_PNG);
+                            pictureIndex = workbook.AddPicture(data, (PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
                             helper = workbook.GetCreationHelper() as XSSFCreationHelper;
                             drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
                             anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
@@ -135,7 +135,7 @@ namespace SWApp.Models
                             picture = drawing.CreatePicture(anchor, pictureIndex) as XSSFPicture;
                             cell.CellStyle = dataStyle;
                             picture.Resize(1, 1);
-                            FileSystem.DeleteFile(imgFilepath, UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently);
+                          //  FileSystem.DeleteFile(imgFilepath, UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently);
                         }
                         catch (FileNotFoundException)
                         {
