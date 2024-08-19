@@ -128,17 +128,17 @@ namespace SWApp.Views.Pages
             }
             if (cbCreateDXF.IsChecked == false && cbCreateSTEP.IsChecked == false)
             {
-                _helpSerivce.SnackbarService.Show("Uwaga!", "Wybierz opcję eksportu DXF lub STEP", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24),
+                _helpSerivce.SnackbarService.Show("Uwaga!", "Wybierz opcję eksportu DXF lub STEP", ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24),
                 TimeSpan.FromSeconds(3));
             }
             else if (int.TryParse(txtSigmaQuantity.Text.ToString(), out quantitySigma) && options[6])
             {
-                _helpSerivce.SnackbarService.Show("Uwaga!", "Wprowadź poprawny nakład do sigmy!", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24),
+                _helpSerivce.SnackbarService.Show("Uwaga!", "Wprowadź poprawny nakład do sigmy!", ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24),
                 TimeSpan.FromSeconds(3));
             }
             else if (!ViewModel.IsValidPath(filedirToSave))
             {
-                _helpSerivce.SnackbarService.Show("Uwaga!", "Wprowadź poprawną ścieżkę zapisu!", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24),
+                _helpSerivce.SnackbarService.Show("Uwaga!", "Wprowadź poprawną ścieżkę zapisu!", ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24),
                 TimeSpan.FromSeconds(3));
             }
             else
@@ -157,7 +157,7 @@ namespace SWApp.Views.Pages
                 }
                 catch (Exception ex)
                 {
-                    _helpSerivce.SnackbarService.Show("Błąd!", ex.Message, ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24), TimeSpan.FromSeconds(3));
+                    _helpSerivce.SnackbarService.Show("Błąd!", ex.Message, ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24), TimeSpan.FromSeconds(3));
                 }
                 finally
                 {

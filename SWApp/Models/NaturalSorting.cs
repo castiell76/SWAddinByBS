@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SWApp.Models
 {
-    class NaturalSorting
+    public static class NaturalSorting
     {
         public static class SafeNativeMethods
         {
@@ -16,16 +17,21 @@ namespace SWApp.Models
             public static extern int StrCmpLogicalW(string psz1, string psz2);
         }
 
-        public sealed class NaturalStringComparer : IComparer<string>
+        public sealed class NaturalStringComparer : IComparer
         {
-            #region IComparer<string> Members
-
-            public int Compare(string x, string y)
+            public int Compare(object x, object y)
             {
-                return SafeNativeMethods.StrCmpLogicalW(x, y);
-            }
+                // Upewniamy się, że porównujemy tylko stringi
+                string s1 = x as string;
+                string s2 = y as string;
 
-            #endregion
+                if (s1 == null || s2 == null)
+                {
+                    throw new ArgumentException("Objects must be strings to compare.");
+                }
+
+                return SafeNativeMethods.StrCmpLogicalW(s1, s2);
+            }
         }
     }
 }

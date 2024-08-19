@@ -51,7 +51,7 @@ namespace SWApp.Viewmodels.Pages
                 
                 if (CrossSectionsList.Any(x => x.Type == ("wprowadź dane profila")) || CrossSectionsList.Any(x => x.Type == ("")) || CrossSectionsList.Count == 0 || CrossSectionsList.Any(x=> x.Type == string.Empty))
                 {
-                    OnErrorOccured("Uwaga!","Wprowadź poprawne dane profila", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24));
+                    OnErrorOccured("Uwaga!","Wprowadź poprawne dane profila", ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24));
                 }
                 else
                 {
@@ -93,11 +93,11 @@ namespace SWApp.Viewmodels.Pages
             }
             catch (System.InvalidCastException)
             {
-                OnErrorOccured("Uwaga!", "Wprowadź poprawne dane profila", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24));
+                OnErrorOccured("Uwaga!", "Wprowadź poprawne dane profila", ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24));
             }
             catch (System.NullReferenceException)
             {
-                OnErrorOccured("Uwaga!", "Wprowadź poprawne dane profila", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24));
+                OnErrorOccured("Uwaga!", "Wprowadź poprawne dane profila", ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24));
             }
         }
 

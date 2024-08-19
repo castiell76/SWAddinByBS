@@ -1,5 +1,6 @@
-dodawanie viewmodeli i podpinanie funkcji pod nowe kontrolki
- public List<ExportStatus> ExportFromAssembly() swobject linia 700
+Export do excel (w tym barcody)
+
+
 
 
 t³umaczenie dokumentacji z chatgpt

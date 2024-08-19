@@ -183,7 +183,7 @@ namespace SWApp.Models
             //adding image of assembly
             assemblyImageFilepath = swObject.GetBitMap(assemblyFilepath, assemblyConfig);
             data = File.ReadAllBytes(assemblyImageFilepath);
-            pictureIndex = workbook.AddPicture(data, (PictureType)XSSFWorkbook.PICTURE_TYPE_PNG);
+            pictureIndex = workbook.AddPicture(data, (PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
             helper = workbook.GetCreationHelper() as XSSFCreationHelper;
             drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
             anchor = helper.CreateClientAnchor() as XSSFClientAnchor;

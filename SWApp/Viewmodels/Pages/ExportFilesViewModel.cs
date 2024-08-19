@@ -51,7 +51,7 @@ namespace SWApp.Viewmodels.Pages
 
             catch(Exception ex)
             {
-                OnModelErrorOccurred("Uwaga", "Błąd", ControlAppearance.Danger, new SymbolIcon(SymbolRegular.Important24));
+                OnModelErrorOccurred("Uwaga", "Błąd", ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24));
             }
         }
         public bool IsValidPath(string path, bool allowRelativePaths = false)
@@ -86,7 +86,7 @@ namespace SWApp.Viewmodels.Pages
         }
         private void OnModelErrorOccurred(string title, string message, ControlAppearance controlAppearance, SymbolIcon icon)
         {
-            // Przełączenie na wątek UI
+          
             _dispatcher.Invoke(() =>
             {
                 _helpService.SnackbarService.Show(title, message, controlAppearance, icon, TimeSpan.FromSeconds(3));

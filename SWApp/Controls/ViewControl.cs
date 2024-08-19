@@ -97,5 +97,15 @@ namespace SWApp.Controls
             filepath = saveFileDialog.SelectedPath;
             return filepath;
         }
+        public string SaveDialog(string filename, string extension, string filter)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.FileName = filename;
+            saveFileDialog1.DefaultExt = extension;
+            saveFileDialog1.Filter = filter;
+            saveFileDialog1.ShowDialog();
+            string filepath = saveFileDialog1.FileName;
+            return filepath;
+        }
     }
 }

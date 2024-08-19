@@ -28,6 +28,7 @@
             </ResourceDictionary.MergedDictionaries>
             <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
             <helpers:ThemeToIndexConverter x:Key="ThemeToIndexConverter" />
+            <helpers:FileNameConverter x:Key="FileNameConverter" />
         </ResourceDictionary>
     </Page.Resources>
 
@@ -59,13 +60,17 @@
                         <CheckBox x:Name="cbCheckedBy"  Content="Dodaj sprawdzającego projekt" Checked="cbCheckedBy_Checked" Unchecked="cbCheckedBy_Unchecked"/>
                         <ComboBox x:Name="comboCheckedBy" Visibility="Collapsed" IsEditable="True"/>
                     </StackPanel>
+                    <StackPanel>
+                        <CheckBox x:Name="cbSetMaterial" Content="Dodaj materiał" Checked="cbSetMaterial_Checked" Unchecked="cbSetMaterial_Unchecked"/>
+                        <ComboBox x:Name="comboMaterial" Visibility="Collapsed"  IsEditable="True" ItemsSource="{Binding MaterialList}"></ComboBox>
+                    </StackPanel>
 
                     <StackPanel>
                         <CheckBox x:Name="cbSetIndex" Content="Ustaw indeks wyrobu" Checked="cbSetIndex_Checked" Unchecked="cbSetIndex_Unchecked"></CheckBox>
                         <ui:TextBox x:Name="tbIndex" PlaceholderText="Wprowadź indeks wyrobu" Visibility="Collapsed"></ui:TextBox>
                         <DockPanel>
-                            <ui:Button x:Name="btnRevision" Content="Podnieś rewizję"></ui:Button>
-                            <ui:TextBlock x:Name="tbRevision"></ui:TextBlock>
+                            <ui:Button x:Name="btnRevision" Content="Podnieś rewizję" Click="btnRevision_Click"></ui:Button>
+                            <ui:TextBlock x:Name="tbRevision" VerticalAlignment="Center" Margin="20,0,0,0" Height="15"></ui:TextBlock>
                         </DockPanel>
                     </StackPanel>
                 </StackPanel>
@@ -83,10 +88,29 @@
                 <StackPanel x:Name="stackpanelWithDatagrid" Visibility="Collapsed">
 
                     <DataGrid x:Name="dgAllProperties"  
-          AutoGenerateColumns="True"
-          Style="{StaticResource datagridStyle}"
+                              AutoGenerateColumns="True"
+                              Style="{StaticResource datagridStyle}"
                               ItemsSource="{Binding Properties}"
+                              AutoGeneratingColumn="dgAllProperties_AutoGeneratingColumn"
+                              CanUserResizeColumns="True"
+                              CanUserReorderColumns="True"
+                              CanUserSortColumns="True"
+                              CanUserDeleteRows="True"
+                              CanUserResizeRows="True"
+                              CanUserAddRows="False"
+                              PreviewMouseWheel="dgAllProperties_PreviewMouseWheel"
+                              ScrollViewer.CanContentScroll="True"
+                              PreviewMouseDown="dgAllProperties_PreviewMouseDown"
+                              PreviewMouseMove="dgAllProperties_PreviewMouseMove"
+                              PreviewMouseUp="dgAllProperties_PreviewMouseUp"
+                              Sorting="dgAllProperties_Sorting"
     >
+                       
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem x:Name="miPropertiesOpen" Header="Otwórz" Click="miPropertiesOpen_Click"></MenuItem>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
                         <DataGrid.Resources>
                             <ResourceDictionary>
                                 <ResourceDictionary.MergedDictionaries>
@@ -95,7 +119,7 @@
                             </ResourceDictionary>
                         </DataGrid.Resources>
                     </DataGrid >
-                    <ui:Button HorizontalAlignment="Right" Content="Zapisz do xls"></ui:Button>
+                    <ui:Button HorizontalAlignment="Center" Content="Zapisz do xls" Click="Button_Click_1"></ui:Button>
                 </StackPanel>
             </StackPanel>
             

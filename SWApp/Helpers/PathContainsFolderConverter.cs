@@ -1,20 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace SWApp.Helpers
 {
-    public class FileNameConverter : IValueConverter
+    public class PathContainsFolderConverter : IValueConverter
     {
+        public string TargetFolder { get; set; }
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string path)
+            if (value is string filePath)
             {
-                return Path.GetFileNameWithoutExtension(path);
+                var cos = filePath.Contains(TargetFolder);
+                return filePath.Contains(TargetFolder);
             }
-
-            return value;
+            return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

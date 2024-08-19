@@ -1,28 +1,33 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:helpers="clr-namespace:SWApp.Helpers"
+                    >
+    <helpers:TypeToIconConverter x:Key="TypeToIconConverter" />
+    <helpers:NotNullConverter x:Key="NotNullOrEmptyConverter" />
+    <helpers:PathContainsFolderConverter x:Key="PathContainsFolderConverter" TargetFolder="04 NORMALIA" />
     <Style TargetType="DataGrid" x:Key="datagridStyle">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="RowBackground" Value="White" />
-        <!--<Setter Property="AlternatingRowBackground" Value="LightGray" />-->
         <Setter Property="HorizontalGridLinesBrush" Value="#D3D3D3" />
         <Setter Property="VerticalGridLinesBrush" Value="#D3D3D3" />
         <Setter Property="GridLinesVisibility" Value="All" />
-        <Setter Property="BorderBrush" Value="#D3D3D3" />
+        <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="HeadersVisibility" Value="Column" />
         <Setter Property="CellStyle">
             <Setter.Value>
                 <Style TargetType="DataGridCell">
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="BorderThickness" Value="0" />
-                    <Setter Property="MinHeight" Value="40" />
+                    <Setter Property="MinHeight" Value="25" />
                     <Setter Property="FontFamily" Value="Segoe UI" />
                     <Setter Property="Foreground" Value="Black" />
                     <Setter Property="Background" Value="#E0E0E0" />
-                    <Setter Property="FontSize" Value="15" />
+                    <Setter Property="FontSize" Value="12" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="DataGridCell">
@@ -31,24 +36,37 @@
                                             Background="{TemplateBinding Background}"
                                             BorderBrush="{TemplateBinding BorderBrush}"
                                             BorderThickness="{TemplateBinding BorderThickness}">
-                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left" />
+                                        <ContentPresenter x:Name="CellContent" VerticalAlignment="Center" HorizontalAlignment="Left" />
                                     </Border>
                                 </Grid>
                                 <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="LightGray" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="LightBlue" />
+                                    </Trigger>
                                     <Trigger Property="IsEditing" Value="True">
                                         <Setter TargetName="CellBorder" Property="Background" Value="#74c7ea" />
                                     </Trigger>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.Text}" Value="">
+                                        <Setter TargetName="CellBorder" Property="Background" Value="IndianRed" />
+                                        
+                                    </DataTrigger>
+
+
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
                                             <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
                                             <Condition Binding="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}, Path=(ItemsControl.AlternationIndex)}" Value="0" />
+                                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.Text, Converter={StaticResource NotNullOrEmptyConverter}}" Value="True" />
                                         </MultiDataTrigger.Conditions>
                                         <MultiDataTrigger.EnterActions>
                                             <BeginStoryboard>
                                                 <Storyboard>
                                                     <ColorAnimation Storyboard.TargetName="CellBorder"
-                                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                                    To="White" Duration="0:0:0.3"/>
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="White" Duration="0:0:0.3"/>
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </MultiDataTrigger.EnterActions>
@@ -56,12 +74,14 @@
                                             <BeginStoryboard>
                                                 <Storyboard>
                                                     <ColorAnimation Storyboard.TargetName="CellBorder"
-                                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                                    To="#E0E0E0" Duration="0:0:0.3"/>
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="#E0E0E0" Duration="0:0:0.3"/>
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </MultiDataTrigger.ExitActions>
                                     </MultiDataTrigger>
+
+                                    <!-- Triggery dla najechania myszką nad komórką z wierszem nieparzystym -->
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
                                             <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
@@ -71,8 +91,8 @@
                                             <BeginStoryboard>
                                                 <Storyboard>
                                                     <ColorAnimation Storyboard.TargetName="CellBorder"
-                                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                                    To="#e6f7ff" Duration="0:0:0.3"/>
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="#e6f7ff" Duration="0:0:0.3"/>
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </MultiDataTrigger.EnterActions>
@@ -80,12 +100,42 @@
                                             <BeginStoryboard>
                                                 <Storyboard>
                                                     <ColorAnimation Storyboard.TargetName="CellBorder"
-                                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
-                                                                    To="LightGray" Duration="0:0:0.3"/>
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="LightGray" Duration="0:0:0.3"/>
                                                 </Storyboard>
                                             </BeginStoryboard>
                                         </MultiDataTrigger.ExitActions>
                                     </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
+                                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.Text}" Value="" />
+                                            <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.Text}" Value="" />
+                                           
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="CellBorder"
+                         Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                         To="#FFAAAA" Duration="0:0:0.3"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </MultiDataTrigger.EnterActions>
+                                        <MultiDataTrigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="CellBorder"
+                         Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                         To="IndianRed" Duration="0:0:0.3"/>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </MultiDataTrigger.ExitActions>
+                                    </MultiDataTrigger>
+
+
+
+
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Setter.Value>
@@ -102,10 +152,11 @@
                     <Setter Property="BorderBrush" Value="Black" />
                     <Setter Property="BorderThickness" Value="1,1,0,1" />
                     <Setter Property="Padding" Value="4,2,4,2" />
-                    <Setter Property="MinHeight" Value="40" />
+                    <Setter Property="MaxWidth"  Value="250" />
+                    <Setter Property="MinHeight" Value="25" />
                     <Setter Property="FontStyle" Value="Italic" />
                     <Setter Property="VerticalAlignment" Value="Center" />
-                    <Setter Property="FontSize" Value="15" />
+                    <Setter Property="FontSize" Value="12" />
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
                     <Setter Property="Template">
                         <Setter.Value>
@@ -141,6 +192,8 @@
                                             </BeginStoryboard>
                                         </Trigger.ExitActions>
                                     </Trigger>
+
+                                  
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Setter.Value>
@@ -148,19 +201,19 @@
                 </Style>
             </Setter.Value>
         </Setter>
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.(CheckBox.IsChecked)}" Value="True">
-                <Setter Property="Background" Value="LightGreen" />
-            </DataTrigger>
-            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Content.(CheckBox.IsChecked)}" Value="False">
-                <Setter Property="Background" Value="IndianRed" />
-            </DataTrigger>
-        </Style.Triggers>
+      
     </Style>
 
     <Style x:Key="EditingTextBoxStyle" TargetType="TextBox">
         <Setter Property="Background" Value="#74c7ea" />
+
         <Setter Property="BorderThickness" Value="0" />
     </Style>
+
+    <DataTemplate x:Key="TypeColumnTemplate">
+        <Image Source="{Binding Path=typ, Converter={StaticResource TypeToIconConverter}}" 
+               Width="16" Height="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </DataTemplate>
+
 
 </ResourceDictionary>

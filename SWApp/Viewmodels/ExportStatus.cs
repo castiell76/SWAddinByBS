@@ -10,7 +10,7 @@ namespace SWApp.Viewmodels
 {
     public class ExportStatus
     {
-        [ColumnName("ścieżka")]
+        [ColumnName("nazwa")]
         [ColumnVisibility(true)]
         public string filepath { get; set; }
 
