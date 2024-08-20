@@ -71,39 +71,43 @@ namespace SWApp.Viewmodels.Pages
                 string cellValueToSort;
                 int cellValueInt;
                 string filepath = _viewControl.SaveDialog(index, ".xlsx", "Plik Excel (*.xlsx) |*.xlsx");
-               
-
-                var listFromDG = new List<SWFileProperties>(datagrid.ItemsSource as IEnumerable<SWFileProperties>);
-
-                //to avoid sorting empty string as 1st 
-                foreach (var item in listFromDG)
+                if(filepath != string.Empty)
                 {
-                    if (item.drawingNum == "")
+                    var listFromDG = new List<SWFileProperties>(datagrid.ItemsSource as IEnumerable<SWFileProperties>);
+
+                    //to avoid sorting empty string as 1st 
+                    foreach (var item in listFromDG)
                     {
-                        item.drawingNum = "a";
-                    }
-                }
-
-                //var sortedlistFromDG = listFromDG.OrderByDescending(x => x.drawingNum.Length).OrderBy(x => x.drawingNum, new NaturalStringComparer()).ToList();
-
-                dt = ToDataTable(listFromDG);
-
-
-                //removing char a from cells which should be empty
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    cellValue = (dt.Rows[i]["drawingNum"].ToString());
-                    if (cellValue == "a")
-                    {
-                        cellValue = "";
-                        dt.Rows[i]["drawingNum"] = cellValue;
+                        if (item.drawingNum == "")
+                        {
+                            item.drawingNum = "a";
+                        }
                     }
 
+                    //var sortedlistFromDG = listFromDG.OrderByDescending(x => x.drawingNum.Length).OrderBy(x => x.drawingNum, new NaturalStringComparer()).ToList();
+
+                    dt = ToDataTable(listFromDG);
+
+
+                    //removing char a from cells which should be empty
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        cellValue = (dt.Rows[i]["drawingNum"].ToString());
+                        if (cellValue == "a")
+                        {
+                            cellValue = "";
+                            dt.Rows[i]["drawingNum"] = cellValue;
+                        }
+
+                    }
+
+                    dt = dt.DefaultView.ToTable();
+
+                    excelFile.CreateWorkBook(dt, index, filepath, assemblyFilepath, configName);
+                    OnErrorOccured("Sukces!", "Wygenerowano plik xls", ControlAppearance.Success, new SymbolIcon(SymbolRegular.Checkmark24));
                 }
 
-                dt = dt.DefaultView.ToTable();
-
-                excelFile.CreateWorkBook(dt, index, filepath, assemblyFilepath, configName);
+                
             }
             catch (NullReferenceException)
             {

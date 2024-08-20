@@ -50,6 +50,7 @@ using SkiaSharp;
 using stdole;
 using System.Drawing;
 using SWApp.Helpers;
+using System.Drawing.Imaging;
 
 
 
@@ -100,7 +101,7 @@ namespace SWApp
             {"SKALA","SCALE" },
             {"MONTAŻ","INSTALLATION" }
         };
-        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
+        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
 
         public SWObject()
         {
@@ -2285,43 +2286,21 @@ namespace SWApp
             return swParts;
         }
 
-        public string GetBitMap(string filepath,string configName)
+        public byte[] GetBitMap(string filepath,string configName)
         {
-            
-            string filename;
-            string imgFilepath;
-            string systemDir;
-            if (System.IO.Path.GetExtension(filepath) == ".SLDASM")
-            {
-                filename = System.IO.Path.GetFileNameWithoutExtension(filepath)+"SLDASM";
-            }
-            else
-            {
-                filename = System.IO.Path.GetFileNameWithoutExtension(filepath)+"SLDPRT";
-            }
-            systemDir = System.IO.Path.GetPathRoot(System.Environment.SystemDirectory);
-
-            imgFilepath = $"{systemDir}temp\\{filename}.BMP";
-
-            if (Directory.Exists(System.IO.Path.GetDirectoryName(imgFilepath)) == false)
-            {
-                Directory.CreateDirectory($"{systemDir}temp");
-            }
-
             //ONLY FOR TESTINGAPP --> ANOTHER OPTIOFOR GENERATE BITMAP
             //bool guwnit = swApp.GetPreviewBitmapFile(filepath, configName, imgFilepath);
 
-
-
-            //OLD METHOD
-
+            byte[] imageBytes;
             object imageObj = _swApp.GetPreviewBitmap(filepath, configName);
-            string fileName = System.IO.Path.GetFileNameWithoutExtension(filepath);
             var image = Models.PictureDispConverter.Convert(imageObj);
-            image.Save(imgFilepath, System.Drawing.Imaging.ImageFormat.Bmp);
-
-            return imgFilepath;
-
+            
+            using (var ms = new MemoryStream())
+            {
+                image.Save(ms, ImageFormat.Bmp);
+                imageBytes = ms.ToArray();
+            }
+            return imageBytes;
         }
 
 

@@ -22,7 +22,8 @@ namespace SWApp.Models
         string modelFilepath;
         object imageObj;
         string configName;
-        string imgFilepath;
+        //string imgFilepath;
+        byte[] imageBytes;
         string assemblyImageFilepath;
         byte[] data;
         int pictureIndex;
@@ -120,11 +121,12 @@ namespace SWApp.Models
 
                         configName = dt.Rows[i].Field<string>("configuration");
                         modelFilepath = dt.Rows[i].Field<string>(j);
-                        imgFilepath = swObject.GetBitMap(modelFilepath, configName);
+                        //imgFilepath = swObject.GetBitMap(modelFilepath, configName);
+                        imageBytes = swObject.GetBitMap(modelFilepath, configName);
                         try
                         {
-                            data = File.ReadAllBytes(imgFilepath);
-                            pictureIndex = workbook.AddPicture(data, (PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
+                            //data = File.ReadAllBytes(imgFilepath);
+                            pictureIndex = workbook.AddPicture(imageBytes, (PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
                             helper = workbook.GetCreationHelper() as XSSFCreationHelper;
                             drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
                             anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
@@ -181,9 +183,9 @@ namespace SWApp.Models
             sheet.SetColumnWidth(2, 10000);
 
             //adding image of assembly
-            assemblyImageFilepath = swObject.GetBitMap(assemblyFilepath, assemblyConfig);
-            data = File.ReadAllBytes(assemblyImageFilepath);
-            pictureIndex = workbook.AddPicture(data, (PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
+            imageBytes = swObject.GetBitMap(assemblyFilepath, assemblyConfig);
+            //data = File.ReadAllBytes(assemblyImageFilepath);
+            pictureIndex = workbook.AddPicture(imageBytes, (PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
             helper = workbook.GetCreationHelper() as XSSFCreationHelper;
             drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
             anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
@@ -193,7 +195,7 @@ namespace SWApp.Models
             anchor.Row1 = 0;
             picture = drawing.CreatePicture(anchor, pictureIndex) as XSSFPicture;
             picture.Resize(1, 1);
-            FileSystem.DeleteFile(assemblyImageFilepath, UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently);
+           // FileSystem.DeleteFile(assemblyImageFilepath, UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently);
 
 
             //Selecting column Q, cler all and select to default

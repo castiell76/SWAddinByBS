@@ -15,16 +15,16 @@ namespace SWApp.Helpers
             switch (type?.ToLower())
             {
                 case "assembly":
-                    //imagePath = "C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\assembly.bmp";
-                    imagePath = "C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\assembly.bmp";
+                    imagePath = "C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\assembly.bmp";
+                    //imagePath = "C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\assembly.bmp";
                     break;
                 case "part":
-                    //imagePath = "C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\part.bmp";
-                    imagePath = "C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\part.bmp";
+                    imagePath = "C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\part.bmp";
+                    //imagePath = "C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\part.bmp";
                     break;
                 case "sheet":
-                   // imagePath = "C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\sheet.bmp";
-                    imagePath = "C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\sheet.bmp";
+                    imagePath = "C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\sheet.bmp";
+                    //imagePath = "C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\sheet.bmp";
                     break;
             }
 

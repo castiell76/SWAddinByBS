@@ -103,9 +103,16 @@ namespace SWApp.Controls
             saveFileDialog1.FileName = filename;
             saveFileDialog1.DefaultExt = extension;
             saveFileDialog1.Filter = filter;
-            saveFileDialog1.ShowDialog();
-            string filepath = saveFileDialog1.FileName;
-            return filepath;
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                filename = saveFileDialog1.FileName;
+            }
+            else
+            {
+
+                filename = string.Empty;
+            }
+            return filename;
         }
     }
 }
