@@ -101,7 +101,7 @@ namespace SWApp
             {"SKALA","SCALE" },
             {"MONTAŻ","INSTALLATION" }
         };
-        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
+        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
 
         public SWObject()
         {
@@ -2291,16 +2291,18 @@ namespace SWApp
             //ONLY FOR TESTINGAPP --> ANOTHER OPTIOFOR GENERATE BITMAP
             //bool guwnit = swApp.GetPreviewBitmapFile(filepath, configName, imgFilepath);
 
-            byte[] imageBytes;
-            object imageObj = _swApp.GetPreviewBitmap(filepath, configName);
-            var image = Models.PictureDispConverter.Convert(imageObj);
+            //byte[] imageBytes;
+            //object imageObj = _swApp.GetPreviewBitmap(filepath, configName);
+            //var image = Models.PictureDispConverter.Convert(imageObj);
+
+            //using (var ms = new MemoryStream())
+            //{
+            //    image.Save(ms, ImageFormat.Bmp);
+            //    imageBytes = ms.ToArray();
+            //}
+            //return imageBytes;
+            return null;
             
-            using (var ms = new MemoryStream())
-            {
-                image.Save(ms, ImageFormat.Bmp);
-                imageBytes = ms.ToArray();
-            }
-            return imageBytes;
         }
 
 

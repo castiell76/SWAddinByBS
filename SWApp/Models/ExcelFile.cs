@@ -12,29 +12,44 @@ using System.Windows;
 using SolidWorks.Interop.sldworks;
 using System.Runtime.InteropServices;
 using Microsoft.VisualBasic.FileIO;
+using Wpf.Ui.Controls;
 
 namespace SWApp.Models
 {
 
     public class ExcelFile
     {
-        SWObject swObject = new SWObject();
-        string modelFilepath;
-        object imageObj;
-        string configName;
-        //string imgFilepath;
-        byte[] imageBytes;
-        string assemblyImageFilepath;
-        byte[] data;
-        int pictureIndex;
-        XSSFCreationHelper helper;
-        XSSFDrawing drawing;
-        XSSFClientAnchor anchor;
-        XSSFPicture picture;
+        private Dictionary<string, string> ColumnsNames = new Dictionary<string, string>
+        {
+            { "type", "typ"},
+            { "filepath", "widok"},
+            { "description", "opis"},
+            { "material", "materiał"},
+            { "index", "indeks"},
+            { "thickness", "grubość"},
+            { "mass", "masa [kg]"},
+            { "area", "powierzchnia [dm2]"},
+            { "paintQty", "ilość farby [kg]"},
+            { "drawingNum", "nr rysunku"},
+            { "Qty", "sztuk na kpl"},
+            { "configuration", "konfiguracja"},
+            { "comments", "uwagi"},
 
+        };
 
+        public event Action<string, string, ControlAppearance, SymbolIcon> ErrorOccurred;
         public void CreateWorkBook(DataTable dt, string indexName, string filepath, string assemblyFilepath, string assemblyConfig)
         {
+            SWObject swObject = new SWObject();
+            string modelFilepath;
+            string configName;
+            byte[] imageBytes;
+
+            int pictureIndex;
+            XSSFCreationHelper helper;
+            XSSFDrawing drawing;
+            XSSFClientAnchor anchor;
+            XSSFPicture picture;
 
             //creating new workbook
             IWorkbook workbook = new XSSFWorkbook();
@@ -44,8 +59,8 @@ namespace SWApp.Models
             //Create styles for IndexHeader
             IFont fontIndex = workbook.CreateFont();
             fontIndex.IsBold = true;
-            fontIndex.IsItalic = true;
-            fontIndex.FontHeightInPoints = 14;
+            fontIndex.IsItalic = false;
+            fontIndex.FontHeightInPoints = 9;
             ICellStyle headerIndexStyle = workbook.CreateCellStyle();
             headerIndexStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
             headerIndexStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
@@ -67,22 +82,22 @@ namespace SWApp.Models
             //Create styles for headers
             IFont fontHeader = workbook.CreateFont();
             fontHeader.IsBold = true;
-            fontHeader.IsItalic = true;
-            fontIndex.FontHeightInPoints = 12;
+            fontHeader.IsItalic = false;
+            fontIndex.FontHeightInPoints = 9;
             ICellStyle headerStyle = workbook.CreateCellStyle();
-            headerStyle.BorderBottom = BorderStyle.Medium;
-            headerStyle.BorderLeft = BorderStyle.Medium;
-            headerStyle.BorderRight = BorderStyle.Medium;
-            headerStyle.BorderTop = BorderStyle.Medium;
+            headerStyle.BorderBottom = BorderStyle.Thick;
+            headerStyle.BorderLeft = BorderStyle.Thick;
+            headerStyle.BorderRight = BorderStyle.Thick;
+            headerStyle.BorderTop = BorderStyle.Thick;
             headerStyle.SetFont(fontHeader);
 
             //create styles for data
             IFont dataFont = workbook.CreateFont();
-            fontIndex.FontHeightInPoints = 11;
+            fontIndex.FontHeightInPoints = 9;
             ICellStyle dataStyle = workbook.CreateCellStyle();
             dataStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
             dataStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-            dataStyle.BorderBottom = BorderStyle.Thin;
+            dataStyle.BorderBottom = BorderStyle.Medium;
             dataStyle.BorderLeft = BorderStyle.Thin;
             dataStyle.BorderRight = BorderStyle.Thin;
             dataStyle.BorderTop = BorderStyle.Thin;
@@ -92,14 +107,15 @@ namespace SWApp.Models
 
             foreach (DataColumn column in dt.Columns)
             {
-                if (column.ColumnName == "status" || column.ColumnName == "createdBy" || column.ColumnName == "checkedBy" || column.ColumnName == "dxfExist" || column.ColumnName == "stepExist")
+                if (column.ColumnName == "status" || column.ColumnName == "createdBy" || column.ColumnName == "checkedBy" || column.ColumnName == "dxfExist"||
+                    column.ColumnName == "assemblyFilePath" || column.ColumnName == "stepExist"  || column.ColumnName == "assemblyConfig")
                 {
 
                 }
                 else
                 {
                     ICell cellMain = rowMain.CreateCell(k);
-                    cellMain.SetCellValue(column.ColumnName);
+                    cellMain.SetCellValue(ColumnsNames[column.ColumnName]);
                     cellMain.CellStyle = headerStyle;
                     k++;
                 }
@@ -113,31 +129,28 @@ namespace SWApp.Models
                 {
 
                     DataColumn dc = dt.Columns[j];
-                    row.Height = 2000;
+                    row.Height = 2500;
                     if (dc.ColumnName == "filepath")
                     {
                         ICell cell = row.CreateCell(j);
-                        sheet.SetColumnWidth(j, 7000);
+                        sheet.SetColumnWidth(j, 10000);
 
                         configName = dt.Rows[i].Field<string>("configuration");
                         modelFilepath = dt.Rows[i].Field<string>(j);
-                        //imgFilepath = swObject.GetBitMap(modelFilepath, configName);
                         imageBytes = swObject.GetBitMap(modelFilepath, configName);
                         try
                         {
-                            //data = File.ReadAllBytes(imgFilepath);
-                            pictureIndex = workbook.AddPicture(imageBytes, (PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
-                            helper = workbook.GetCreationHelper() as XSSFCreationHelper;
-                            drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
-                            anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
-                            anchor.Dx1 = 200000;
-                            anchor.Dy1 = 50000;
-                            anchor.Col1 = j;
-                            anchor.Row1 = i + 2;
-                            picture = drawing.CreatePicture(anchor, pictureIndex) as XSSFPicture;
-                            cell.CellStyle = dataStyle;
-                            picture.Resize(1, 1);
-                          //  FileSystem.DeleteFile(imgFilepath, UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently);
+                            //pictureIndex = workbook.AddPicture(imageBytes, (PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
+                            //helper = workbook.GetCreationHelper() as XSSFCreationHelper;
+                            //drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+                            //anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
+                            //anchor.Dx1 = 200000;
+                            //anchor.Dy1 = 50000;
+                            //anchor.Col1 = j;
+                            //anchor.Row1 = i + 2;
+                            //picture = drawing.CreatePicture(anchor, pictureIndex) as XSSFPicture;
+                            //cell.CellStyle = dataStyle;
+                            //picture.Resize(1, 1);
                         }
                         catch (FileNotFoundException)
                         {
@@ -146,29 +159,31 @@ namespace SWApp.Models
 
 
                     }
-                    else if (dc.ColumnName == "status" || dc.ColumnName == "createdBy" || dc.ColumnName == "checkedBy" || dc.ColumnName == "dxfExist" || dc.ColumnName == "stepExist")
+                    else if(dc.ColumnName == "type")
                     {
-
-
+                        ICell cell = row.CreateCell(j);
+                        var type = dt.Rows[i].Field<string>(j);
+                        switch (type)
+                        {
+                            case "part":
+                                cell.SetCellValue("część");
+                                break;
+                            case "assembly":
+                                cell.SetCellValue("złożenie");
+                                break;
+                            case "sheet":
+                                cell.SetCellValue("wcięte");
+                                break;
+                        }
                     }
-                    else
+
+                    else if (dc.ColumnName != "status" && dc.ColumnName != "createdBy" && dc.ColumnName != "checkedBy" && dc.ColumnName != "dxfExist" &&
+                             dc.ColumnName != "assemblyFilePath" && dc.ColumnName != "stepExist" && dc.ColumnName != "assemblyConfig")
                     {
-
-                        if (dc.ColumnName == "comments")
-                        {
-                            ICell cell = row.CreateCell(j - 5);
-                            cell.SetCellValue(dt.Rows[i].Field<string>(j));
-                            sheet.AutoSizeColumn(j);
-                            cell.CellStyle = dataStyle;
-                        }
-                        else
-                        {
-                            ICell cell = row.CreateCell(j);
-                            cell.SetCellValue(dt.Rows[i].Field<string>(j));
-                            sheet.AutoSizeColumn(j);
-                            cell.CellStyle = dataStyle;
-                        }
-
+                        ICell cell = row.CreateCell(j);
+                        cell.SetCellValue(dt.Rows[i].Field<string>(j));
+                        sheet.AutoSizeColumn(j);
+                        cell.CellStyle = dataStyle;
                     }
 
                 }
@@ -179,27 +194,27 @@ namespace SWApp.Models
             ICell cellAssemblyPic = rowMainIndex.CreateCell(2);
             headerIndexStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
             headerIndexStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-            rowMainIndex.Height = 2500;
-            sheet.SetColumnWidth(2, 10000);
+            rowMainIndex.Height = 3500;
+            sheet.SetColumnWidth(2, 14000);
 
             //adding image of assembly
             imageBytes = swObject.GetBitMap(assemblyFilepath, assemblyConfig);
             //data = File.ReadAllBytes(assemblyImageFilepath);
-            pictureIndex = workbook.AddPicture(imageBytes, (PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
-            helper = workbook.GetCreationHelper() as XSSFCreationHelper;
-            drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
-            anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
-            anchor.Dx1 = 100000;
-            anchor.Dy1 = 50000;
-            anchor.Col1 = 2;
-            anchor.Row1 = 0;
-            picture = drawing.CreatePicture(anchor, pictureIndex) as XSSFPicture;
-            picture.Resize(1, 1);
-           // FileSystem.DeleteFile(assemblyImageFilepath, UIOption.OnlyErrorDialogs, RecycleOption.DeletePermanently);
+            //pictureIndex = workbook.AddPicture(imageBytes, (PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
+            //helper = workbook.GetCreationHelper() as XSSFCreationHelper;
+            //drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            //anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
+            //anchor.Dx1 = 100000;
+            //anchor.Dy1 = 50000;
+            //anchor.Col1 = 2;
+            //anchor.Row1 = 0;
+            //picture = drawing.CreatePicture(anchor, pictureIndex) as XSSFPicture;
+            //picture.Resize(1, 1);
 
 
             //Selecting column Q, cler all and select to default
-            cellAssemblyPic.CellStyle = headerIndexStyle;
+            //cellAssemblyPic.CellStyle = headerIndexStyle;
+
             //save file
             try
             {
@@ -211,7 +226,7 @@ namespace SWApp.Models
             }
             catch (IOException)
             {
-                MessageBox.Show("Plik tylko do odczytu");
+                ErrorOccurred?.Invoke("Uwaga!", "Wybrano plik tylko do odczytu. Plik nie został zapisany", ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24));
             }
 
         }

@@ -24,6 +24,7 @@ namespace SWApp.Viewmodels.Pages
         private IContentDialogService _contentDialogService;
         private HelpService _helpService;
         private ViewControl _viewControl;
+        private ExcelFile _excelFile;
 
         private ObservableCollection<SWFileProperties> _properties;
         public ObservableCollection<SWFileProperties> Properties
@@ -43,11 +44,12 @@ namespace SWApp.Viewmodels.Pages
             _swObject = new SWObject();
             _helpService = new HelpService();
             _viewControl = new ViewControl();
+            _excelFile = new ExcelFile();
 
             _contentDialogService = HelpService.GetRequiredService<IContentDialogService>();
             _swObject.SupressedElementsDetected += OnSuprresedElementsDetected;
             _swObject.ErrorOccurred += OnErrorOccured;
-
+            _excelFile.ErrorOccurred += OnErrorOccured;
            // MaterialList = _swObject.GetMaterialList();
         }
 
@@ -219,10 +221,6 @@ namespace SWApp.Viewmodels.Pages
         public char SetRevision()
         {
             return _swObject.SetRevision();
-        }
-        public void Test()
-        {
-            _swObject.GetBitMap("C:\\Users\\Public\\Documents\\SOLIDWORKS\\SOLIDWORKS 2022\\samples\\tutorial\\motionstudies\\valve_cam.sldasm", "Default");
         }
     }
 }
