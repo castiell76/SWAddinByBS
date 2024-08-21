@@ -65,7 +65,7 @@ namespace SWApp.Viewmodels.Pages
             await ShowContentDialogAsync();
         }
 
-        public void SaveToExcel(System.Windows.Controls.DataGrid datagrid, string index, string assemblyFilepath, string configName)
+        public void SaveToExcel(System.Windows.Controls.DataGrid datagrid, string index, string assemblyFilepath, string configName, string assemblyDescription, string assemblyMass, string assemblySize)
         {
             try
             {
@@ -120,7 +120,7 @@ namespace SWApp.Viewmodels.Pages
 
                     dt = dt.DefaultView.ToTable();
 
-                    excelFile.CreateWorkBook(dt, index, filepath, assemblyFilepath, configName,"test","test", 0);
+                    excelFile.CreateWorkBook(dt, index, filepath, assemblyFilepath, configName,assemblyDescription,assemblySize, assemblyMass);
                     OnErrorOccured("Sukces!", "Wygenerowano plik xls", ControlAppearance.Success, new SymbolIcon(SymbolRegular.Checkmark24));
                 }
 
@@ -160,11 +160,13 @@ namespace SWApp.Viewmodels.Pages
             return dataTable;
         }
 
-        public (string,string,string) ReadAssemblyProperties()
+        public (string,string,string,string,string,string) ReadAssemblyProperties()
         {
-            string index, filepath, configname;
+            string index, filepath, configname, description, size, massStr;
+            double mass = default;
+            massStr = mass.ToString();
 
-            return (index, filepath, configname) = _swObject.GetDataForBitmap();
+            return (index, filepath, configname, description, size, massStr) = _swObject.GetDataForBitmap();
         }
         public async Task<ObservableCollection<SWFileProperties>> ReadPropertiesAsync()
         {

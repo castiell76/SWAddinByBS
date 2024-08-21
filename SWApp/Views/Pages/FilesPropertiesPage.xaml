@@ -124,6 +124,9 @@
                 <ui:TextBox x:Name="tbSavedIndex" Visibility="Collapsed"></ui:TextBox>
                 <ui:TextBox x:Name="tbAssyemblyFilepath" Visibility="Collapsed"></ui:TextBox>
                 <ui:TextBox x:Name="tbConfigName" Visibility="Collapsed"></ui:TextBox>
+                <ui:TextBox x:Name="tbAssemblyDescription" Visibility="Collapsed"></ui:TextBox>
+                <ui:TextBox x:Name="tbAssemblySize" Visibility="Collapsed"></ui:TextBox>
+                <ui:TextBox x:Name="tbAssemblyMass" Visibility="Collapsed"></ui:TextBox>
             </StackPanel>
             
         </controls:ControlExample>

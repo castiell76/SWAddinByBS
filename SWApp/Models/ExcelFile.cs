@@ -295,8 +295,6 @@ namespace SWApp.Models
             picture.Resize(2, 3);
 
             sheet.AutoSizeColumn(3);
-            //Selecting column Q, cler all and select to default
-            //cellAssemblyPic.CellStyle = headerIndexStyle;
 
 
             //format as table

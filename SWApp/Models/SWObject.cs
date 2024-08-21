@@ -121,12 +121,15 @@ namespace SWApp
             SupressedElementsDetected?.Invoke(this, isSuppresed);
         }
 
-        public (string, string, string) GetDataForBitmap()
+        public (string, string, string, string, string, string) GetDataForBitmap()
         {
-            string index, filepath, configName = default;
+            double mass = default;
+            string index, filepath, configName, description, size, massStr = default;
+            double width, height, length;
             try
             {
                 swModel = (ModelDoc2)_swApp.ActiveDoc;
+                int modelType = swModel.GetType();
                 swModelExt = swModel.Extension;
                 swConfMgr = swModel.ConfigurationManager;
                 swConfig = (Configuration)swConfMgr.ActiveConfiguration;
@@ -134,12 +137,31 @@ namespace SWApp
                 filepath = swModel.GetPathName();
                 configName = swConfig.Name;
                 swCustomPropMgr.Get6("index xl", false, out string valOut, out index, out bool wasResolved, out bool linkToProperty);
-                return (index, filepath, configName);
+                swCustomPropMgr.Get6("opis", false, out string valOutDesc, out description, out bool wasResolvedDesc, out bool linkToPropertyDesc);
+                swCustomPropMgr.Get6("masa", false, out string valOutMass, out massStr, out wasResolved, out linkToProperty);
+                if(modelType == (int)swDocumentTypes_e.swDocPART)
+                {
+                    swPart = (PartDoc)swModel;
+                    var box = swPart.GetPartBox(true);
+                    width = (box[3] - box[0]) as double;
+
+                }
+                else if ( modelType == (int)swDocumentTypes_e.swDocASSEMBLY)
+                {
+                    swAss = (AssemblyDoc)swModel;
+                    var box = swAss.GetBox();
+                }
+                else
+                {
+                    size = string.Empty;
+                }
+
+                    return (index, filepath, configName, description, size, massStr);
             }
             catch (NullReferenceException)
             {
                 ErrorOccurred?.Invoke("Uwaga!", "Włącz plik SolidWorks typu złożenie lub część", ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24));
-                return (string.Empty, string.Empty, string.Empty);
+                return (string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
                 
             }
             

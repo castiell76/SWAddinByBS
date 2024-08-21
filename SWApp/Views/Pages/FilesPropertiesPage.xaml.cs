@@ -217,7 +217,7 @@ namespace SWApp.Views.Pages
         if (!(options.All(x => x == false)))
         {
             _viewModel.SetProperties(customPropertiesToGive, optionsStr, options);
-            (tbSavedIndex.Text, tbAssyemblyFilepath.Text, tbConfigName.Text) = _viewModel.ReadAssemblyProperties();
+            (tbSavedIndex.Text, tbAssyemblyFilepath.Text, tbConfigName.Text, tbAssemblyDescription.Text, tbAssemblyMass.Text, tbAssemblySize.Text) = _viewModel.ReadAssemblyProperties();
             _viewModel.ReadPropertiesAsync();
             stackpanelWithDatagrid.Visibility = Visibility.Visible;
         }
@@ -413,7 +413,7 @@ namespace SWApp.Views.Pages
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            _viewModel.SaveToExcel(dgAllProperties, tbSavedIndex.Text, tbAssyemblyFilepath.Text, tbConfigName.Text);
+            _viewModel.SaveToExcel(dgAllProperties, tbSavedIndex.Text, tbAssyemblyFilepath.Text, tbConfigName.Text, tbAssemblyDescription.Text, tbAssemblyMass.Text, tbAssemblySize.Text);
         }
 
     }
