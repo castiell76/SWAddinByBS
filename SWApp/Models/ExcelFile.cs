@@ -13,6 +13,9 @@ using SolidWorks.Interop.sldworks;
 using System.Runtime.InteropServices;
 using Microsoft.VisualBasic.FileIO;
 using Wpf.Ui.Controls;
+using NPOI.XWPF.UserModel;
+using NPOI.OpenXmlFormats.Spreadsheet;
+using NPOI.SS.Util;
 
 namespace SWApp.Models
 {
@@ -26,7 +29,7 @@ namespace SWApp.Models
             { "description", "opis"},
             { "material", "materiał"},
             { "index", "indeks"},
-            { "thickness", "grubość"},
+            { "thickness", "grubość [mm]"},
             { "mass", "masa [kg]"},
             { "area", "powierzchnia [dm2]"},
             { "paintQty", "ilość farby [kg]"},
@@ -34,11 +37,12 @@ namespace SWApp.Models
             { "Qty", "sztuk na kpl"},
             { "configuration", "konfiguracja"},
             { "comments", "uwagi"},
+            { "name", "nazwa" },
 
         };
 
         public event Action<string, string, ControlAppearance, SymbolIcon> ErrorOccurred;
-        public void CreateWorkBook(DataTable dt, string indexName, string filepath, string assemblyFilepath, string assemblyConfig)
+        public void CreateWorkBook(DataTable dt, string indexName, string filepath, string assemblyFilepath, string assemblyConfig, string projectName, string size, double assemblyWeight)
         {
             SWObject swObject = new SWObject();
             string modelFilepath;
@@ -46,55 +50,126 @@ namespace SWApp.Models
             byte[] imageBytes;
 
             int pictureIndex;
+            int k = 0;
+            int i = 0;
             XSSFCreationHelper helper;
             XSSFDrawing drawing;
             XSSFClientAnchor anchor;
             XSSFPicture picture;
 
             //creating new workbook
-            IWorkbook workbook = new XSSFWorkbook();
-            NPOI.SS.UserModel.ISheet sheet = workbook.CreateSheet("BOM");
-            int k = 0;
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = workbook.CreateSheet("BOM") as XSSFSheet;
+            
 
-            //Create styles for IndexHeader
-            IFont fontIndex = workbook.CreateFont();
+            //Create styles for IndexHeader descriptions
+            XSSFFont fontIndex = workbook.CreateFont() as XSSFFont;
             fontIndex.IsBold = true;
             fontIndex.IsItalic = false;
-            fontIndex.FontHeightInPoints = 9;
-            ICellStyle headerIndexStyle = workbook.CreateCellStyle();
+            fontIndex.FontHeightInPoints = 12;
+            XSSFCellStyle headerIndexStyle = workbook.CreateCellStyle() as XSSFCellStyle;
             headerIndexStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
             headerIndexStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-            headerIndexStyle.BorderBottom = BorderStyle.Thick;
-            headerIndexStyle.BorderLeft = BorderStyle.Thick;
-            headerIndexStyle.BorderRight = BorderStyle.Thick;
-            headerIndexStyle.BorderTop = BorderStyle.Thick;
+            headerIndexStyle.BorderBottom = BorderStyle.Medium;
+            headerIndexStyle.BorderLeft = BorderStyle.Medium;
+            headerIndexStyle.BorderRight = BorderStyle.Thin;
+            headerIndexStyle.BorderTop = BorderStyle.Medium;
             headerIndexStyle.SetFont(fontIndex);
 
+            //Create styles for IndexHeader Values
+            XSSFFont fontValuesIndex = workbook.CreateFont() as XSSFFont;
+            fontValuesIndex.IsBold = false;
+            fontValuesIndex.IsItalic = false;
+            fontValuesIndex.FontHeightInPoints = 10;
+            XSSFCellStyle headerIndexValuesStyle = workbook.CreateCellStyle() as XSSFCellStyle;
+            headerIndexValuesStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            headerIndexValuesStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            headerIndexValuesStyle.BorderBottom = BorderStyle.Medium;
+            headerIndexValuesStyle.BorderLeft = BorderStyle.Thin;
+            headerIndexValuesStyle.BorderRight = BorderStyle.Medium;
+            headerIndexValuesStyle.BorderTop = BorderStyle.Medium;
+            headerIndexValuesStyle.SetFont(fontValuesIndex);
+
             //creating Index Header
-            IRow rowMainIndex = sheet.CreateRow(0);
-            ICell cellMainIndex = rowMainIndex.CreateCell(0);
-            cellMainIndex.SetCellValue("Nr indeksu");
-            cellMainIndex.CellStyle = headerIndexStyle;
-            cellMainIndex = rowMainIndex.CreateCell(1);
-            cellMainIndex.SetCellValue(indexName);
+            XSSFRow rowMainIndex0 = sheet.CreateRow(0) as XSSFRow;
+            XSSFRow rowMainIndex1 = sheet.CreateRow(1) as XSSFRow;
+            XSSFRow rowMainIndex2 = sheet.CreateRow(2) as XSSFRow;
+
+            //merged for assembly pic
+            XSSFCell cellMainIndex = rowMainIndex0.CreateCell(0) as XSSFCell;
+            sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(0, 2, 0, 3));
+
+            //index header data
+            #region row 0
+            cellMainIndex = rowMainIndex0.CreateCell(4) as XSSFCell;
+            cellMainIndex.SetCellValue("nazwa wyrobu");
             cellMainIndex.CellStyle = headerIndexStyle;
 
-            //Create styles for headers
-            IFont fontHeader = workbook.CreateFont();
+            cellMainIndex = rowMainIndex0.CreateCell(5) as XSSFCell;
+            cellMainIndex.SetCellValue(projectName);
+            cellMainIndex.CellStyle = headerIndexValuesStyle;
+
+            cellMainIndex = rowMainIndex0.CreateCell(6) as XSSFCell;
+            cellMainIndex.SetCellValue("nr indeksu");
+            cellMainIndex.CellStyle = headerIndexStyle;
+
+            cellMainIndex = rowMainIndex0.CreateCell(7) as XSSFCell;
+            cellMainIndex.SetCellValue(indexName);
+            cellMainIndex.CellStyle = headerIndexValuesStyle;
+            #endregion
+            #region row 1
+            cellMainIndex = rowMainIndex1.CreateCell(4) as XSSFCell;
+            cellMainIndex.SetCellValue("gabaryty (dług X szer X wys");
+            cellMainIndex.CellStyle = headerIndexStyle;
+
+            cellMainIndex = rowMainIndex1.CreateCell(5) as XSSFCell;
+            cellMainIndex.SetCellValue(size);
+            cellMainIndex.CellStyle = headerIndexValuesStyle;
+
+            cellMainIndex = rowMainIndex1.CreateCell(6) as XSSFCell;
+            cellMainIndex.SetCellValue("nr zlecenia");
+            cellMainIndex.CellStyle = headerIndexStyle;
+
+            cellMainIndex = rowMainIndex1.CreateCell(7) as XSSFCell;
+            cellMainIndex.SetCellValue("");
+            cellMainIndex.CellStyle = headerIndexValuesStyle;
+            #endregion
+            #region row 2
+            cellMainIndex = rowMainIndex2.CreateCell(4) as XSSFCell;
+            cellMainIndex.SetCellValue("waga [kg]");
+            cellMainIndex.CellStyle = headerIndexStyle;
+
+            cellMainIndex = rowMainIndex2.CreateCell(5) as XSSFCell;
+            cellMainIndex.SetCellValue(assemblyWeight);
+            cellMainIndex.CellStyle = headerIndexValuesStyle;
+
+            cellMainIndex = rowMainIndex2.CreateCell(6) as XSSFCell;
+            cellMainIndex.SetCellValue("ilość sztuk wyrobu");
+            cellMainIndex.CellStyle = headerIndexStyle;
+
+            cellMainIndex = rowMainIndex2.CreateCell(7) as XSSFCell;
+            cellMainIndex.SetCellValue("");
+            cellMainIndex.CellStyle = headerIndexValuesStyle;
+            #endregion
+
+            //Create styles for table headers
+            XSSFFont fontHeader = workbook.CreateFont() as XSSFFont;
             fontHeader.IsBold = true;
             fontHeader.IsItalic = false;
-            fontIndex.FontHeightInPoints = 9;
-            ICellStyle headerStyle = workbook.CreateCellStyle();
-            headerStyle.BorderBottom = BorderStyle.Thick;
-            headerStyle.BorderLeft = BorderStyle.Thick;
-            headerStyle.BorderRight = BorderStyle.Thick;
-            headerStyle.BorderTop = BorderStyle.Thick;
+            fontHeader.FontHeightInPoints = 11;
+            XSSFCellStyle headerStyle = workbook.CreateCellStyle() as XSSFCellStyle;
+            headerStyle.BorderBottom = BorderStyle.Medium;
+            headerStyle.BorderLeft = BorderStyle.Medium;
+            headerStyle.BorderRight = BorderStyle.Medium;
+            headerStyle.BorderTop = BorderStyle.Medium;
+            headerStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            headerStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
             headerStyle.SetFont(fontHeader);
 
             //create styles for data
-            IFont dataFont = workbook.CreateFont();
-            fontIndex.FontHeightInPoints = 9;
-            ICellStyle dataStyle = workbook.CreateCellStyle();
+            XSSFFont dataFont = workbook.CreateFont() as XSSFFont;
+            dataFont.FontHeightInPoints = 10;
+            XSSFCellStyle dataStyle = workbook.CreateCellStyle() as XSSFCellStyle;
             dataStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
             dataStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
             dataStyle.BorderBottom = BorderStyle.Medium;
@@ -102,19 +177,20 @@ namespace SWApp.Models
             dataStyle.BorderRight = BorderStyle.Thin;
             dataStyle.BorderTop = BorderStyle.Thin;
             dataStyle.SetFont(dataFont);
-            IRow rowMain = sheet.CreateRow(1);
+            XSSFRow rowMain = sheet.CreateRow(3) as XSSFRow;
 
 
+            //styling headers
             foreach (DataColumn column in dt.Columns)
             {
-                if (column.ColumnName == "status" || column.ColumnName == "createdBy" || column.ColumnName == "checkedBy" || column.ColumnName == "dxfExist"||
-                    column.ColumnName == "assemblyFilePath" || column.ColumnName == "stepExist"  || column.ColumnName == "assemblyConfig")
+                if (column.ColumnName == "status" || column.ColumnName == "createdBy" || column.ColumnName == "checkedBy" || column.ColumnName == "dxfExist" ||
+                    column.ColumnName == "assemblyFilePath" || column.ColumnName == "stepExist" || column.ColumnName == "assemblyConfig")
                 {
 
                 }
                 else
                 {
-                    ICell cellMain = rowMain.CreateCell(k);
+                    XSSFCell cellMain = rowMain.CreateCell(k) as XSSFCell;
                     cellMain.SetCellValue(ColumnsNames[column.ColumnName]);
                     cellMain.CellStyle = headerStyle;
                     k++;
@@ -122,17 +198,16 @@ namespace SWApp.Models
             }
 
             //creating new rows with data
-            for (int i = 0; i < dt.Rows.Count; i++)
+            for (i = 0; i < dt.Rows.Count; i++)
             {
-                IRow row = sheet.CreateRow(i + 2);
+                XSSFRow row = sheet.CreateRow(i + 4) as XSSFRow;
                 for (int j = 0; j < dt.Columns.Count; j++)
                 {
-
                     DataColumn dc = dt.Columns[j];
                     row.Height = 2500;
                     if (dc.ColumnName == "filepath")
                     {
-                        ICell cell = row.CreateCell(j);
+                        XSSFCell cell = row.CreateCell(j) as XSSFCell;
                         sheet.SetColumnWidth(j, 10000);
 
                         configName = dt.Rows[i].Field<string>("configuration");
@@ -140,17 +215,20 @@ namespace SWApp.Models
                         imageBytes = swObject.GetBitMap(modelFilepath, configName);
                         try
                         {
-                            //pictureIndex = workbook.AddPicture(imageBytes, (PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
-                            //helper = workbook.GetCreationHelper() as XSSFCreationHelper;
-                            //drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
-                            //anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
-                            //anchor.Dx1 = 200000;
-                            //anchor.Dy1 = 50000;
-                            //anchor.Col1 = j;
-                            //anchor.Row1 = i + 2;
-                            //picture = drawing.CreatePicture(anchor, pictureIndex) as XSSFPicture;
-                            //cell.CellStyle = dataStyle;
-                            //picture.Resize(1, 1);
+                            pictureIndex = workbook.AddPicture(imageBytes, (NPOI.SS.UserModel.PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
+                            helper = workbook.GetCreationHelper() as XSSFCreationHelper;
+                            drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+                            anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
+                            anchor.Dx1 = 100000;
+                            anchor.Dy1 = 50000;
+                            anchor.Col1 = j;
+                            anchor.Row1 = i + 4;
+                            picture = drawing.CreatePicture(anchor, pictureIndex) as XSSFPicture;
+                            cell.CellStyle = dataStyle;
+                            picture.Resize(1, 1);
+
+
+                       
                         }
                         catch (FileNotFoundException)
                         {
@@ -159,20 +237,23 @@ namespace SWApp.Models
 
 
                     }
-                    else if(dc.ColumnName == "type")
+                    else if (dc.ColumnName == "type")
                     {
-                        ICell cell = row.CreateCell(j);
+                        XSSFCell cell = row.CreateCell(j) as XSSFCell;
                         var type = dt.Rows[i].Field<string>(j);
                         switch (type)
                         {
                             case "part":
                                 cell.SetCellValue("część");
+                                cell.CellStyle = dataStyle;
                                 break;
                             case "assembly":
                                 cell.SetCellValue("złożenie");
+                                cell.CellStyle = dataStyle;
                                 break;
                             case "sheet":
                                 cell.SetCellValue("wcięte");
+                                cell.CellStyle = dataStyle;
                                 break;
                         }
                     }
@@ -180,41 +261,81 @@ namespace SWApp.Models
                     else if (dc.ColumnName != "status" && dc.ColumnName != "createdBy" && dc.ColumnName != "checkedBy" && dc.ColumnName != "dxfExist" &&
                              dc.ColumnName != "assemblyFilePath" && dc.ColumnName != "stepExist" && dc.ColumnName != "assemblyConfig")
                     {
-                        ICell cell = row.CreateCell(j);
+                        XSSFCell cell = row.CreateCell(j) as XSSFCell;
                         cell.SetCellValue(dt.Rows[i].Field<string>(j));
                         sheet.AutoSizeColumn(j);
                         cell.CellStyle = dataStyle;
                     }
 
                 }
-
+                row.Height = 2500;
             }
 
             //cell and its where need to add assembly bitmap
-            ICell cellAssemblyPic = rowMainIndex.CreateCell(2);
+            XSSFCell cellAssemblyPic = rowMainIndex0.CreateCell(0) as XSSFCell;
             headerIndexStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
             headerIndexStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-            rowMainIndex.Height = 3500;
-            sheet.SetColumnWidth(2, 14000);
+            rowMainIndex0.Height = 1666;
+            rowMainIndex1.Height = 1666;
+            rowMainIndex2.Height = 1666;
+            sheet.SetColumnWidth(0, 10000);
 
             //adding image of assembly
             imageBytes = swObject.GetBitMap(assemblyFilepath, assemblyConfig);
             //data = File.ReadAllBytes(assemblyImageFilepath);
-            //pictureIndex = workbook.AddPicture(imageBytes, (PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
-            //helper = workbook.GetCreationHelper() as XSSFCreationHelper;
-            //drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
-            //anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
-            //anchor.Dx1 = 100000;
-            //anchor.Dy1 = 50000;
-            //anchor.Col1 = 2;
-            //anchor.Row1 = 0;
-            //picture = drawing.CreatePicture(anchor, pictureIndex) as XSSFPicture;
-            //picture.Resize(1, 1);
+            pictureIndex = workbook.AddPicture(imageBytes, (NPOI.SS.UserModel.PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
+            helper = workbook.GetCreationHelper() as XSSFCreationHelper;
+            drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
+            anchor.Dx1 = 50000;
+            anchor.Dy1 = 25000;
+            anchor.Col1 = 0;
+            anchor.Row1 = 0;
+            picture = drawing.CreatePicture(anchor, pictureIndex) as XSSFPicture;
+            picture.Resize(2, 3);
 
-
+            sheet.AutoSizeColumn(3);
             //Selecting column Q, cler all and select to default
             //cellAssemblyPic.CellStyle = headerIndexStyle;
 
+
+            //format as table
+            XSSFTable table = sheet.CreateTable();
+            CT_Table ctTable = table.GetCTTable();
+            AreaReference myDataRange = new AreaReference(new CellReference(3, 0), new CellReference(i+4, 13));
+            ctTable.@ref = myDataRange.FormatAsString();
+            ctTable.id = 1;
+            ctTable.name = "Table1";
+            ctTable.displayName = "Table1";
+            ctTable.tableStyleInfo = new CT_TableStyleInfo();
+            ctTable.tableStyleInfo.name = "TableStyleMedium2"; // TableStyleMedium2 is one of XSSFBuiltinTableStyle
+            ctTable.tableStyleInfo.showRowStripes = true;
+            ctTable.autoFilter = new CT_AutoFilter(); 
+            ctTable.autoFilter.filterColumn = new List<CT_FilterColumn>(); 
+
+            for(int l = 1; l<15; l++)
+            {
+                ctTable.autoFilter.filterColumn.Add(new CT_FilterColumn()
+                { colId = Convert.ToUInt32(l), showButton = true });
+            }
+
+            
+            ctTable.tableColumns = new CT_TableColumns();
+            ctTable.tableColumns.tableColumn = new List<CT_TableColumn>();
+            ctTable.tableColumns.tableColumn.Add(new CT_TableColumn() { id = 1, name = "widok" });
+            ctTable.tableColumns.tableColumn.Add(new CT_TableColumn() { id = 2, name = "nazwa" });
+            ctTable.tableColumns.tableColumn.Add(new CT_TableColumn() { id = 3, name = "opis" });
+            ctTable.tableColumns.tableColumn.Add(new CT_TableColumn() { id = 4, name = "typ" });
+            ctTable.tableColumns.tableColumn.Add(new CT_TableColumn() { id = 5, name = "materiał" });
+            ctTable.tableColumns.tableColumn.Add(new CT_TableColumn() { id = 6, name = "indeks" });
+            ctTable.tableColumns.tableColumn.Add(new CT_TableColumn() { id = 7, name = "grubość [mm]" });
+            ctTable.tableColumns.tableColumn.Add(new CT_TableColumn() { id = 8, name = "masa [kg]" });
+            ctTable.tableColumns.tableColumn.Add(new CT_TableColumn() { id = 9, name = "powierzchnia [dm2]" });
+            ctTable.tableColumns.tableColumn.Add(new CT_TableColumn() { id = 10, name = "ilość farby [kg]" });
+            ctTable.tableColumns.tableColumn.Add(new CT_TableColumn() { id = 11, name = "nr rysunku" });
+            ctTable.tableColumns.tableColumn.Add(new CT_TableColumn() { id = 12, name = "sztuk na kpl" });
+            ctTable.tableColumns.tableColumn.Add(new CT_TableColumn() { id = 13, name = "konfiguracja" });
+            ctTable.tableColumns.tableColumn.Add(new CT_TableColumn() { id = 14, name = "uwagi" });
             //save file
             try
             {

@@ -15,6 +15,8 @@ using SWApp.Controls;
 using System.Linq;
 using static SWApp.Models.NaturalSorting;
 using System.Reflection;
+using System.IO;
+using System.Diagnostics;
 
 namespace SWApp.Viewmodels.Pages
 {
@@ -50,7 +52,7 @@ namespace SWApp.Viewmodels.Pages
             _swObject.SupressedElementsDetected += OnSuprresedElementsDetected;
             _swObject.ErrorOccurred += OnErrorOccured;
             _excelFile.ErrorOccurred += OnErrorOccured;
-           // MaterialList = _swObject.GetMaterialList();
+            //MaterialList = _swObject.GetMaterialList();
         }
 
         public void OnErrorOccured(string title, string message, ControlAppearance appearance, SymbolIcon icon)
@@ -89,7 +91,20 @@ namespace SWApp.Viewmodels.Pages
                     //var sortedlistFromDG = listFromDG.OrderByDescending(x => x.drawingNum.Length).OrderBy(x => x.drawingNum, new NaturalStringComparer()).ToList();
 
                     dt = ToDataTable(listFromDG);
+                    dt.Columns.Add("name");
+                    
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        string cos = Path.GetFileNameWithoutExtension(row["filepath"] as string);
+                        row["name"] = cos;
+                        Debug.Print(row["name"].ToString());
+                    }
 
+                    dt.Columns["filepath"].SetOrdinal(0);
+                    dt.Columns["name"].SetOrdinal(1);
+                    dt.Columns["description"].SetOrdinal(2);
+                    dt.Columns["type"].SetOrdinal(3);
+                    dt.Columns["comments"].SetOrdinal(13);
 
                     //removing char a from cells which should be empty
                     for (int i = 0; i < dt.Rows.Count; i++)
@@ -105,7 +120,7 @@ namespace SWApp.Viewmodels.Pages
 
                     dt = dt.DefaultView.ToTable();
 
-                    excelFile.CreateWorkBook(dt, index, filepath, assemblyFilepath, configName);
+                    excelFile.CreateWorkBook(dt, index, filepath, assemblyFilepath, configName,"test","test", 0);
                     OnErrorOccured("Sukces!", "Wygenerowano plik xls", ControlAppearance.Success, new SymbolIcon(SymbolRegular.Checkmark24));
                 }
 

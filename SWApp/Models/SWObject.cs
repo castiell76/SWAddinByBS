@@ -101,7 +101,7 @@ namespace SWApp
             {"SKALA","SCALE" },
             {"MONTAŻ","INSTALLATION" }
         };
-        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
+        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
 
         public SWObject()
         {
@@ -424,7 +424,7 @@ namespace SWApp
             swModel = (ModelDoc2)_swApp.ActiveDoc;
             List<string> filters = new List<string>();
             Dictionary<string,int> allParts = CountParts(swModel, filters);
-            //properties for open file
+            //properties for opened file
             SetAllSingleFileProperties(swModel,customProperties,allParts,optionsStr,options,1,".0");
 
             //properties for all components
@@ -620,6 +620,8 @@ namespace SWApp
                 //Set paint quantity - ALWAYS
                 SetCustomProperty(swModel, "ilosc farby", paintQty, "");
             }
+
+            swModel.Save3((int)swSaveAsOptions_e.swSaveAsOptions_Silent, 0, 0);
             
         }
         public void SetCustomProperty(ModelDoc2 swModel, string name, string value, string configName)
@@ -2291,18 +2293,17 @@ namespace SWApp
             //ONLY FOR TESTINGAPP --> ANOTHER OPTIOFOR GENERATE BITMAP
             //bool guwnit = swApp.GetPreviewBitmapFile(filepath, configName, imgFilepath);
 
-            //byte[] imageBytes;
-            //object imageObj = _swApp.GetPreviewBitmap(filepath, configName);
-            //var image = Models.PictureDispConverter.Convert(imageObj);
-
-            //using (var ms = new MemoryStream())
-            //{
-            //    image.Save(ms, ImageFormat.Bmp);
-            //    imageBytes = ms.ToArray();
-            //}
-            //return imageBytes;
-            return null;
-            
+            byte[] imageBytes;
+            object imageObj = _swApp.GetPreviewBitmap(filepath, configName);
+            var image = Models.PictureDispConverter.Convert(imageObj);
+          
+            using (var ms = new MemoryStream())
+            {
+                image.Save(ms, ImageFormat.Bmp);
+                imageBytes = ms.ToArray();
+            }
+            return imageBytes;
+            //return null;
         }
 
 
