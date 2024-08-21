@@ -101,7 +101,7 @@ namespace SWApp
             {"SKALA","SCALE" },
             {"MONTAŻ","INSTALLATION" }
         };
-        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
+        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
 
         public SWObject()
         {
@@ -123,9 +123,9 @@ namespace SWApp
 
         public (string, string, string, string, string, string) GetDataForBitmap()
         {
-            double mass = default;
             string index, filepath, configName, description, size, massStr = default;
-            double width, height, length;
+            double[] partCoords;
+            double width, height, depth;
             try
             {
                 swModel = (ModelDoc2)_swApp.ActiveDoc;
@@ -142,14 +142,24 @@ namespace SWApp
                 if(modelType == (int)swDocumentTypes_e.swDocPART)
                 {
                     swPart = (PartDoc)swModel;
-                    var box = swPart.GetPartBox(true);
-                    width = (box[3] - box[0]) as double;
+
+                    partCoords = (double[])swPart.GetPartBox(false);
+
+                    depth = Math.Round((Math.Abs(partCoords[2]) + Math.Abs(partCoords[5])) * 1000);
+                    height = Math.Round((Math.Abs(partCoords[1]) + Math.Abs(partCoords[4])) * 1000);
+                    width = Math.Round((Math.Abs(partCoords[0]) + Math.Abs(partCoords[3])) * 1000);
+
+                    size = $"{width}x{depth}x{height} mm";
 
                 }
                 else if ( modelType == (int)swDocumentTypes_e.swDocASSEMBLY)
                 {
                     swAss = (AssemblyDoc)swModel;
-                    var box = swAss.GetBox();
+                    partCoords = (double[])swAss.GetBox((int)swBoundingBoxOptions_e.swBoundingBoxIncludeRefPlanes);
+                    depth = Math.Round((Math.Abs(partCoords[2]) + Math.Abs(partCoords[5])) * 1000);
+                    height = Math.Round((Math.Abs(partCoords[1]) + Math.Abs(partCoords[4])) * 1000);
+                    width = Math.Round((Math.Abs(partCoords[0]) + Math.Abs(partCoords[3])) * 1000);
+                    size = $"{width}x{depth}x{height} mm";
                 }
                 else
                 {

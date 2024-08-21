@@ -148,7 +148,7 @@ namespace SWApp.Views.Pages
 
         private void btnShowTable_Click(object sender, RoutedEventArgs e)
         {
-            (tbSavedIndex.Text, tbAssyemblyFilepath.Text, tbConfigName.Text) = _viewModel.ReadAssemblyProperties();
+            (tbSavedIndex.Text, tbAssyemblyFilepath.Text, tbConfigName.Text, tbAssemblyDescription.Text, tbAssemblySize.Text, tbAssemblyMass.Text) = _viewModel.ReadAssemblyProperties();
             _viewModel.ReadPropertiesAsync();
             stackpanelWithDatagrid.Visibility = Visibility.Visible;
 

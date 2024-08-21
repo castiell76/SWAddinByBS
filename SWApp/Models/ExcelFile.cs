@@ -42,7 +42,7 @@ namespace SWApp.Models
         };
 
         public event Action<string, string, ControlAppearance, SymbolIcon> ErrorOccurred;
-        public void CreateWorkBook(DataTable dt, string indexName, string filepath, string assemblyFilepath, string assemblyConfig, string projectName, string size, double assemblyWeight)
+        public void CreateWorkBook(DataTable dt, string indexName, string filepath, string assemblyFilepath, string assemblyConfig, string projectName, string size, string assemblyMass)
         {
             SWObject swObject = new SWObject();
             string modelFilepath;
@@ -140,7 +140,7 @@ namespace SWApp.Models
             cellMainIndex.CellStyle = headerIndexStyle;
 
             cellMainIndex = rowMainIndex2.CreateCell(5) as XSSFCell;
-            cellMainIndex.SetCellValue(assemblyWeight);
+            cellMainIndex.SetCellValue(assemblyMass);
             cellMainIndex.CellStyle = headerIndexValuesStyle;
 
             cellMainIndex = rowMainIndex2.CreateCell(6) as XSSFCell;
