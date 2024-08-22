@@ -51,9 +51,11 @@ namespace SWApp.Models
             string configName;
             byte[] imageBytes;
             byte[] barcodeBytes;
+            byte[] qrBytes;
 
             int pictureIndex;
             int barcodeIndex;
+            int qrIndex;
             int k = 0;
             int i = 0;
             XSSFCreationHelper helper;
@@ -292,16 +294,16 @@ namespace SWApp.Models
             helper = workbook.GetCreationHelper() as XSSFCreationHelper;
             drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
             anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
-            anchor.Dx1 = 50000;
-            anchor.Dy1 = 25000;
+            anchor.Dx1 = 10000;
+            anchor.Dy1 = 5000;
             anchor.Col1 = 0;
             anchor.Row1 = 0;
             picture = drawing.CreatePicture(anchor, pictureIndex) as XSSFPicture;
-            picture.Resize(2, 3);
+            picture.Resize(1.5, 2.3);
 
             //adding index barcode
             sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(1, 1, 8, 9));
-            barcodeBytes = TypeToBarcodeConverter.GenerateBarcode(indexName);
+            barcodeBytes = TypeToVisualCodesConverter.GenerateBarcode(indexName);
             barcodeIndex = workbook.AddPicture(barcodeBytes, (NPOI.SS.UserModel.PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
             helper = workbook.GetCreationHelper() as XSSFCreationHelper;
             drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
@@ -312,13 +314,29 @@ namespace SWApp.Models
             anchor.Row1 = 1;
             picture = drawing.CreatePicture(anchor, barcodeIndex) as XSSFPicture;
             var barcodeCell = rowMainIndex1.CreateCell(8);
-            //barcodeCell.CellStyle = dataStyle;
+            picture.Resize(2, 1);
+
+            //adding index QR
+            sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(1, 1, 10, 11));
+            qrBytes = TypeToVisualCodesConverter.GenerateQR(indexName);
+            qrIndex = workbook.AddPicture(qrBytes, (NPOI.SS.UserModel.PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
+            helper = workbook.GetCreationHelper() as XSSFCreationHelper;
+            drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
+            anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
+            anchor.Dx1 = 100000;
+            anchor.Dy1 = 50000;
+            anchor.Col1 = 10;
+            anchor.Row1 = 1;
+            picture = drawing.CreatePicture(anchor, qrIndex) as XSSFPicture;
+            var qrCell = rowMainIndex1.CreateCell(10);
             picture.Resize(2, 1);
 
             //resize type columns
-            sheet.AutoSizeColumn(3);
-            sheet.SetColumnWidth(2, 10000);
-            sheet.SetColumnWidth(13, 10000);
+            //sheet.AutoSizeColumn(3);
+            sheet.SetColumnWidth(1, 3500);
+            sheet.SetColumnWidth(2, 3500);
+            sheet.SetColumnWidth(3, 3500);
+            sheet.SetColumnWidth(13, 3500);
 
             ////format as table
             XSSFTable table = sheet.CreateTable();

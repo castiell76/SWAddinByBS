@@ -19,7 +19,7 @@ using ZXing.Windows.Compatibility;
 
 namespace SWApp.Helpers
 {
-    public class TypeToBarcodeConverter 
+    public class TypeToVisualCodesConverter 
     {
         public static byte[] GenerateBarcode(string text)
         {
@@ -31,7 +31,29 @@ namespace SWApp.Helpers
                     Height = 400,
                     Width = 800,
                     PureBarcode = false,
-                    Margin = 10,
+                    Margin = 5,
+                },
+            };
+
+            var bitmap = writer.Write(text);
+
+            using (var stream = new MemoryStream())
+            {
+                bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Bmp);
+                return stream.ToArray();
+            }
+        }
+
+        public static byte[] GenerateQR(string text)
+        {
+            BarcodeWriter writer = new BarcodeWriter()
+            {
+                Format = BarcodeFormat.QR_CODE,
+                Options = new EncodingOptions
+                {
+                    Height = 400,
+                    Width = 400,
+                    Margin = 2,
                 },
             };
 

@@ -101,7 +101,7 @@ namespace SWApp
             {"SKALA","SCALE" },
             {"MONTAŻ","INSTALLATION" }
         };
-        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\ebabs\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
+        private readonly string allOperationsstr = File.ReadAllText("C:\\Users\\BIP\\source\\repos\\SWAddinByBS\\SWApp\\assets\\Operations.json");
 
         public SWObject()
         {
