@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Windows.Threading;
 using SWApp.Views.Pages;
 using System.ComponentModel.Design;
+using Wpf.Ui.Appearance;
+
 namespace WF_Host
 {
     [ComVisible(true)]
@@ -28,6 +30,7 @@ namespace WF_Host
             components = new System.ComponentModel.Container();
             elementHost2 = new ElementHost();
             mainWindow2 = new MainWindow();
+
             SuspendLayout();
 
             // elementHost2
@@ -53,10 +56,15 @@ namespace WF_Host
             Size = new System.Drawing.Size(630, 800);
             var cos = BackColor;
             ResumeLayout(false);
+            
         }
+
+
 
         private void OnThemeChanged(object sender, bool isDarkTheme)
         {
+
+            
             if (isDarkTheme)
             {
                 BackColor = Color.Black;

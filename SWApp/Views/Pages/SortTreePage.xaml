@@ -31,7 +31,7 @@
         </ResourceDictionary>
     </Page.Resources>
     <StackPanel>
-        <controls:ControlExample HeaderText="Wskaż kolejność sortowania" Margin="30" >
+        <controls:ControlExample HeaderText="Wskaż kolejność sortowania" Margin="15" >
 
             <ListBox
          Name="sortTreeListBox"
@@ -39,9 +39,9 @@
           PreviewMouseMove="ListBox_PreviewMouseMove"
           AllowDrop="True"
           Drop="ListBox_Drop"
-    HorizontalAlignment="Center"
-                        Width="Auto"
-    FontSize="15">
+          HorizontalAlignment="Center"
+          Width="Auto"
+          FontSize="15">
             </ListBox>
         </controls:ControlExample>
         <ui:ToggleSwitch x:Name="groupCompononents" Content="Grupuj jednakowe części" HorizontalAlignment="Center"></ui:ToggleSwitch>

@@ -18,6 +18,7 @@ using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.Util;
 using SWApp.Helpers;
 using Aspose.Pdf;
+using NPOI.SS.Formula.Functions;
 
 namespace SWApp.Models
 {
@@ -288,18 +289,29 @@ namespace SWApp.Models
             rowMainIndex2.Height = 1666;
             sheet.SetColumnWidth(0, 10000);
 
+
+            //resize type columns
+            sheet.SetColumnWidth(0, 9500);
+            for (int z=1; z<dt.Columns.Count; z++)
+            {
+                sheet.SetColumnWidth(z,5000);
+            }
+
+
             //adding image of assembly
             imageBytes = swObject.GetBitMap(assemblyFilepath, assemblyConfig);
             pictureIndex = workbook.AddPicture(imageBytes, (NPOI.SS.UserModel.PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
             helper = workbook.GetCreationHelper() as XSSFCreationHelper;
             drawing = sheet.CreateDrawingPatriarch() as XSSFDrawing;
             anchor = helper.CreateClientAnchor() as XSSFClientAnchor;
-            anchor.Dx1 = 10000;
-            anchor.Dy1 = 5000;
+            anchor.Dx1 = 0;
+            anchor.Dx2 = 12000;
+            anchor.Dy1 = 0;
+            anchor.Dy2 = 4500;
             anchor.Col1 = 0;
             anchor.Row1 = 0;
             picture = drawing.CreatePicture(anchor, pictureIndex) as XSSFPicture;
-            picture.Resize(1.5, 2.3);
+            picture.Resize(2.4, 2.9);
 
             //adding index barcode
             sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(1, 1, 8, 9));
@@ -314,10 +326,11 @@ namespace SWApp.Models
             anchor.Row1 = 1;
             picture = drawing.CreatePicture(anchor, barcodeIndex) as XSSFPicture;
             var barcodeCell = rowMainIndex1.CreateCell(8);
+            //barcodeCell.CellStyle = dataStyle;
             picture.Resize(2, 1);
 
             //adding index QR
-            sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(1, 1, 10, 11));
+            sheet.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(1, 2, 10, 11));
             qrBytes = TypeToVisualCodesConverter.GenerateQR(indexName);
             qrIndex = workbook.AddPicture(qrBytes, (NPOI.SS.UserModel.PictureType)XSSFWorkbook.PICTURE_TYPE_BMP);
             helper = workbook.GetCreationHelper() as XSSFCreationHelper;
@@ -329,14 +342,7 @@ namespace SWApp.Models
             anchor.Row1 = 1;
             picture = drawing.CreatePicture(anchor, qrIndex) as XSSFPicture;
             var qrCell = rowMainIndex1.CreateCell(10);
-            picture.Resize(2, 1);
-
-            //resize type columns
-            //sheet.AutoSizeColumn(3);
-            sheet.SetColumnWidth(1, 3500);
-            sheet.SetColumnWidth(2, 3500);
-            sheet.SetColumnWidth(3, 3500);
-            sheet.SetColumnWidth(13, 3500);
+            picture.Resize(1, 1);
 
             ////format as table
             XSSFTable table = sheet.CreateTable();

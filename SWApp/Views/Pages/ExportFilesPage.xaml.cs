@@ -211,5 +211,6 @@ namespace SWApp.Views.Pages
                 e.Column = templateColumn;
             }
         }
+
     }
 }
