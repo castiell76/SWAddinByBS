@@ -1,0 +1,31 @@
+﻿<Page x:Class="SWApp.Views.Pages.Calculations.CalculationsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:SWApp.Views.Pages.Calculations"
+      xmlns:controls="clr-namespace:SWApp.Controls"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:helpers="clr-namespace:SWApp.Helpers"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CalcutationsPage">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemesDictionary Theme="Light" />
+                <ui:ControlsDictionary />
+                <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/ControlExample.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/DatagridResource.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+            <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+            <helpers:ThemeToIndexConverter x:Key="ThemeToIndexConverter" />
+            <helpers:FileNameConverter x:Key="FileNameConverter" />
+        </ResourceDictionary>
+    </Page.Resources>
+    <StackPanel>
+        <ui:TextBox Text="THIS IS JUST TEST TBOX IN MAIN TAB" HorizontalAlignment="Center">
+
+        </ui:TextBox>
+    </StackPanel>
+</Page>

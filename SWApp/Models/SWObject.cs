@@ -80,6 +80,7 @@ namespace SWApp
         private Configuration swConfig;
         private Configuration swAssConfig;
         private MassProperty2 swMassProp;
+        private ISelectionMgr selectionMgr;
         private string _templateAssemblyPath;
         private string _templatePartPath;
         private string _systemPath;
@@ -120,7 +121,84 @@ namespace SWApp
         {
             SupressedElementsDetected?.Invoke(this, isSuppresed);
         }
+        public void SetColorPart(RALToRGBConverter.RalColor ral, bool[] options, string details)
+        {
+            bool setTransparency = options[0];
+            bool setEmission = options[1];
+            bool setProperty = options[2];
+            double transparency = 0;
+            double emission = 0;
 
+            if (setTransparency)
+            {
+                transparency = 0.5;
+            }
+            else if (setEmission)
+            {
+                emission = 0.6;
+            }
+           
+
+            List<Component2> swComps = new List<Component2>();
+            try
+            {
+                swModel = (ModelDoc2)_swApp.ActiveDoc;
+                int modelType = swModel.GetType();
+                
+                double red = Convert.ToDouble(ral.R) / 255;
+                double green = Convert.ToDouble(ral.G) / 255;
+                double blue = Convert.ToDouble(ral.B) / 255;
+
+                if (modelType == (int)swDocumentTypes_e.swDocASSEMBLY)
+                {
+                    swAss = (AssemblyDoc)swModel;
+                    selectionMgr = swModel.ISelectionManager;
+                    int objectsCount = selectionMgr.GetSelectedObjectCount2(-1);
+                    if (objectsCount != 0)
+                    {
+                        
+                        for (int i = 1; i <= objectsCount; i++)
+                        {
+                            object selectedObject = selectionMgr.GetSelectedObject6(i, -1);
+                            if (selectedObject is Component2)
+                            {
+                                swComps.Add((Component2)selectedObject);
+                            }
+                        }
+                        foreach (Component2 swComp in swComps)
+                        {
+                            swComp.MaterialPropertyValues = new double[] { red, green, blue, 0, 0, 0, 0, transparency, emission };
+                            
+                            if (setProperty)
+                            {
+                                swModel = (ModelDoc2)swComp.GetModelDoc2();
+                                SetCustomProperty(swModel, "kolor", $"{ral.Name} {details}", "");
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        ErrorOccurred?.Invoke("Uwaga!", "Wybierz kolor z listy i pliki, które chcesz pokolorować w drzewie SolidWorks", ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24));
+                    }
+
+                }
+                else
+                {
+                    swModel.MaterialPropertyValues = new double[] { red, green, blue, 0, 0, 0, 0, transparency, emission };
+                    if (setProperty)
+                    {
+                        SetCustomProperty(swModel, "kolor", $"{ral.Name} {details}", "");
+                    }
+                }
+            }
+            catch (NullReferenceException)
+            {
+                ErrorOccurred?.Invoke("Uwaga!", "Wybierz kolor z listy i pliki, które chcesz pokolorować w drzewie SolidWorks", ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24));
+            }
+           
+
+        }
         public (string, string, string, string, string, string) GetDataForBitmap()
         {
             string index, filepath, configName, description, size, massStr = default;
@@ -947,6 +1025,7 @@ namespace SWApp
                 ModelDoc2 swModelChild;
                 AssemblyDoc swAssemblyDoc = swModel as AssemblyDoc;
                 Dictionary<string, int> partsToExport = CountParts(swModel, filters);
+                
 
                 if (partsToExport == null || partsToExport.Count == 0)
                 {
@@ -1036,6 +1115,7 @@ namespace SWApp
         private ExportedDXF ExportToDXF(string filepath, string filedirToSave, Dictionary<string,int> totalParts, bool[] options, int quantity)
         {
             ExportedDXF outputDXF = new ExportedDXF();
+            filepath = filepath.ToLower();
             bool boolstatus = false;
             string sigmaNote;
             string dxfFilepath;
@@ -1209,7 +1289,8 @@ namespace SWApp
                 filepath = swModel.GetPathName();
                 totalParts.Add(filepath, 1);
             }
-                return totalParts;
+            totalParts = totalParts.ToDictionary(kvp => kvp.Key.ToLower(), kvp => kvp.Value);
+            return totalParts;
         }
  
         public void CreateRectangleProfile(ProfileSW profileSW, string filepath)

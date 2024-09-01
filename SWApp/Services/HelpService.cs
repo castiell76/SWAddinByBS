@@ -70,8 +70,11 @@ namespace SWApp.Services
                           _ = services.AddSingleton<HelpService>();
                           _ = services.AddSingleton<Views.Pages.ExportFilesPage>();
                           _ = services.AddSingleton<Views.Pages.DrawingsPage>();
-
-                          
+                          _ = services.AddSingleton<Views.Pages.Calculations.CalculationsPage>();
+                          _ = services.AddSingleton<Views.Pages.Calculations.TestPage>();
+                          _ = services.AddSingleton<Views.Pages.Calculations.EstimationPrepSteps.EstimationMainPage>();
+                          _ = services.AddSingleton<Views.Pages.Calculations.EstimationPrepSteps.BendingPage>();
+                          _ = services.AddSingleton<Views.Pages.Calculations.EstimationPrepSteps.CuttingPage>();
                           services.AddTransient<CrossSectionsViewmodel>();
                           services.AddTransient<FilesPropertiesViewModel>();
                           

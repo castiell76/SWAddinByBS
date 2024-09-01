@@ -154,14 +154,14 @@ namespace SWApp.Views.Pages
                     dgExport.Visibility = Visibility.Visible;
                     dgExport.AutoGeneratingColumn += dgPrimaryGrid_AutoGeneratingColumn;
                     dgExport.ItemsSource = ViewModel.ExportStatuses;
-                }
+            }
                 catch (Exception ex)
                 {
-                    _helpSerivce.SnackbarService.Show("Błąd!", ex.Message, ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24), TimeSpan.FromSeconds(3));
-                }
+                _helpSerivce.SnackbarService.Show("Błąd!", ex.Message, ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24), TimeSpan.FromSeconds(3));
+            }
                 finally
                 {
-                    progressRing.Visibility = Visibility.Collapsed;
+                progressRing.Visibility = Visibility.Collapsed;
                     progressRing.IsIndeterminate = false;
                     progressRing.IsEnabled = false;
                     btnExport.IsEnabled = true;

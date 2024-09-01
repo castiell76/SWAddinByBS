@@ -9,6 +9,8 @@ using System.ComponentModel;
 using Wpf.Ui.Appearance;
 using System;
 using MenuItem = Wpf.Ui.Controls.MenuItem;
+using SWApp.Views.Pages.Calculations;
+using SWApp.Views.Pages.Calculations.EstimationPrepSteps;
 
 namespace SWApp.Viewmodels
 {
@@ -23,6 +25,15 @@ namespace SWApp.Viewmodels
             new NavigationViewItem("Właściwości plików",SymbolRegular.DocumentBulletList24, typeof(FilesPropertiesPage)),
             new NavigationViewItem("Działania na rysunkach",SymbolRegular.DrawShape24, typeof(DrawingsPage)),
             new NavigationViewItem("Konwertowanie na arkusz blachy",SymbolRegular.ConvertRange24, typeof(ConvertToSheetPage)),
+            new NavigationViewItem("Kolorowanie elementów", SymbolRegular.BuildingSwap48, typeof(ColorElements)),
+            new NavigationViewItem("Kosztorysowanie", SymbolRegular.CheckboxChecked24, typeof(CalculationsPage))
+            {
+            MenuItemsSource = new object[]
+            {
+                new NavigationViewItem("Strona główna", SymbolRegular.CheckboxChecked24, typeof(EstimationMainPage)),
+                new NavigationViewItem("Test", SymbolRegular.Predictions24, typeof(TestPage))
+            }
+            },
 
         };
         //[ObservableProperty]
