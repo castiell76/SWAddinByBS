@@ -1,9 +1,7 @@
-﻿
-
-using System;
+﻿using System;
 using Wpf.Ui.Controls;
 
-namespace SWapp.Controls;
+namespace SWApp.Controls;
 
 public record NavigationCard
 {
@@ -15,3 +13,4 @@ public record NavigationCard
 
     public Type? PageType { get; init; }
 }
+

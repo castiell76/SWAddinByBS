@@ -10,7 +10,6 @@ using Wpf.Ui.Appearance;
 using System;
 using MenuItem = Wpf.Ui.Controls.MenuItem;
 using SWApp.Views.Pages.Calculations;
-using SWApp.Views.Pages.Calculations.EstimationPrepSteps;
 
 namespace SWApp.Viewmodels
 {
@@ -30,7 +29,6 @@ namespace SWApp.Viewmodels
             {
             MenuItemsSource = new object[]
             {
-                new NavigationViewItem("Strona główna", SymbolRegular.CheckboxChecked24, typeof(EstimationMainPage)),
                 new NavigationViewItem("Test", SymbolRegular.Predictions24, typeof(TestPage))
             }
             },

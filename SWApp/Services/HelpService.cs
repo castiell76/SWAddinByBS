@@ -51,6 +51,9 @@ namespace SWApp.Services
                           // App Host
                           _ = services.AddHostedService<ApplicationHostService>();
 
+                          
+
+
                           //// Main window container with navigation
                           _ = services.AddSingleton<MainWindow>();
                           _ = services.AddSingleton<MainWindowViewModel>();
@@ -72,9 +75,6 @@ namespace SWApp.Services
                           _ = services.AddSingleton<Views.Pages.DrawingsPage>();
                           _ = services.AddSingleton<Views.Pages.Calculations.CalculationsPage>();
                           _ = services.AddSingleton<Views.Pages.Calculations.TestPage>();
-                          _ = services.AddSingleton<Views.Pages.Calculations.EstimationPrepSteps.EstimationMainPage>();
-                          _ = services.AddSingleton<Views.Pages.Calculations.EstimationPrepSteps.BendingPage>();
-                          _ = services.AddSingleton<Views.Pages.Calculations.EstimationPrepSteps.CuttingPage>();
                           services.AddTransient<CrossSectionsViewmodel>();
                           services.AddTransient<FilesPropertiesViewModel>();
                           
@@ -88,16 +88,6 @@ namespace SWApp.Services
             _contentDialogService = _host.Services.GetRequiredService<IContentDialogService>();
             _themeService = _host.Services.GetRequiredService<IThemeService>();
         }
-        //private void InjectDependencies()
-        //{
-        //    _navigationService = GetRequiredService<INavigationService>();
-        //    _serviceProvider = GetRequiredService<IServiceProvider>();
-        //    _snackbarService = GetRequiredService<ISnackbarService>();
-        //    _contentDialogService = GetRequiredService<IContentDialogService>();
-
-        //    // Use injected dependencies
-        //    //ainWindow2.Initialize(_navigationService, _serviceProvider, _snackbarService, _contentDialogService);
-        //}
         public static T GetRequiredService<T>()
         where T : class
         {

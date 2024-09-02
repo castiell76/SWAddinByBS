@@ -1,5 +1,7 @@
-﻿using System;
+﻿using SWApp.Viewmodels.Pages.Calculations;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,8 +22,11 @@ namespace SWApp.Views.Pages.Calculations
     /// </summary>
     public partial class CalculationsPage : Page
     {
+        public CalculationsPageViewModel ViewModel;
         public CalculationsPage()
         {
+            ViewModel = new CalculationsPageViewModel();
+            DataContext = ViewModel;
             InitializeComponent();
         }
     }

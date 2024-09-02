@@ -9,12 +9,15 @@
       xmlns:helpers="clr-namespace:SWApp.Helpers"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="CalcutationsPage">
+      Title="CalcutationsPage"
+       d:DataContext="{d:DesignInstance local:CalculationsPage,
+                                     IsDesignTimeCreatable=False}">
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemesDictionary Theme="Light" />
                 <ui:ControlsDictionary />
+                <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/NavigationPresenter.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/ControlExample.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/DatagridResource.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
@@ -23,9 +26,6 @@
             <helpers:FileNameConverter x:Key="FileNameConverter" />
         </ResourceDictionary>
     </Page.Resources>
-    <StackPanel>
-        <ui:TextBox Text="THIS IS JUST TEST TBOX IN MAIN TAB" HorizontalAlignment="Center">
-
-        </ui:TextBox>
-    </StackPanel>
+    <controls:NavigationPresenter x:Name="ctrlest" ItemsSource="{Binding NavigationCards, Mode=OneWay}">
+    </controls:NavigationPresenter>
 </Page>
