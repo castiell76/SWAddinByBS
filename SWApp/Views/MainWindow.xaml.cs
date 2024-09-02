@@ -82,13 +82,14 @@ namespace SWApp.Views
             _helpService = new HelpService();
             _helpService.GetServices();
             _navigationService = _helpService.NavigationService;
-
+            _navigationService.SetNavigationControl(NavigationViewMain);
             _serviceProvider = _helpService.ServiceProvider;
             _snackbarService = _helpService.SnackbarService;
             _snackbarService.SetSnackbarPresenter(SnackbarPresenterMain);
             _contentDialogService = _helpService.ContentDialogService;
             _contentDialogService.SetContentPresenter(RootContentDialogPresenter);
             _themeService = _helpService.ThemeService;
+
             //_navigationService.SetNavigationControl(NavigationView);
             //_contentDialogService.SetDialogHost(RootContentDialog);
 

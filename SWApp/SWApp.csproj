@@ -153,7 +153,7 @@
     <PackageReference Include="System.Security.Cryptography.Xml" Version="9.0.0-preview.5.24306.7" />
     <PackageReference Include="System.Security.Permissions" Version="9.0.0-preview.5.24306.7" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.0-preview.5.24306.7" />
-    <PackageReference Include="WPF-UI" Version="3.0.4" />
+    <PackageReference Include="WPF-UI" Version="3.0.5" />
     <PackageReference Include="ZXing.Net" Version="0.16.9" />
     <PackageReference Include="ZXing.Net.Bindings.Windows.Compatibility" Version="0.16.12" />
   </ItemGroup>

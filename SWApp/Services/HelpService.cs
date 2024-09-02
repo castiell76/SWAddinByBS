@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Wpf.Ui;
+using Wpf.Ui.Controls;
 
 namespace SWApp.Services
 {
@@ -51,14 +52,12 @@ namespace SWApp.Services
                           // App Host
                           _ = services.AddHostedService<ApplicationHostService>();
 
-                          
 
 
                           //// Main window container with navigation
                           _ = services.AddSingleton<MainWindow>();
                           _ = services.AddSingleton<MainWindowViewModel>();
                           _ = services.AddSingleton<Views.MainWindow>();
-
                           _ = services.AddSingleton<INavigationService, Wpf.Ui.NavigationService>();
                           _ = services.AddSingleton<IThemeService, ThemeService>();
                           _ = services.AddSingleton<ISnackbarService, SnackbarService>();
@@ -87,6 +86,7 @@ namespace SWApp.Services
             _snackbarService = _host.Services.GetRequiredService<ISnackbarService>();
             _contentDialogService = _host.Services.GetRequiredService<IContentDialogService>();
             _themeService = _host.Services.GetRequiredService<IThemeService>();
+           // _navigationView = _host.Services.GetRequiredService<INavigationView>();
         }
         public static T GetRequiredService<T>()
         where T : class
