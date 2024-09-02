@@ -1,5 +1,4 @@
 ﻿using SWApp.ControlsLookup;
-using SWApp.Viewmodels.Pages.Calculations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,20 +15,17 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Wpf.Ui.Controls;
 
-namespace SWApp.Views.Pages.Calculations
+namespace SWApp.Views.Pages.Calculations.CalculationSteps
 {
     /// <summary>
-    /// Interaction logic for TestPage.xaml
+    /// Interaction logic for CuttingPage.xaml
     /// </summary>
     /// 
-    [SWAppPage("TestPage.", SymbolRegular.ControlButton24)]
-    public partial class TestPage : Page
+    [SWAppPage("CuttingPage.", SymbolRegular.Laptop48)]
+    public partial class CuttingPage : Page
     {
-        public TestPageViewModel ViewModel;
-        public TestPage()
+        public CuttingPage()
         {
-            ViewModel = new TestPageViewModel();
-            DataContext = ViewModel;
             InitializeComponent();
         }
     }

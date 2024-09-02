@@ -10,6 +10,7 @@ using Wpf.Ui.Appearance;
 using System;
 using MenuItem = Wpf.Ui.Controls.MenuItem;
 using SWApp.Views.Pages.Calculations;
+using SWApp.Views.Pages.Calculations.CalculationSteps;
 
 namespace SWApp.Viewmodels
 {
@@ -34,24 +35,7 @@ namespace SWApp.Viewmodels
             },
 
         };
-        //[ObservableProperty]
-        //private ObservableCollection<object> _bottomMenuItems = new ObservableCollection<object>
-        //{
-        //    new DropDownButton
-        //    {
-        //        Icon = new SymbolIcon { Symbol = SymbolRegular.ConvertRange24 },
-        //        Content = "Wybierz wygląd",
-        //        VerticalAlignment = System.Windows.VerticalAlignment.Bottom,
-        //        Flyout = new ContextMenu
-        //        {
-        //            Items =
-        //            {
-        //                new MenuItem { Header = "Jasny" },
-        //                new MenuItem { Header = "Ciemny" }
-        //            }
-        //        }
-        //    }
-        //};
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)

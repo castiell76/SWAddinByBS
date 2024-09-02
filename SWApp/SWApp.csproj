@@ -68,12 +68,17 @@
     <None Remove="SWApp\**" />
     <Page Remove="SWApp\**" />
   </ItemGroup>
+
   <ItemGroup>
     <Reference Include="SolidWorks.Interop.sldworks">
       <HintPath>..\..\..\..\..\..\Program Files\SOLIDWORKS Corp\SOLIDWORKS\api\redist\SolidWorks.Interop.sldworks.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SolidWorks.Interop.swconst">
       <HintPath>..\..\..\..\..\..\Program Files\SOLIDWORKS Corp\SOLIDWORKS\SolidWorks.Interop.swconst.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

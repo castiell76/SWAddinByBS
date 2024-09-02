@@ -13,26 +13,60 @@ namespace SWApp.ControlsLookup
 
         public static IEnumerable<SWAppPage> All()
         {
-            foreach (
-                Type? type in SWAppAssembly
-                    .Asssembly.GetTypes()
-                    .Where(t => t.IsDefined(typeof(SWAppPageAttribute)))
-            )
-            {
-                SWAppPageAttribute? galleryPageAttribute = type.GetCustomAttributes<SWAppPageAttribute>()
-                    .FirstOrDefault();
+            var pages = new List<SWAppPage>();
+            Type[] types;
 
-                if (galleryPageAttribute is not null)
+            // Próbujemy pobrać wszystkie typy z assembly
+            try
+            {
+                types = SWAppAssembly.Assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                // Jeśli wystąpi błąd, używamy tylko załadowanych typów
+                types = ex.Types.Where(t => t != null).ToArray();
+
+                // Logujemy każdy wyjątek, jeśli potrzebne
+                foreach (var loaderEx in ex.LoaderExceptions)
                 {
-                    yield return new SWAppPage(
-                        type.Name[..type.Name.LastIndexOf(PageSuffix)],
-                        galleryPageAttribute.Description,
-                        galleryPageAttribute.Icon,
-                        type
-                    );
+                    Console.WriteLine($"Error loading type: {loaderEx.Message}");
                 }
             }
+
+            // Przechodzimy przez załadowane typy i przetwarzamy te, które mają wymagany atrybut
+            foreach (Type? type in types.Where(t => t.IsDefined(typeof(SWAppPageAttribute))))
+            {
+                try
+                {
+                    SWAppPageAttribute? galleryPageAttribute = type.GetCustomAttributes<SWAppPageAttribute>()
+                        .FirstOrDefault();
+
+                    if (galleryPageAttribute is not null)
+                    {
+                        Console.WriteLine($"Found type: {type.FullName}");
+                        pages.Add(new SWAppPage(
+                            type.Name[..type.Name.LastIndexOf(PageSuffix)],
+                            galleryPageAttribute.Description,
+                            galleryPageAttribute.Icon,
+                            type
+                        ));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Opcjonalnie: Logowanie błędu podczas przetwarzania konkretnego typu
+                    Console.WriteLine($"Error processing type {type?.FullName}: {ex.Message}");
+                }
+            }
+
+            // Zwrócenie wyników za pomocą yield return
+            foreach (var page in pages)
+            {
+                yield return page;
+            }
         }
+
+
 
         public static IEnumerable<SWAppPage> FromNamespace(string namespaceName)
         {

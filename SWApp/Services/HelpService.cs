@@ -74,6 +74,9 @@ namespace SWApp.Services
                           _ = services.AddSingleton<Views.Pages.DrawingsPage>();
                           _ = services.AddSingleton<Views.Pages.Calculations.CalculationsPage>();
                           _ = services.AddSingleton<Views.Pages.Calculations.TestPage>();
+                          _ = services.AddSingleton<Views.Pages.ColorElements>();
+                          _ = services.AddSingleton<Views.Pages.Calculations.CalculationSteps.BendingPage>();
+                          _ = services.AddSingleton<Views.Pages.Calculations.CalculationSteps.CuttingPage>();
                           services.AddTransient<CrossSectionsViewmodel>();
                           services.AddTransient<FilesPropertiesViewModel>();
                           

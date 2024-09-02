@@ -9,6 +9,6 @@ namespace SWApp
 {
     public class SWAppAssembly
     {
-        public static Assembly Asssembly => Assembly.GetExecutingAssembly();
+        public static Assembly Assembly => Assembly.GetExecutingAssembly();
     }
 }
