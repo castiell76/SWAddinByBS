@@ -1,4 +1,6 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using SolidWorks.Interop.swconst;
 using SWApp.Controls;
 using SWApp.Services;
@@ -17,13 +19,16 @@ using Wpf.Ui.Controls;
 
 namespace SWApp.Viewmodels.Pages
 {
-    public class ExportFilesViewModel : INotifyPropertyChanged
+    public partial class ExportFilesViewModel : ObservableObject, INotifyPropertyChanged
     {
+
         private SWObject _swObject;
         private HelpService _helpService;
         private ViewControl _viewControl;
         private ObservableCollection<ExportStatus> _exportStatuses;
         private readonly Dispatcher _dispatcher;
+
+
         public ExportFilesViewModel()
         {
             _swObject = new SWObject();
@@ -41,12 +46,11 @@ namespace SWApp.Viewmodels.Pages
                 OnPropertyChanged(nameof(ExportStatuses));
             }
         }
-        public async Task ExportFilesAsync(bool[] options, int quantitySigma, string filedirToSave, List<string> filters)
+        public  void ExportFilesAsync(bool[] options, int quantitySigma, string filedirToSave, List<string> filters)
         {
             try
             {
-                _exportStatuses = await Task.Run(() =>
-                    _swObject.ExportFromAssembly(options, quantitySigma, filedirToSave, filters));
+                _exportStatuses = _swObject.ExportFromAssembly(options, quantitySigma, filedirToSave, filters);
             }
 
             catch(Exception ex)

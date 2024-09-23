@@ -26,6 +26,7 @@ using Wpf.Ui;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 using Binding = System.Windows.Data.Binding;
+using Plotly.NET;
 
 namespace SWApp.Views.Pages
 {
@@ -48,21 +49,6 @@ namespace SWApp.Views.Pages
             ApplicationThemeManager.Apply(this);
         }
 
-        private void CbAllDXF_Checked(object sender, RoutedEventArgs e)
-        {
-            cbPBSheet.IsEnabled = false;
-            cbPTSheet.IsEnabled = false;
-            cbPBSheet.IsChecked = false;
-            cbPTSheet.IsChecked = false;
-        }
-
-        private void CbAllDXF_Unchecked(object sender, RoutedEventArgs e)
-        {
-            cbPBSheet.IsEnabled = true;
-            cbPTSheet.IsEnabled = true;
-            cbPBSheet.IsChecked = false;
-            cbPTSheet.IsChecked = false;
-        }
         private void CbCreateDXFForSigma_Checked(object sender, RoutedEventArgs e)
         {
             cbCreateDXF.IsChecked = true;
@@ -92,7 +78,7 @@ namespace SWApp.Views.Pages
             }
         }
 
-        private async void btnExport_Click(object sender, RoutedEventArgs e)
+        private void btnExport_Click(object sender, RoutedEventArgs e)
         {
             
             int quantitySigma;
@@ -105,27 +91,12 @@ namespace SWApp.Views.Pages
             string filedirToSave = txtPathDir.Text.ToString();
             options[0] = cbCreateDXF.IsChecked ?? false;
             options[1] = cbCreateSTEP.IsChecked ?? false;
-            options[2] = cbPBSheet.IsChecked ?? false;
-            options[3] = cbPTSheet.IsChecked ?? false;
-            options[4] = cbDXFFromDrawing.IsChecked ?? false;
-            options[5] = cbAllDXF.IsChecked ?? false;
-            options[6] = cbCreateDXFForSigma.IsChecked ?? false;
-            options[7] = cbSketchInclude.IsChecked ?? false;
-            options[8] = cbFormingToolsInclude.IsChecked ?? false;
+            options[2] = cbDXFFromDrawing.IsChecked ?? false;
+            options[3] = cbAllDXF.IsChecked ?? false;
+            options[4] = cbCreateDXFForSigma.IsChecked ?? false;
+            options[5] = cbSketchInclude.IsChecked ?? false;
+            options[6] = cbFormingToolsInclude.IsChecked ?? false;
 
-            if (options[2] && options[3])
-            {
-                filters.Add("PB");
-                filters.Add("PT");
-            }
-            else if (options[3])
-            {
-                filters.Add("PT");
-            }
-            else if (options[2])
-            {
-                filters.Add("PB");
-            }
             if (cbCreateDXF.IsChecked == false && cbCreateSTEP.IsChecked == false)
             {
                 _helpSerivce.SnackbarService.Show("Uwaga!", "Wybierz opcję eksportu DXF lub STEP", ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24),
@@ -146,11 +117,7 @@ namespace SWApp.Views.Pages
                 try
                 {
                     btnExport.IsEnabled = false;
-                    tbExport.Text = "Eksportowanie...";
-                    progressRing.IsEnabled = true;
-                    progressRing.Visibility = Visibility.Visible;
-                    progressRing.IsIndeterminate = true;
-                    await ViewModel.ExportFilesAsync(options, quantitySigma, filedirToSave, filters);
+                    ViewModel.ExportFilesAsync(options, quantitySigma, filedirToSave, filters);
                     dgExport.Visibility = Visibility.Visible;
                     dgExport.AutoGeneratingColumn += dgPrimaryGrid_AutoGeneratingColumn;
                     dgExport.ItemsSource = ViewModel.ExportStatuses;
@@ -161,9 +128,6 @@ namespace SWApp.Views.Pages
             }
                 finally
                 {
-                progressRing.Visibility = Visibility.Collapsed;
-                    progressRing.IsIndeterminate = false;
-                    progressRing.IsEnabled = false;
                     btnExport.IsEnabled = true;
                     tbExport.Text = "Eksportuj";
                     
@@ -210,7 +174,42 @@ namespace SWApp.Views.Pages
 
                 e.Column = templateColumn;
             }
+            if (desc?.Name == "type")
+            {
+                var templateColumn = new DataGridTemplateColumn
+                {
+                    Header = e.Column.Header,
+                    SortMemberPath = desc.Name
+                };
+
+                var template = new DataTemplate();
+                var factory = new FrameworkElementFactory(typeof(System.Windows.Controls.Image));
+                factory.SetValue(System.Windows.Controls.Image.WidthProperty, 25.0);
+                factory.SetValue(System.Windows.Controls.Image.HeightProperty, 25.0);
+
+                factory.SetValue(System.Windows.Controls.Image.VerticalAlignmentProperty, VerticalAlignment.Center);
+
+                var binding = new System.Windows.Data.Binding("type")
+                {
+                    Converter = (IValueConverter)this.Resources["TypeToIconConverter"]
+                };
+                factory.SetBinding(System.Windows.Controls.Image.SourceProperty, binding);
+
+                template.VisualTree = factory;
+                templateColumn.CellTemplate = template;
+
+                e.Column = templateColumn;
+            }
         }
 
+        private void cbAllDXF_Checked(object sender, RoutedEventArgs e)
+        {
+            flyout.IsOpen = true;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            flyout.IsOpen = false;
+        }
     }
 }

@@ -10,9 +10,14 @@ namespace SWApp.Viewmodels
 {
     public class ExportStatus
     {
+        [ColumnName("typ")]
+        [ColumnVisibility(true)]
+        public string type { get; set; }
+
         [ColumnName("nazwa")]
         [ColumnVisibility(true)]
         public string filepath { get; set; }
+
 
         [ColumnVisibility(true)]
         [ColumnName("utworzono DXF?")]

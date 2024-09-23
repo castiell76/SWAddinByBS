@@ -73,7 +73,7 @@ namespace SWApp.Services
                           _ = services.AddSingleton<Views.Pages.ExportFilesPage>();
                           _ = services.AddSingleton<Views.Pages.DrawingsPage>();
                           _ = services.AddSingleton<Views.Pages.Calculations.CalculationsPage>();
-                          _ = services.AddSingleton<Views.Pages.Calculations.TestPage>();
+                          _ = services.AddSingleton<Views.Pages.Calculations.CalculationsMainPage>();
                           _ = services.AddSingleton<Views.Pages.ColorElements>();
                           _ = services.AddSingleton<Views.Pages.Calculations.CalculationSteps.BendingPage>();
                           _ = services.AddSingleton<Views.Pages.Calculations.CalculationSteps.CuttingPage>();

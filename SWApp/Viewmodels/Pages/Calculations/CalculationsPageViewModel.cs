@@ -18,17 +18,17 @@ namespace SWApp.Viewmodels.Pages.Calculations
         public ObservableCollection<NavigationCard> NavigationCards { get; set; }
         public CalculationsPageViewModel()
         {
-            NavigationCards = new ObservableCollection<NavigationCard>(
-        ControlPages
-            .FromNamespace(typeof(CalculationsPage).Namespace!)
-            .Select(x => new NavigationCard()
-            {
-                Name = x.Name,
-                Icon = x.Icon,
-                Description = x.Description,
-                PageType = x.PageType
-            })
-    );
+    //        NavigationCards = new ObservableCollection<NavigationCard>(
+    //    ControlPages
+    //        .FromNamespace(typeof(CalculationsPage).Namespace!)
+    //        .Select(x => new NavigationCard()
+    //        {
+    //            Name = x.Name,
+    //            Icon = x.Icon,
+    //            Description = x.Description,
+    //            PageType = x.PageType
+    //        })
+    //);
 
 
         }

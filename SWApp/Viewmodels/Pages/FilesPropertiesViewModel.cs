@@ -205,7 +205,7 @@ namespace SWApp.Viewmodels.Pages
                 new ContentDialog
                 {
                     Title = "Uwaga!",
-                    Content = "Wykryto komponenty wygaszone i/lub w odciążeniu. Czy chcesz przywrócić je do pełnej pamięci?",
+                    Content = "Wykryto komponenty wygaszone i/lub w odciążeniu. Czy chcesz przywrócić je do pełnej pamięci? \n\nWażne! Pliki wygaszone nie będą zawarte w tabelce.",
                     PrimaryButtonText = "Tak",
                     SecondaryButtonText = "Nie",
                 }, CancellationToken.None);

@@ -16,24 +16,23 @@ namespace SWApp.ControlsLookup
             var pages = new List<SWAppPage>();
             Type[] types;
 
-            // Próbujemy pobrać wszystkie typy z assembly
             try
             {
                 types = SWAppAssembly.Assembly.GetTypes();
             }
             catch (ReflectionTypeLoadException ex)
             {
-                // Jeśli wystąpi błąd, używamy tylko załadowanych typów
+
                 types = ex.Types.Where(t => t != null).ToArray();
 
-                // Logujemy każdy wyjątek, jeśli potrzebne
+
                 foreach (var loaderEx in ex.LoaderExceptions)
                 {
                     Console.WriteLine($"Error loading type: {loaderEx.Message}");
                 }
             }
 
-            // Przechodzimy przez załadowane typy i przetwarzamy te, które mają wymagany atrybut
+
             foreach (Type? type in types.Where(t => t.IsDefined(typeof(SWAppPageAttribute))))
             {
                 try
@@ -54,12 +53,12 @@ namespace SWApp.ControlsLookup
                 }
                 catch (Exception ex)
                 {
-                    // Opcjonalnie: Logowanie błędu podczas przetwarzania konkretnego typu
+                  
                     Console.WriteLine($"Error processing type {type?.FullName}: {ex.Message}");
                 }
             }
 
-            // Zwrócenie wyników za pomocą yield return
+            
             foreach (var page in pages)
             {
                 yield return page;

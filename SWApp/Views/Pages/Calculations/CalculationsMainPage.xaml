@@ -1,0 +1,65 @@
+﻿<Page x:Class="SWApp.Views.Pages.Calculations.CalculationsMainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:SWApp.Views.Pages.Calculations"
+      xmlns:vm="clr-namespace:SWApp.Viewmodels"
+      xmlns:controls="clr-namespace:SWApp.Controls"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:helpers="clr-namespace:SWApp.Helpers"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="TestPage">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemesDictionary Theme="Light" />
+                <ui:ControlsDictionary />
+                <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/NavigationPresenter.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/ControlExample.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="pack://application:,,,/SWApp;component/Controls/DatagridResource.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+            <helpers:TypeToIconConverter x:Key="TypeToIconConverter"></helpers:TypeToIconConverter>
+            <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+            <helpers:ThemeToIndexConverter x:Key="ThemeToIndexConverter" />
+            <helpers:FileNameConverter x:Key="FileNameConverter" />
+        </ResourceDictionary>
+    </Page.Resources>
+    <StackPanel>
+        <Menu FontSize="14">
+            <MenuItem Header="Pobierz drzewo SW" Click="MenuItem_Click" />
+        </Menu>
+        <DockPanel>
+            <controls:ControlExample HeaderText="Drzewo wyrobu" Margin="15" HorizontalAlignment="Left">
+                <StackPanel>
+                    <TreeView x:Name="swTreeView"
+                             AllowDrop="True"
+                             IsManipulationEnabled="True"
+                             MouseRightButtonDown="swTreeView_MouseRightButtonDown"
+                             SelectedItemChanged="swTreeView_SelectedItemChanged"
+                             Width="200"
+                             ItemsSource="{Binding SWTreeNodes}"
+                             >
+                        <TreeView.ContextMenu>
+                            <ContextMenu x:Name="cmNodes" >
+                                <MenuItem x:Name="cmAddNode" Header="Dodaj" />
+                                <MenuItem x:Name="cmOpenNode"  Header="Otwórz" Click="cmOpenNode_Click" />
+                                <MenuItem x:Name="cmDeleteNode" Header="Usuń"/>
+                            </ContextMenu>
+                        </TreeView.ContextMenu>
+                    </TreeView>
+
+                </StackPanel>
+
+            </controls:ControlExample >
+            <controls:ControlExample HeaderText="Materiały i operacje części" Margin="15" HorizontalAlignment="Right">
+                <DataGrid>
+
+                </DataGrid>
+            </controls:ControlExample>
+        </DockPanel>
+    </StackPanel>
+   
+
+</Page>

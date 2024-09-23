@@ -26,11 +26,11 @@ namespace SWApp.Viewmodels
             new NavigationViewItem("Działania na rysunkach",SymbolRegular.DrawShape24, typeof(DrawingsPage)),
             new NavigationViewItem("Konwertowanie na arkusz blachy",SymbolRegular.ConvertRange24, typeof(ConvertToSheetPage)),
             new NavigationViewItem("Kolorowanie elementów", SymbolRegular.BuildingSwap48, typeof(ColorElements)),
-            new NavigationViewItem("Kosztorysowanie", SymbolRegular.CheckboxChecked24, typeof(CalculationsPage))
+            new NavigationViewItem("Kosztorysowanie", SymbolRegular.MoneyCalculator24, typeof(CalculationsPage))
             {
             MenuItemsSource = new object[]
             {
-                new NavigationViewItem("Test", SymbolRegular.Predictions24, typeof(TestPage))
+                new NavigationViewItem("Lista elementów", SymbolRegular.CircleSmall24, typeof(CalculationsMainPage))
             }
             },
 

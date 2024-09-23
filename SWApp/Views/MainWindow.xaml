@@ -61,6 +61,7 @@
             <ui:NavigationView.ContentOverlay>
                 <Grid>
                     <ui:SnackbarPresenter x:Name="SnackbarPresenterMain"></ui:SnackbarPresenter>
+                    
                 </Grid>
             </ui:NavigationView.ContentOverlay>
         </ui:NavigationView>

@@ -533,7 +533,7 @@ namespace SWApp
             TreeControlItem node;
             swModel = (ModelDoc2)_swApp.ActiveDoc;
             List<string> filters = new List<string>();
-            Dictionary<string,int> allParts = CountParts(swModel, filters);
+            Dictionary<string,int> allParts = CountParts(swModel, filters, null);
             //properties for opened file
             SetAllSingleFileProperties(swModel,customProperties,allParts,optionsStr,options,1,".0");
 
@@ -1022,9 +1022,10 @@ namespace SWApp
             try
             {
                 ModelDoc2 swModel = _swApp.ActiveDoc as ModelDoc2;
+                string assemblyFilepath = swModel.GetPathName();
                 ModelDoc2 swModelChild;
                 AssemblyDoc swAssemblyDoc = swModel as AssemblyDoc;
-                Dictionary<string, int> partsToExport = CountParts(swModel, filters);
+                Dictionary<string, int> partsToExport = CountParts(swModel, filters, options);
                 
 
                 if (partsToExport == null || partsToExport.Count == 0)
@@ -1034,38 +1035,45 @@ namespace SWApp
 
                 int extensionOption = 1;
 
+                _swApp.SetUserPreferenceToggle((int)swUserPreferenceToggle_e.swExtRefNoPromptOrSave, true);
+
                 foreach (string path in partsToExport.Keys)
                 {
-                    swModelChild = (ModelDoc2)_swApp.ActivateDoc3(path, false, 0, 0);
-                    if (Path.GetExtension(path) == ".SLDASM")
+                    if(assemblyFilepath.ToLower() != path)
                     {
-                        extensionOption = 2;
-                    }
-                    else
-                    {
-                        extensionOption = 1;
-                    }
-                    if (swModelChild == null)
-                    {
-                        swModelChild = _swApp.OpenDoc6(Path.GetFileName(path), extensionOption, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
                         swModelChild = (ModelDoc2)_swApp.ActivateDoc3(path, false, 0, 0);
+                        //for now it is chose to NOT to iterate and generate export files of assemblies
+                        if (Path.GetExtension(path) == ".SLDASM")
+                        {
+                            extensionOption = 2;
+                        }
+                        else
+                        {
+                            extensionOption = 1;
+
+                            if (swModelChild != null)
+                            {
+                                swModelChild = _swApp.OpenDoc6(Path.GetFileName(path), extensionOption, (int)swOpenDocOptions_e.swOpenDocOptions_Silent, "", 0, 0);
+                            }
+                        }
+                        
+                        exportStatuses.Add(ExportSingleFile(filedirToSave, partsToExport, options, quantitySigma));
+                        _swApp.CloseDoc(path);
+                        Marshal.ReleaseComObject(swModelChild);
                     }
-                    exportStatuses.Add(ExportSingleFile(filedirToSave, partsToExport, options, quantitySigma));
-                    _swApp.CloseDoc(path);
+
+                    if (options[2])
+                    {
+                        ExportToDXFFromDrawing(filedirToSave);
+                    }
                 }
 
-                if (options[4])
-                {
-                    ExportToDXFFromDrawing(filedirToSave);
-                }
+                _swApp.SetUserPreferenceToggle((int)swUserPreferenceToggle_e.swExtRefNoPromptOrSave, false);
+
             }
             catch (NullReferenceException)
             {
-
-                _dispatcher?.Invoke(new Action(() =>
-                {
-                    ErrorOccurred?.Invoke("Uwaga!", "Aktywny plik nie jest złożeniem SolidWorks", ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24));
-                }));
+              ErrorOccurred?.Invoke("Uwaga!", "Aktywny plik nie jest złożeniem SolidWorks", ControlAppearance.Caution, new SymbolIcon(SymbolRegular.Important24));
                 
             }
 
@@ -1215,6 +1223,23 @@ namespace SWApp
             if(swModel != null)
             {
                 modelFilepath = swModel.GetPathName(); //pathname inc. filename with extension
+                swModelExt = swModel.Extension;
+                swFeature = swModelExt.GetTemplateSheetMetal();
+
+                //checking if part is sheet template and assing proper type
+                if(swFeature != null)
+                {
+                    exportStatus.type = "sheet";
+                }
+                else if(swModel.GetType() == (int)(int)swDocumentTypes_e.swDocASSEMBLY)
+                {
+                    exportStatus.type = "assembly";
+                }
+                else
+                {
+                    exportStatus.type = "part";
+                }
+
                 filename = System.IO.Path.GetFileName(filepath);
                 exportStatus.stepCreated = false;
                 exportStatus.dxfCreated = false;
@@ -1239,50 +1264,65 @@ namespace SWApp
             return exportStatus;
         }
 
-        public Dictionary<string,int> CountParts(ModelDoc2 swModel, List<string> filters)
+        public Dictionary<string, int> CountParts(ModelDoc2 swModel, List<string> filters, bool[] options)
         {
+            var cos = options[3];
             Dictionary<string, int> totalParts = new Dictionary<string, int>();
             string filepath;
             int modelType = swModel.GetType();
-            
+
             if (modelType == (int)swDocumentTypes_e.swDocASSEMBLY)
-                {
+            {
                 swAss = (AssemblyDoc)swModel;
                 totalParts.Add(swModel.GetPathName(), 1);
                 var obj = (object[])swAss.GetComponents(false); //false for take all parts from main assembly and subassemblies
-                    
-                    
 
-                    foreach (Component2 comp in obj)
+                foreach (Component2 comp in obj)
+                {
+                    var suppresion = comp.GetSuppression2();
+                    if (suppresion == (int)swComponentSuppressionState_e.swComponentFullyLightweight || suppresion == (int)swComponentSuppressionState_e.swComponentLightweight) //if components is in lightweight mode or is suppressed it has to be unsuppressed to get count 
                     {
-                        var suppresion = comp.GetSuppression2();
-                        if (suppresion != (int)swComponentSuppressionState_e.swComponentResolved || suppresion != (int)swComponentSuppressionState_e.swComponentFullyResolved) //if components is in lightweight mode or is suppressed it has to be unsuppressed to get count 
+                        comp.SetSuppression2(3);
+                    }
+
+                    swModel = (ModelDoc2)comp.GetModelDoc2();
+
+                    if (swModel != null)
+                    {
+                        filepath = comp.GetPathName();
+                        if (!totalParts.ContainsKey(filepath))
                         {
-                            comp.SetSuppression2(3);
+                            totalParts.Add(filepath, 1);
+
+                            //checking if model is template sheet, if so the return list will return ONLY sheet parts
+                            swModelExt = swModel.Extension;
+                            swFeature = (Feature)swModelExt.GetTemplateSheetMetal();
+                            if (swFeature != null && options[3] == false)
+                            {
+                                filters.Add(filepath);
+                            }
+                        }
+                        else
+                        {
+                            totalParts[filepath]++;
                         }
 
-                         swModel = (ModelDoc2)comp.GetModelDoc2();
-                        filepath = swModel.GetPathName();
-                        if (swModel != null)
-                        {
-                            if (!totalParts.ContainsKey(filepath))
-                            {
-                                totalParts.Add(filepath, 1);
-                            }
-                            else
-                            {
-                                totalParts[filepath]++;
-                            }
-                        }
+                    }
 
+                    //setting suppression state lightweight if it was so
+                    if (suppresion == (int)swComponentSuppressionState_e.swComponentFullyLightweight || suppresion == (int)swComponentSuppressionState_e.swComponentLightweight) //if components is in lightweight mode or is suppressed it has to be unsuppressed to get count 
+                    {
                         comp.SetSuppression2(suppresion);
+                    }
 
-                    }
-                    if (filters.Count() != 0)
-                    {
-                        totalParts = totalParts.Where(k => filters.Any(f => k.Key.Contains(f))).ToDictionary(k => k.Key, k => k.Value);
-                    }
                 }
+                if (filters.Count() != 0)
+                {
+                    totalParts = totalParts.Where(k => filters.Any(f => k.Key.Contains(f))).ToDictionary(k => k.Key, k => k.Value);
+                }
+
+
+            }
             else
             {
                 swModel = (ModelDoc2)_swApp.ActiveDoc;
@@ -1292,7 +1332,7 @@ namespace SWApp
             totalParts = totalParts.ToDictionary(kvp => kvp.Key.ToLower(), kvp => kvp.Value);
             return totalParts;
         }
- 
+
         public void CreateRectangleProfile(ProfileSW profileSW, string filepath)
         {
             ModelDoc2 swModel;
@@ -2772,10 +2812,10 @@ namespace SWApp
             string assemblyName = System.IO.Path.GetFileNameWithoutExtension(swModel.GetPathName());
 
             //add main node assembly
-            SWTreeNode mainAssembly = new SWTreeNode() { Name = assemblyName };
+            SWTreeNode mainAssembly = new SWTreeNode() { Name = assemblyName, Type = "assembly", Path=swModel.GetPathName() };
 
             //add other nodes
-            SWTreeNode treeNode = new SWTreeNode() { Name = assemblyName };
+            SWTreeNode treeNode = new SWTreeNode() { Name = assemblyName, Type= "assembly", Path = swModel.GetPathName() };
             node = node.GetFirstChild();
             treeNode = CreateTreeFromSW(node, "", treeNode);
             mainAssembly.Items.Add(treeNode);
@@ -2795,7 +2835,7 @@ namespace SWApp
             string finalDrawingNum = drawingNum.ToString();
             string name;
             string path;
-
+            string type;
 
             while (node != null)
             {
@@ -2806,14 +2846,16 @@ namespace SWApp
                     swModel = (ModelDoc2)swComp.GetModelDoc2();
                     name = System.IO.Path.GetFileNameWithoutExtension(swModel.GetPathName());
                     path = System.IO.Path.GetFullPath(swModel.GetPathName());
+                    swModelExt = swModel.Extension;
+                    swFeature = swModelExt.GetTemplateSheetMetal();
                     if (swModel.GetType() == (int)swDocumentTypes_e.swDocASSEMBLY)
                     {
                         childNode = node.GetFirstChild();
-
+                        type = "assembly";
                         parentNumOld = parentNum;
                         parentNum = $"{parentNum}.{drawingNum}";
                         //add position in a tree level 
-                        SWTreeNode newTreeLevel = new SWTreeNode() { Name = name, Path = path };
+                        SWTreeNode newTreeLevel = new SWTreeNode() { Name = name, Path = path, Type = type };
 
                         CreateTreeFromSW(childNode, parentNum, newTreeLevel);
                         swTreeNodes.Items.Add(newTreeLevel);
@@ -2821,9 +2863,10 @@ namespace SWApp
                     }
                     else
                     {
+                        type = swFeature != null ? "sheet" : "part";
                         evaluatedParentNum = $"{parentNum}.{drawingNum}";
                         //add position in a tree level
-                        swTreeNodes.Items.Add(new SWTreeNode() { Name = name, Path = path });
+                        swTreeNodes.Items.Add(new SWTreeNode() { Name = name, Path = path, Type=type });
                     }
                     drawingNum++;
 

@@ -1,5 +1,4 @@
-Export do excel (w tym barcody)
-
+generowanie dxf -- zeby nie otwieraly sie zlozenia tylko party i nie pokazywalo sie okienko o wybor plikow, ktorych nie mozna odnalezc (usuniete)
 
 
 

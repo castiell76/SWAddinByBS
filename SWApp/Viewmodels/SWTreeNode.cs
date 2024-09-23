@@ -34,6 +34,7 @@ namespace SWApp.Viewmodels
         public int ID { get; set; }
         public string Name { get; set; }
         public string Path { get; set; }
+        public string Type { get; set; }
         public string Description { get; set; }
         public ObservableCollection<Operation> Operations { get; set; }
         public List<SWTreeNode> Childs { get; set; }

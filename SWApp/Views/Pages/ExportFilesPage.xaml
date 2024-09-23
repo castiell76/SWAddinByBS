@@ -34,25 +34,42 @@
 
     <StackPanel>
         <DockPanel>
+            
             <controls:ControlExample HeaderText="Wskaż odpowiednie opcje eksportu" Margin="15">
+                
                 <StackPanel x:Name="spCheckboxes">
                     <CheckBox x:Name="cbCreateDXF" Content="Generuj pliki DXF"/>
                     <CheckBox x:Name="cbCreateSTEP" Content="Generuj pliki STEP"/>
-                    <CheckBox x:Name="cbPBSheet" Content="Wygeneruj arkusze blachy (PB)"/>
-                    <CheckBox x:Name="cbPTSheet" Content="Wygeneruj tworzywa (PT)"/>
                     <CheckBox x:Name="cbDXFFromDrawing" Content="Uwzględnij DXF z arkuszy rysunków"/>
-                    <CheckBox x:Name="cbAllDXF" Checked="CbAllDXF_Checked" Unchecked="CbAllDXF_Unchecked">
-                        <TextBlock TextWrapping="Wrap">Wygeneruj z niestandardowych <LineBreak/>nazw części"</TextBlock>
+                    <CheckBox x:Name="cbAllDXF" Checked="cbAllDXF_Checked">
+                        <TextBlock TextWrapping="Wrap">Uwzględnij części niebędące <LineBreak/>arkuszem blachy</TextBlock>
                     </CheckBox>
-                    
+                   
                     <StackPanel>
                         <CheckBox x:Name="cbCreateDXFForSigma" Checked="CbCreateDXFForSigma_Checked" Unchecked="cbCreateDXFForSigma_Unchecked" Content="Stwórz do Sigmy"></CheckBox>
                         <ui:TextBox x:Name="txtSigmaQuantity" PlaceholderText="Wprowadź nakład do sigmy" Visibility="Collapsed"></ui:TextBox>
                         
                     </StackPanel>
-                    
+                    <ui:Flyout
+                        x:Name="flyout"
+                        IsOpen="False"
+                        Placement="Top"
+                        HorizontalAlignment="Center">
+                        <StackPanel>
+                            <TextBlock
+                                 Width="Auto"
+                                 HorizontalAlignment="Center"
+                                 Text="Zaznaczenie tej opcji może znacznie wydłużyć czas generowania"
+                                 TextWrapping="WrapWithOverflow"
+                                FontWeight="SemiBold"/> 
+                            <Button Content="OK" FontWeight="SemiBold" HorizontalAlignment="Center" Click="Button_Click"/>
+                        </StackPanel>
+                    </ui:Flyout>
+                   
                 </StackPanel>
+                
             </controls:ControlExample>
+ 
             <StackPanel Margin="15">
                 <controls:ControlExample HeaderText="Opcjonalnie dla części">
                     <StackPanel>
@@ -71,7 +88,6 @@
                 <ui:Button HorizontalAlignment="Center" Margin="0,20,0,0" x:Name="btnExport" Click="btnExport_Click" >
                     <DockPanel>
                         <TextBlock x:Name="tbExport" Text="Eksportuj" ></TextBlock>
-                        <ui:ProgressRing Width="20" Height="20" Margin="8,0,0,0" x:Name="progressRing" IsIndeterminate="True" Visibility="Collapsed"/>
                     </DockPanel>
                 </ui:Button>
             </StackPanel>
@@ -108,6 +124,7 @@
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                 </DataGrid>
+                
             </StackPanel>
 
         </controls:ControlExample>

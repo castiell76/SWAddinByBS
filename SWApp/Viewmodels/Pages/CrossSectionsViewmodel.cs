@@ -34,8 +34,6 @@ namespace SWApp.Viewmodels.Pages
             _sWObject.ErrorOccurred += OnErrorOccured;
         }
 
-
-
         private void OnErrorOccured(string title, string message, ControlAppearance appearance, SymbolIcon icon)
         {
             _helpService.SnackbarService.Show(title, message, appearance, new SymbolIcon(SymbolRegular.Important24), TimeSpan.FromSeconds(3));
