@@ -26,7 +26,7 @@ namespace SWApp.Viewmodels.Pages.Calculations
         public CalculationsMainPageViewModel()
         {
             _swTreeNodes = new ObservableCollection<SWTreeNode>();
-            //swObject = new SWObject();
+            swObject = new SWObject();
         }
 
         public IEnumerable<SWTreeNode> SWTreeInit()
@@ -43,6 +43,7 @@ namespace SWApp.Viewmodels.Pages.Calculations
         {
             SWTreeNode newNode = new SWTreeNode() { Name = "nowa część", Type = "part", Path = "" };
             _swTreeNodes.Add(newNode);
+            OnPropertyChanged(nameof(SWTreeNodes));
             
         }
 
@@ -66,11 +67,11 @@ namespace SWApp.Viewmodels.Pages.Calculations
             // Usuń draggedNode z jego bieżącego rodzica
             if (draggedNode.Parent != null)
             {
-                draggedNode.Parent.Childs.Remove(draggedNode);
+                draggedNode.Parent.Items.Remove(draggedNode);
             }
 
             // Dodaj draggedNode jako dziecko do targetNode
-            targetNode.Childs.Add(draggedNode);
+            targetNode.Items.Add(draggedNode);
             draggedNode.Parent = targetNode; // Ustaw targetNode jako nowego rodzica
         }
 
