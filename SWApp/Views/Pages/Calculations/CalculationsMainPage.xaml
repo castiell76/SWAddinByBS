@@ -27,8 +27,11 @@
         </ResourceDictionary>
     </Page.Resources>
     <StackPanel>
-        <Menu FontSize="14">
-            <MenuItem Header="Pobierz drzewo SW" Click="MenuItem_Click" />
+        <Menu FontSize="16">
+            <ui:MenuItem Icon="{ui:SymbolIcon Wrench24}" Header="Narzędzia">
+                <ui:MenuItem Header="Pobierz drzewo SW" Click="MenuItem_Click" />
+            </ui:MenuItem>
+            
         </Menu>
         <DockPanel>
             <controls:ControlExample HeaderText="Drzewo wyrobu" Margin="15" HorizontalAlignment="Left">
@@ -36,16 +39,22 @@
                     <TreeView x:Name="swTreeView"
                              AllowDrop="True"
                              IsManipulationEnabled="True"
+                              PreviewMouseMove="swTreeView_PreviewMouseMove"
+                              Drop="swTreeView_Drop"
+                              DragOver="swTreeView_DragOver"
                              MouseRightButtonDown="swTreeView_MouseRightButtonDown"
                              SelectedItemChanged="swTreeView_SelectedItemChanged"
-                             Width="200"
+                             MinWidth="100"
+                             FontSize="14"
                              ItemsSource="{Binding SWTreeNodes}"
+                             MinHeight="200"
                              >
+                       
                         <TreeView.ContextMenu>
                             <ContextMenu x:Name="cmNodes" >
-                                <MenuItem x:Name="cmAddNode" Header="Dodaj" />
+                                <MenuItem x:Name="cmAddNode" Header="Dodaj" Click="cmAddNode_Click"/>
                                 <MenuItem x:Name="cmOpenNode"  Header="Otwórz" Click="cmOpenNode_Click" />
-                                <MenuItem x:Name="cmDeleteNode" Header="Usuń"/>
+                                <MenuItem x:Name="cmDeleteNode" Header="Usuń" Click="cmDeleteNode_Click"/>
                             </ContextMenu>
                         </TreeView.ContextMenu>
                     </TreeView>
@@ -54,7 +63,10 @@
 
             </controls:ControlExample >
             <controls:ControlExample HeaderText="Materiały i operacje części" Margin="15" HorizontalAlignment="Right">
-                <DataGrid>
+                <DataGrid
+                    MinHeight="200"
+                    FontSize="14"
+                    MinWidth="400">
 
                 </DataGrid>
             </controls:ControlExample>

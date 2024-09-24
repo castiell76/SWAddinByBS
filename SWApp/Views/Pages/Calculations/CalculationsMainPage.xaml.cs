@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Wpf.Ui.Controls;
+using TextBox = Wpf.Ui.Controls.TextBox;
 
 namespace SWApp.Views.Pages.Calculations
 {
@@ -42,13 +43,14 @@ namespace SWApp.Views.Pages.Calculations
 
         }
 
+
         private void swTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            //if (e.NewValue is SWTreeNode selectedNode)
-            //{
 
-            //    dgCalculationModuleOperations.ItemsSource = selectedNode.Operations;
-            //}
+            if (e.NewValue is SWTreeNode selectedNode)
+            {
+
+            }
         }
 
         private void cmOpenNode_Click(object sender, RoutedEventArgs e)
@@ -98,37 +100,122 @@ namespace SWApp.Views.Pages.Calculations
 
             var template = new HierarchicalDataTemplate(typeof(SWTreeNode));
 
-            // Tworzenie TextBlock dla nazwy
             var nameTextBlock = new FrameworkElementFactory(typeof(Wpf.Ui.Controls.TextBlock));
             nameTextBlock.SetBinding(Wpf.Ui.Controls.TextBlock.TextProperty, new Binding("Name")); // Powiązanie z Name
 
-            // Tworzenie Image dla ikony typu
+
             var typeImage = new FrameworkElementFactory(typeof(System.Windows.Controls.Image));
             typeImage.SetValue(System.Windows.Controls.Image.WidthProperty, 25.0);
             typeImage.SetValue(System.Windows.Controls.Image.HeightProperty, 25.0);
             typeImage.SetValue(System.Windows.Controls.Image.VerticalAlignmentProperty, VerticalAlignment.Center);
 
-            // Powiązanie ikony z typem i użycie konwertera
+
             var binding = new Binding("Type")
             {
                 Converter = (IValueConverter)this.Resources["TypeToIconConverter"]
             };
             typeImage.SetBinding(System.Windows.Controls.Image.SourceProperty, binding);
 
-            // Tworzenie StackPanel jako kontenera dla ikony i nazwy
+
             var stackPanel = new FrameworkElementFactory(typeof(StackPanel));
             stackPanel.SetValue(StackPanel.OrientationProperty, Orientation.Horizontal); // Ikona i nazwa obok siebie
-            stackPanel.AppendChild(typeImage);  // Dodanie ikony
-            stackPanel.AppendChild(nameTextBlock);  // Dodanie nazwy
+            stackPanel.AppendChild(typeImage);
+            stackPanel.AppendChild(nameTextBlock);
 
-            // Ustawienie StackPanel jako VisualTree dla HierarchicalDataTemplate
+
             template.VisualTree = stackPanel;
 
-            // Powiązanie ItemsSource dla elementów dzieci
+
             template.ItemsSource = new Binding("Items");
 
-            // Ustawienie ItemTemplate dla TreeView
+
             swTreeView.ItemTemplate = template;
         }
+
+        private void cmAddNode_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel.AddNode();
+
+            //CreateTreeViewTemplate();
+        }
+
+        private void cmDeleteNode_Click(object sender, RoutedEventArgs e)
+        {
+            if (swTreeView.SelectedItem is SWTreeNode selectedNode)
+            {
+                ViewModel.RemoveNode(selectedNode);
+            }
+        }
+
+        private void swTreeView_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                // Sprawdź, na którym węźle znajduje się kursor
+                var item = GetNodeAtMousePosition(e.GetPosition(swTreeView));
+                if (item != null)
+                {
+                    // Rozpocznij przeciąganie
+                    DragDrop.DoDragDrop(swTreeView, item, DragDropEffects.Move);
+                }
+            }
+        }
+
+        private void swTreeView_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(SWTreeNode)))
+            {
+                var draggedNode = (SWTreeNode)e.Data.GetData(typeof(SWTreeNode));
+                var targetNode = GetNodeAtMousePosition(e.GetPosition(swTreeView));
+
+                if (targetNode != null && targetNode != draggedNode)
+                {
+                    // Przenieś węzeł (możesz dostosować tę logikę do swoich potrzeb)
+                    ViewModel.MoveNode(draggedNode, targetNode);
+                }
+            }
+        }
+
+
+
+        private void swTreeView_DragOver(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(typeof(SWTreeNode)))
+            {
+                e.Effects = DragDropEffects.None;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.Move;
+            }
+            e.Handled = true;
+        }
+
+        private SWTreeNode GetNodeAtMousePosition(Point position)
+        {
+            var hitTestResult = VisualTreeHelper.HitTest(swTreeView, position);
+            if (hitTestResult != null)
+            {
+                // Znajdź odpowiedni węzeł
+                System.Windows.Controls.TreeViewItem treeViewItem = FindAncestor<System.Windows.Controls.TreeViewItem>(hitTestResult.VisualHit);
+                if (treeViewItem != null)
+                {
+                    return (SWTreeNode)treeViewItem.DataContext; // Zwróć właściwy węzeł
+                }
+            }
+            return null;
+        }
+        private T FindAncestor<T>(DependencyObject current) where T : DependencyObject
+        {
+            while (current != null)
+            {
+                if (current is T)
+                {
+                    return (T)current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            return null;
+        }
     }
-    }
+}
