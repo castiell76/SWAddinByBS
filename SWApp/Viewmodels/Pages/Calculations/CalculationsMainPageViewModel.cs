@@ -56,7 +56,7 @@ namespace SWApp.Viewmodels.Pages.Calculations
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void MoveNode(SWTreeNode draggedNode, SWTreeNode targetNode)
+        public void MoveNode(SWTreeNode draggedNode, SWTreeNode targetNode, SWTreeNode draggedNodeParent)
         {
             if (draggedNode == targetNode || IsChildOf(draggedNode, targetNode))
             {
@@ -64,15 +64,13 @@ namespace SWApp.Viewmodels.Pages.Calculations
                 return;
             }
 
-            // Usuń draggedNode z jego bieżącego rodzica
-            if (draggedNode.Parent != null)
+            if (draggedNodeParent != null)
             {
-                draggedNode.Parent.Items.Remove(draggedNode);
+                draggedNodeParent.Items.Remove(draggedNode);
             }
 
-            // Dodaj draggedNode jako dziecko do targetNode
             targetNode.Items.Add(draggedNode);
-            draggedNode.Parent = targetNode; // Ustaw targetNode jako nowego rodzica
+            draggedNode.Parent = targetNode;
         }
 
         private bool IsChildOf(SWTreeNode node, SWTreeNode potentialParent)

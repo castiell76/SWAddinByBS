@@ -166,14 +166,69 @@ namespace SWApp.Views.Pages.Calculations
             if (e.Data.GetDataPresent(typeof(SWTreeNode)))
             {
                 var draggedNode = (SWTreeNode)e.Data.GetData(typeof(SWTreeNode));
+                System.Windows.Controls.TreeViewItem draggedNodeItem = e.OriginalSource as System.Windows.Controls.TreeViewItem;
                 var targetNode = GetNodeAtMousePosition(e.GetPosition(swTreeView));
 
-                if (targetNode != null && targetNode != draggedNode)
+                //finding parent of the dragged node
+                var draggedTreeViewItem = GetTreeViewItemForNode(swTreeView, draggedNode);
+                var parentTreeViewItem = GetParentTreeViewItem(draggedTreeViewItem);
+                if (parentTreeViewItem != null) 
                 {
-                    // Przenieś węzeł (możesz dostosować tę logikę do swoich potrzeb)
-                    ViewModel.MoveNode(draggedNode, targetNode);
+                    var parentNode = (SWTreeNode)parentTreeViewItem.DataContext;
+
+                    if (targetNode != null && targetNode != draggedNode)
+                    {
+                        // Przenieś węzeł (możesz dostosować tę logikę do swoich potrzeb)
+                        ViewModel.MoveNode(draggedNode, targetNode, parentNode);
+                    }
                 }
+               
             }
+        }
+
+        private System.Windows.Controls.TreeViewItem GetTreeViewItemForNode(TreeView treeView, object node)
+        {
+            // Przechodzimy przez wszystkie korzenie TreeView
+            foreach (var item in treeView.Items)
+            {
+                System.Windows.Controls.TreeViewItem treeViewItem = (System.Windows.Controls.TreeViewItem)treeView.ItemContainerGenerator.ContainerFromItem(item);
+                System.Windows.Controls.TreeViewItem result = FindTreeViewItem(treeViewItem, node);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+
+        private System.Windows.Controls.TreeViewItem FindTreeViewItem(System.Windows.Controls.TreeViewItem treeViewItem, object node)
+        {
+            if (treeViewItem == null)
+                return null;
+
+            if (treeViewItem.DataContext == node)
+                return treeViewItem;
+
+            treeViewItem.IsExpanded = true; // Rozwijamy, żeby znaleźć wszystkie dzieci
+            treeViewItem.UpdateLayout(); // Uaktualniamy layout
+
+            foreach (var child in treeViewItem.Items)
+            {
+                System.Windows.Controls.TreeViewItem childItem = (System.Windows.Controls.TreeViewItem)treeViewItem.ItemContainerGenerator.ContainerFromItem(child);
+                System.Windows.Controls.TreeViewItem result = FindTreeViewItem(childItem, node);
+                if (result != null)
+                    return result;
+            }
+
+            return null;
+        }
+
+        private System.Windows.Controls.TreeViewItem GetParentTreeViewItem(System.Windows.Controls.TreeViewItem item)
+        {
+            DependencyObject parent = VisualTreeHelper.GetParent(item);
+            while (parent != null && !(parent is System.Windows.Controls.TreeViewItem))
+            {
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+            return parent as System.Windows.Controls.TreeViewItem;
         }
 
 

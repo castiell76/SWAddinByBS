@@ -13,11 +13,9 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 namespace WF_Host
 {
     //"%windir%\Microsoft.NET\Framework64\v4.0.30319\regasm" /tlb  "$(TargetPath)"
-    //"%windir%\Microsoft.NET\Framework64\v4.0.30319\regasm" /codebase "$(TargetPath)"
+    //"%windir%\Microsoft.NET\Framework64\v4.0.30319\regasm" /codebase "$(TargetPath)" /tlb
     //HKEY_LOCAL_MACHINE\SOFTWARE\SolidWorks\AddIns\
     //"%windir%\Microsoft.NET\Framework64\v4.0.30319\regasm" /tlb /codebase "$(TargetDir)/WF-Host.dll" 
-
-
 
     [ComVisible(true)]
     [Guid("FA0D3E0B-2747-492A-9C23-7055773A6218")]

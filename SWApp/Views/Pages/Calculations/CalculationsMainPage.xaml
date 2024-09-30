@@ -48,8 +48,9 @@
                              FontSize="14"
                              ItemsSource="{Binding SWTreeNodes}"
                              MinHeight="200"
+                             
                              >
-                       
+
                         <TreeView.ContextMenu>
                             <ContextMenu x:Name="cmNodes" >
                                 <MenuItem x:Name="cmAddNode" Header="Dodaj" Click="cmAddNode_Click"/>
