@@ -22,7 +22,7 @@ namespace SWApp.Models
 
         public string GetGPT(string phraseToTranslate)
         {
-            string apiKey = "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";
+            string apiKey = "";
             ChatClient client = new(model: "gpt-3.5-turbo", apiKey);
             ChatCompletion completion = client.CompleteChat($"Przetłumacz wyrażenie: {phraseToTranslate}");
 
