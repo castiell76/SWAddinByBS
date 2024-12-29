@@ -73,6 +73,9 @@ Due to the very specific environment where the add-in might be used, here are so
 ### Property Management
 
 <img width="953" alt="props" src="https://github.com/user-attachments/assets/e91db7f9-8155-4cce-9393-5ebd121a5109" />
+
+Generated bills of material in xlxs file:
+
 <img width="749" alt="bom" src="https://github.com/user-attachments/assets/bc28931a-5203-4956-9d7e-979270af8ba0" />
 
 ### Batch Processing
