@@ -1,4 +1,4 @@
-Summary
+**Summary**
 
 This project showcases my skills in C#, .NET, WPF, and Windows Forms through the development of a custom SolidWorks Add-In. The Add-In streamlines various engineering workflows, demonstrating my ability to solve practical problems in a CAD environment. This repository highlights my expertise in:
 
